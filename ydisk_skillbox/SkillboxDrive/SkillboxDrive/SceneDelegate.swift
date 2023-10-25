@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Foundation
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -19,7 +20,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let firstViewController = UINavigationController(rootViewController: ProfileViewController())
         let secondViewController = UINavigationController(rootViewController: LatestViewController())
         let thirdViewController = UINavigationController(rootViewController: AllFilesViewController())
-        
         
         let tabBarController = UITabBarController()
         

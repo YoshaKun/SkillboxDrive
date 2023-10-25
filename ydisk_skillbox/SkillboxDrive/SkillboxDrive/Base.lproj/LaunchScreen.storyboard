@@ -16,18 +16,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="tLK-tb-eih">
-                                <rect key="frame" x="0.0" y="-26" width="414" height="818"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="tLK-tb-eih">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="tLK-tb-eih" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="Dqj-mi-WIb"/>
-                            <constraint firstItem="tLK-tb-eih" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="IFM-hs-09E"/>
-                            <constraint firstItem="tLK-tb-eih" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="dWe-vZ-gFc"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="tLK-tb-eih" secondAttribute="trailing" id="hhs-AR-VNy"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="tLK-tb-eih" secondAttribute="bottom" id="wXk-CO-TUs"/>
+                            <constraint firstItem="tLK-tb-eih" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="2fJ-IO-FNP"/>
+                            <constraint firstAttribute="bottom" secondItem="tLK-tb-eih" secondAttribute="bottom" id="9yt-86-Dgs"/>
+                            <constraint firstItem="tLK-tb-eih" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="GAF-IX-EzF"/>
+                            <constraint firstItem="tLK-tb-eih" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="RoC-Mv-mor"/>
                         </constraints>
                     </view>
                 </viewController>

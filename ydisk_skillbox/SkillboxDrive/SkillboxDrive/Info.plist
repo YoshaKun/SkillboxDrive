@@ -21,3 +21,21 @@
 	</dict>
 </dict>
 </plist>
+<key>LSApplicationQueriesSchemes</key>
+<array>
+    <string>yandexauth</string>
+    <string>yandexauth2</string>
+    <string>yandexauth4</string>
+</array>
+<key>CFBundleURLTypes</key>
+<array>
+    <dict>
+        <key>CFBundleURLName</key>
+        <string>YandexLoginSDK</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+            <string>yx<f07af6f0e2114816908f7f0989b2e212></string>
+        </array>
+    </dict>
+</array>
+

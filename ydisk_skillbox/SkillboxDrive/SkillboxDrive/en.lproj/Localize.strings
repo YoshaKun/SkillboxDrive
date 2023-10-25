@@ -1,0 +1,17 @@
+/* 
+  Localize.strings
+  SkillboxDrive
+
+  Created by Yosha Kun on 12.10.2023.
+  
+*/
+// форма записи - "key" = "value"
+
+"onboarding1" = "Now all your documents are in one place";
+"onboarding2" = "Accessing files without the Internet";
+"onboarding3" = "Share your files with others";
+"nextButton" = "Next";
+"loginButton" = "Log in";
+"FirstVC.title" = "Profile";
+"SecondVC.title" = "Latest";
+"ThirdVC.title" = "All files";

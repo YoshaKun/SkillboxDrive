@@ -13,6 +13,7 @@ class AllFilesViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .white
+        self.navigationItem.title = Constants.Text.ThirdVC.title
     }
 
 

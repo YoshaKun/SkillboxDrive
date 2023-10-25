@@ -12,7 +12,8 @@ class LatestViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .blue
+        view.backgroundColor = .white
+        self.navigationItem.title = Constants.Text.SecondVC.title
     }
 
 

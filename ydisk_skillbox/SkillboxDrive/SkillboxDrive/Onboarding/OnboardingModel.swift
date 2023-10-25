@@ -16,7 +16,7 @@ struct OnboardingModel {
 class OnboardingData {
     
     let onboardingArray: [OnboardingModel] = [
-        OnboardingModel(image: OnboardingConstants.Image.onboarding1, description: OnboardingConstants.Text.textOnboarding1),
-        OnboardingModel(image: OnboardingConstants.Image.onboarding2, description: OnboardingConstants.Text.textOnboarding2),
-        OnboardingModel(image: OnboardingConstants.Image.onboarding3, description: OnboardingConstants.Text.textOnboarding3)]
+        OnboardingModel(image: Constants.Image.onboarding1, description: Constants.Text.onboarding1),
+        OnboardingModel(image: Constants.Image.onboarding2, description: Constants.Text.onboarding2),
+        OnboardingModel(image: Constants.Image.onboarding3, description: Constants.Text.onboarding3)]
 }

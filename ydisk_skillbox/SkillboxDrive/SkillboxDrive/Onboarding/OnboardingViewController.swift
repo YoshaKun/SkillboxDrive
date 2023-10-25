@@ -8,10 +8,7 @@
 import Foundation
 import UIKit
 
-protocol OnboardingViewControllerProtocol: AnyObject {
-    
-    func presentNewController(vc: UIViewController, anime: Bool)
-}
+protocol OnboardingViewControllerProtocol: AnyObject {}
 
 class OnboardingViewController: UIViewController {
     
@@ -44,12 +41,12 @@ class OnboardingViewController: UIViewController {
         
         pageControl.numberOfPages = 3
         pageControl.backgroundColor = .white
-        pageControl.pageIndicatorTintColor = OnboardingConstants.Colors.graySpecial
-        pageControl.currentPageIndicatorTintColor = OnboardingConstants.Colors.blueSpecial
+        pageControl.pageIndicatorTintColor = Constants.Colors.graySpecial
+        pageControl.currentPageIndicatorTintColor = Constants.Colors.blueSpecial
         pageControl.addTarget(self, action: #selector(pageControlDidChange(_:)), for: .valueChanged)
         
         nextButton.backgroundColor = .blue
-        nextButton.setTitle("Далее", for: .normal)
+        nextButton.setTitle(Constants.Text.nextButton, for: .normal)
         nextButton.setTitleColor(.white, for: .normal)
         nextButton.layer.cornerRadius = 7
         nextButton.addTarget(self, action: #selector(didTappedOnNextButton), for: .touchUpInside)
@@ -74,7 +71,8 @@ class OnboardingViewController: UIViewController {
         case 2:
             print(pageControl.currentPage)
             self.dismiss(animated: true, completion: nil)
-//            presenter.transitionToLoginScreen()
+            Core.shared.setIsNotNewUser()
+            
         default:
             print("default action")
         }
