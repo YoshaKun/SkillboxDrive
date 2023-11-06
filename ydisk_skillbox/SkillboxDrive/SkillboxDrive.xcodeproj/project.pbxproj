@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		531BB9760FEBF2AF2D8FA923 /* Pods_SkillboxDrive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7C82EA2B9B4EBEF875B8675 /* Pods_SkillboxDrive.framework */; };
 		6B205F322AD5736A001BB4CD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B205F312AD5736A001BB4CD /* Constants.swift */; };
 		6B205F342AD587ED001BB4CD /* CustomOnboardingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B205F332AD587ED001BB4CD /* CustomOnboardingCell.swift */; };
 		6B295E8A2AD81DC4003FD56C /* LoginScreenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B295E892AD81DC4003FD56C /* LoginScreenModel.swift */; };
@@ -52,6 +53,9 @@
 		6BEEF1052ACED97D00BBE68D /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		6BEEF1072ACED9EE00BBE68D /* OnboardingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingModel.swift; sourceTree = "<group>"; };
 		6BEEF1092ACED9FE00BBE68D /* OnboardingPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPresenter.swift; sourceTree = "<group>"; };
+		8D2BBF3C3FCB414F081C3D08 /* Pods-SkillboxDrive.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SkillboxDrive.release.xcconfig"; path = "Target Support Files/Pods-SkillboxDrive/Pods-SkillboxDrive.release.xcconfig"; sourceTree = "<group>"; };
+		B7C82EA2B9B4EBEF875B8675 /* Pods_SkillboxDrive.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SkillboxDrive.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E521CEC29C4BD08272839C9B /* Pods-SkillboxDrive.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SkillboxDrive.debug.xcconfig"; path = "Target Support Files/Pods-SkillboxDrive/Pods-SkillboxDrive.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				531BB9760FEBF2AF2D8FA923 /* Pods_SkillboxDrive.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,6 +93,8 @@
 			children = (
 				6BEEF0E42ACEC47000BBE68D /* SkillboxDrive */,
 				6BEEF0E32ACEC47000BBE68D /* Products */,
+				83627F2AA876CF14B63BCC28 /* Pods */,
+				7263AE6E68AABB8E3FE7F8EF /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -164,6 +171,24 @@
 			path = Onboarding;
 			sourceTree = "<group>";
 		};
+		7263AE6E68AABB8E3FE7F8EF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B7C82EA2B9B4EBEF875B8675 /* Pods_SkillboxDrive.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		83627F2AA876CF14B63BCC28 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E521CEC29C4BD08272839C9B /* Pods-SkillboxDrive.debug.xcconfig */,
+				8D2BBF3C3FCB414F081C3D08 /* Pods-SkillboxDrive.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -171,9 +196,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6BEEF0F92ACEC47100BBE68D /* Build configuration list for PBXNativeTarget "SkillboxDrive" */;
 			buildPhases = (
+				EBE1658AC6D6F42F7CE21A83 /* [CP] Check Pods Manifest.lock */,
 				6BEEF0DE2ACEC47000BBE68D /* Sources */,
 				6BEEF0DF2ACEC47000BBE68D /* Frameworks */,
 				6BEEF0E02ACEC47000BBE68D /* Resources */,
+				2E380983ACEA1F615B63673F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -230,6 +257,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2E380983ACEA1F615B63673F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SkillboxDrive/Pods-SkillboxDrive-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SkillboxDrive/Pods-SkillboxDrive-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SkillboxDrive/Pods-SkillboxDrive-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EBE1658AC6D6F42F7CE21A83 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SkillboxDrive-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		6BEEF0DE2ACEC47000BBE68D /* Sources */ = {
@@ -399,6 +468,7 @@
 		};
 		6BEEF0FA2ACEC47100BBE68D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E521CEC29C4BD08272839C9B /* Pods-SkillboxDrive.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -425,6 +495,7 @@
 		};
 		6BEEF0FB2ACEC47100BBE68D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8D2BBF3C3FCB414F081C3D08 /* Pods-SkillboxDrive.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

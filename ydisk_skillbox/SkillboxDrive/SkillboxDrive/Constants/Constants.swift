@@ -17,6 +17,7 @@ enum Constants {
         static let tabBar1 = UIImage(named: "ProfilePicture")
         static let tabBar2 = UIImage(named: "LatestPicture")
         static let tabBar3 = UIImage(named: "AllFilesPicture")
+        static let menu = UIImage(named: "Menu")
     }
     
     enum Text {
@@ -28,6 +29,12 @@ enum Constants {
         
         enum FirstVC {
             static let title = Bundle.main.localizedString(forKey: "FirstVC.title", value: "", table: "Localize")
+            static let cancel = Bundle.main.localizedString(forKey: "FirstVC.cancel", value: "", table: "Localize")
+            static let logOut = Bundle.main.localizedString(forKey: "FirstVC.logOut", value: "", table: "Localize")
+            static let alertTitle = Bundle.main.localizedString(forKey: "FirstVC.alertTitle", value: "", table: "Localize")
+            static let alertMessage = Bundle.main.localizedString(forKey: "FirstVC.alertMessage", value: "", table: "Localize")
+            static let alertYes = Bundle.main.localizedString(forKey: "FirstVC.alertYes", value: "", table: "Localize")
+            static let alertNo = Bundle.main.localizedString(forKey: "FirstVC.alertNo", value: "", table: "Localize")
         }
         
         enum SecondVC {
@@ -46,6 +53,9 @@ enum Constants {
         static var systemText: UIFont {
             UIFont.systemFont(ofSize: 16)
         }
+        static var graphik: UIFont {
+            UIFont(name: "Graphik", size: 30) ?? UIFont.systemFont(ofSize: 16)
+        }
     }
     
     enum Colors {
@@ -54,6 +64,9 @@ enum Constants {
         }
         static var graySpecial: UIColor? {
             UIColor(named: "GraySpecial")
+        }
+        static var gray: UIColor? {
+            UIColor(named: "Gray")
         }
     }
 }

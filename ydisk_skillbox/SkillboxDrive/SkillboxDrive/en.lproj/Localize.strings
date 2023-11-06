@@ -1,4 +1,4 @@
-/* 
+/*
   Localize.strings
   SkillboxDrive
 
@@ -15,3 +15,9 @@
 "FirstVC.title" = "Profile";
 "SecondVC.title" = "Latest";
 "ThirdVC.title" = "All files";
+"FirstVC.cancel" = "Cancel";
+"FirstVC.logOut" = "Log out";
+"FirstVC.alertTitle" = "Out";
+"FirstVC.alertMessage" = "Are you sure you want to log out?";
+"FirstVC.alertYes" = "Yes";
+"FirstVC.alertNo" = "No";
