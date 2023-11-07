@@ -38,6 +38,7 @@ final class LoginScreenPresenter: LoginScreenPresenterProtocol {
     
     func didTapOnButton() {
         
+        
         print("Сработал метод didTapOnButton")
     }
     

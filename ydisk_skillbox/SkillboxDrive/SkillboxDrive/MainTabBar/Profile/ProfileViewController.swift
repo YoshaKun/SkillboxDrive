@@ -32,8 +32,8 @@ class ProfileViewController: UIViewController, ChartViewDelegate {
         
         // Показываем Онборд новому пользователю 1 раз
         if Core.shared.isNewUser() {
-//            let vc = OnboardingViewController()
-            let vc = LoginScreenViewController()
+            let vc = OnboardingViewController()
+//            let vc = LoginScreenViewController()
             vc.modalPresentationStyle = .fullScreen
             present(vc, animated: false)
         }

@@ -9,6 +9,10 @@ import UIKit
 
 final class LoginScreenViewController: UIViewController {
     
+    // TOKEN - потом перенести его в модель LoginScreenModel
+    private var token: String = ""
+    private var isFirst = true
+    
     private let presenter: LoginScreenPresenterProtocol = LoginScreenPresenter()
     private let logoImage = UIImageView()
     private let enterButton = UIButton()
@@ -19,6 +23,14 @@ final class LoginScreenViewController: UIViewController {
         view.backgroundColor = .white
         configureViews()
         configureConstraints()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if isFirst {
+            updateData()
+        }
+        isFirst = false
     }
     
     private func configureViews() {
@@ -35,8 +47,8 @@ final class LoginScreenViewController: UIViewController {
     
     @objc private func didTapOnEnterButton() {
         
-        self.dismiss(animated: true, completion: nil)
         presenter.didTapOnButton()
+        self.dismiss(animated: true, completion: nil)
     }
     
     private func configureConstraints() {
@@ -58,6 +70,39 @@ final class LoginScreenViewController: UIViewController {
             enterButton.heightAnchor.constraint(equalToConstant: 50),
             enterButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -27),
         ])
+    }
+    
+    private func updateData() {
+        
+        guard !token.isEmpty else {
+            let requestTokenViewController = AuthViewController()
+            requestTokenViewController.delegate = self
+            present(requestTokenViewController, animated: false, completion: nil)
+            return
+        }
+        
+//        var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk/resources/files")
+//        components?.queryItems = [URLQueryItem(name: "media_type", value: "image")]
+//        
+//        guard let url = components?.url else { return }
+//        var request = URLRequest(url: url)
+//        request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
+//        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
+//            guard let self = self, let data = data else { return }
+//            guard let newFiles = try?
+//                    JSONDecoder().decode(DiskResponse.self, from: data) else { return }
+//            print("Received: \(newFiles.items?.count ?? 0) files")
+//        }
+//        task.resume()
+    }
+}
+
+extension LoginScreenViewController: AuthViewControllerDelegate {
+    
+    func handleTokenChanged(token: String) {
+        self.token = token
+        print("New token: \(token)")
+        updateData()
     }
 }
 

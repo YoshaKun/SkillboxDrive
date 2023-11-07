@@ -63,16 +63,13 @@ class OnboardingViewController: UIViewController {
         
         switch pageControl.currentPage {
         case 0:
-            print(pageControl.currentPage)
             collectionView.setContentOffset(CGPoint(x: CGFloat(1) * view.frame.size.width, y: 0), animated: true)
         case 1:
-            print(pageControl.currentPage)
             collectionView.setContentOffset(CGPoint(x: CGFloat(2) * view.frame.size.width, y: 0), animated: true)
         case 2:
-            print(pageControl.currentPage)
-            self.dismiss(animated: true, completion: nil)
             Core.shared.setIsNotNewUser()
-            
+            // MARK: - написать сюда метод, вызывающий окно Входа в приложение
+            self.dismiss(animated: true, completion: nil)
         default:
             print("default action")
         }
