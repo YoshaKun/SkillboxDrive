@@ -16,6 +16,7 @@ final class LoginScreenViewController: UIViewController {
     private let presenter: LoginScreenPresenterProtocol = LoginScreenPresenter()
     private let logoImage = UIImageView()
     private let enterButton = UIButton()
+    private let showOnbordButton = UIButton()
     
     override func viewDidLoad() {
         
@@ -25,13 +26,28 @@ final class LoginScreenViewController: UIViewController {
         configureConstraints()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if isFirst {
-            updateData()
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        // MARK: - Showing the Onboarding
+        // Если надо устанавливаем заново Нового пользователя в Юзер дефолтс
+        Core.shared.setNewUser()
+        
+        // Показываем Онборд новому пользователю 1 раз
+        if Core.shared.isNewUser() {
+            guard let vc = presenter.didTapOnOnboardButton() else { return }
+            present(vc, animated: false)
         }
-        isFirst = false
     }
+    
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//
+//        if isFirst {
+//            updateData()
+//        }
+//        isFirst = false
+//    }
     
     private func configureViews() {
         
@@ -39,25 +55,39 @@ final class LoginScreenViewController: UIViewController {
         logoImage.contentMode = .center
         
         enterButton.backgroundColor = presenter.getColor()
-        enterButton.setTitle(presenter.getText(), for: .normal)
+        enterButton.setTitle(presenter.getTextEnterBtn(), for: .normal)
         enterButton.setTitleColor(.white, for: .normal)
         enterButton.layer.cornerRadius = 7
         enterButton.addTarget(self, action: #selector(didTapOnEnterButton), for: .touchUpInside)
+        
+        showOnbordButton.backgroundColor = presenter.getColor()
+        showOnbordButton.setTitle(presenter.getTextOnbordBtn(), for: .normal)
+        showOnbordButton.setTitleColor(.white, for: .normal)
+        showOnbordButton.layer.cornerRadius = 7
+        showOnbordButton.addTarget(self, action: #selector(didTappedOnOnboardButton), for: .touchUpInside)
     }
     
     @objc private func didTapOnEnterButton() {
         
-        presenter.didTapOnButton()
-        self.dismiss(animated: true, completion: nil)
+        guard let tabBarController = presenter.didTapOnButton() else { return }
+        present(tabBarController, animated: true, completion: nil)
+    }
+
+    @objc private func didTappedOnOnboardButton() {
+        
+        guard let vc = presenter.didTapOnOnboardButton() else { return }
+        present(vc, animated: true, completion: nil)
     }
     
     private func configureConstraints() {
         
         logoImage.translatesAutoresizingMaskIntoConstraints = false
         enterButton.translatesAutoresizingMaskIntoConstraints = false
+        showOnbordButton.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(logoImage)
         view.addSubview(enterButton)
+        view.addSubview(showOnbordButton)
         
         NSLayoutConstraint.activate([
             logoImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
@@ -69,6 +99,11 @@ final class LoginScreenViewController: UIViewController {
             enterButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 27),
             enterButton.heightAnchor.constraint(equalToConstant: 50),
             enterButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -27),
+            
+            showOnbordButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            showOnbordButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 27),
+            showOnbordButton.heightAnchor.constraint(equalToConstant: 30),
+            showOnbordButton.widthAnchor.constraint(equalToConstant: 80),
         ])
     }
     
@@ -103,6 +138,23 @@ extension LoginScreenViewController: AuthViewControllerDelegate {
         self.token = token
         print("New token: \(token)")
         updateData()
+    }
+}
+
+class Core {
+    
+    static let shared = Core()
+    
+    func isNewUser() -> Bool {
+        return !UserDefaults.standard.bool(forKey: "isNewUser")
+    }
+    //устанавливаем в Юзер дефолтс что у нас уже Не новый пользователь
+    func setIsNotNewUser() {
+        UserDefaults.standard.set(true, forKey: "isNewUser")
+    }
+    //устанавливаем в Юзер дефолтс что у нас Новый пользователь
+    func setNewUser() {
+        UserDefaults.standard.set(false, forKey: "isNewUser")
     }
 }
 

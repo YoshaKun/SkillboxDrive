@@ -10,9 +10,11 @@ import UIKit
 protocol LoginScreenPresenterProtocol {
     
     func getColor() -> UIColor
-    func getText() -> String
+    func getTextEnterBtn() -> String
+    func getTextOnbordBtn() -> String
     func getImage() -> UIImage?
-    func didTapOnButton()
+    func didTapOnButton() -> UITabBarController?
+    func didTapOnOnboardButton() -> UIViewController?
 }
 
 final class LoginScreenPresenter: LoginScreenPresenterProtocol {
@@ -25,9 +27,15 @@ final class LoginScreenPresenter: LoginScreenPresenterProtocol {
         return color
     }
     
-    func getText() -> String {
+    func getTextEnterBtn() -> String {
         
         let string = model.constant.Text.loginButton
+        return string
+    }
+    
+    func getTextOnbordBtn() -> String {
+        
+        let string = model.constant.Text.OnboardButton
         return string
     }
     
@@ -36,10 +44,21 @@ final class LoginScreenPresenter: LoginScreenPresenterProtocol {
         model.constant.Image.logo1
     }
     
-    func didTapOnButton() {
+    func didTapOnButton() -> UITabBarController? {
         
-        
-        print("Сработал метод didTapOnButton")
+        let tabBarVC = UITabBarController()
+        let firstVC = UINavigationController(rootViewController: ProfileViewController())
+        let secondVC = UINavigationController(rootViewController: LatestViewController())
+        let thirdVC = UINavigationController(rootViewController: AllFilesViewController())
+        tabBarVC.setViewControllers([firstVC, secondVC, thirdVC], animated: false)
+        tabBarVC.modalPresentationStyle = .fullScreen
+        return tabBarVC
     }
     
+    func didTapOnOnboardButton() -> UIViewController? {
+        
+        let onboardVC = OnboardingViewController()
+        onboardVC.modalPresentationStyle = .fullScreen
+        return onboardVC
+    }
 }

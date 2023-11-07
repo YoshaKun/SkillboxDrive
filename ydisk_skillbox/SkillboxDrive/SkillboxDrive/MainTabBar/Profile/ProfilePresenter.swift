@@ -6,3 +6,27 @@
 //
 
 import Foundation
+import UIKit
+
+protocol ProfilePresenterProtocol {
+    
+    func setView(_ view: ProfileViewControllerProtocol)
+    func didTapOnButton() -> UIViewController?
+}
+
+final class ProfilePresenter: ProfilePresenterProtocol {
+    
+    private var view: ProfileViewControllerProtocol?
+    private var model: ProfileModel = ProfileModel()
+    
+    func setView(_ view: ProfileViewControllerProtocol) {
+        
+        self.view = view
+    }
+    
+    func didTapOnButton() -> UIViewController? {
+        
+        return UIViewController()
+    }
+    
+}

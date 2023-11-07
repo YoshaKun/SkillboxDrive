@@ -17,17 +17,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
-        let firstViewController = UINavigationController(rootViewController: ProfileViewController())
-        let secondViewController = UINavigationController(rootViewController: LatestViewController())
-        let thirdViewController = UINavigationController(rootViewController: AllFilesViewController())
-        
-        let tabBarController = UITabBarController()
-        
-        tabBarController.viewControllers = [firstViewController, secondViewController, thirdViewController]
+        let zeroViewController = UINavigationController(rootViewController: LoginScreenViewController())
         
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-        window?.rootViewController = tabBarController
+        window?.rootViewController = zeroViewController
         window?.makeKeyAndVisible()
     }
 

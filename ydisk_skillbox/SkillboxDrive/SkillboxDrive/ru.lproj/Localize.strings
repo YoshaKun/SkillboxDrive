@@ -21,3 +21,4 @@
 "FirstVC.alertMessage" = "Вы уверены, что хотите выйти?";
 "FirstVC.alertYes" = "Да";
 "FirstVC.alertNo" = "Нет";
+"OnboardButton" = "Инфо";

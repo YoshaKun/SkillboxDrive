@@ -8,6 +8,10 @@
 import DGCharts
 import UIKit
 
+protocol ProfileViewControllerProtocol {
+    
+}
+
 class ProfileViewController: UIViewController, ChartViewDelegate {
     
     private var pieChart = PieChartView()
@@ -21,26 +25,9 @@ class ProfileViewController: UIViewController, ChartViewDelegate {
         configureTabBar()
         configureNavigationBar()
         configureConstraints()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        // MARK: - Showing the Onboarding
-        // Если надо устанавливаем заново Нового пользователя в Юзер дефолтс
-        Core.shared.setNewUser()
-        
-        // Показываем Онборд новому пользователю 1 раз
-        if Core.shared.isNewUser() {
-            let vc = OnboardingViewController()
-//            let vc = LoginScreenViewController()
-            vc.modalPresentationStyle = .fullScreen
-            present(vc, animated: false)
-        }
-        
         configurePieChart()
     }
-    
+        
     private func configureTabBar() {
         
         self.tabBarController?.tabBar.tintColor = Constants.Colors.blueSpecial
@@ -118,8 +105,9 @@ class ProfileViewController: UIViewController, ChartViewDelegate {
     }
     
     private func didTappedOnYesAlert() {
-        print("Вызван метод didTappedOn Yes Alert")
         
+        self.dismiss(animated: true, completion: nil)
+        print("Вызван метод didTappedOn Yes Alert")
     }
     
     private func configurePieChart() {
@@ -152,21 +140,6 @@ class ProfileViewController: UIViewController, ChartViewDelegate {
     
 }
 
-class Core {
-    
-    static let shared = Core()
-    
-    func isNewUser() -> Bool {
-        return !UserDefaults.standard.bool(forKey: "isNewUser")
-    }
-    //устанавливаем в Юзер дефолтс что у нас уже Не новый пользователь
-    func setIsNotNewUser() {
-        UserDefaults.standard.set(true, forKey: "isNewUser")
-    }
-    //устанавливаем в Юзер дефолтс что у нас Новый пользователь
-    func setNewUser() {
-        UserDefaults.standard.set(false, forKey: "isNewUser")
-    }
-}
+
 
 

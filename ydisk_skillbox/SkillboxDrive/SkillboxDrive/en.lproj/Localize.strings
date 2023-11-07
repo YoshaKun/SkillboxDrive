@@ -21,3 +21,4 @@
 "FirstVC.alertMessage" = "Are you sure you want to log out?";
 "FirstVC.alertYes" = "Yes";
 "FirstVC.alertNo" = "No";
+"OnboardButton" = "Info";

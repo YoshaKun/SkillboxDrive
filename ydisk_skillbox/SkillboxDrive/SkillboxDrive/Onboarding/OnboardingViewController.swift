@@ -68,7 +68,6 @@ class OnboardingViewController: UIViewController {
             collectionView.setContentOffset(CGPoint(x: CGFloat(2) * view.frame.size.width, y: 0), animated: true)
         case 2:
             Core.shared.setIsNotNewUser()
-            // MARK: - написать сюда метод, вызывающий окно Входа в приложение
             self.dismiss(animated: true, completion: nil)
         default:
             print("default action")
