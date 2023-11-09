@@ -15,6 +15,8 @@ protocol LoginScreenPresenterProtocol {
     func getImage() -> UIImage?
     func didTapOnButton() -> UITabBarController?
     func didTapOnOnboardButton() -> UIViewController?
+    func getToken() -> String?
+    func updateToken(newToken: String?)
 }
 
 final class LoginScreenPresenter: LoginScreenPresenterProtocol {
@@ -60,5 +62,17 @@ final class LoginScreenPresenter: LoginScreenPresenterProtocol {
         let onboardVC = OnboardingViewController()
         onboardVC.modalPresentationStyle = .fullScreen
         return onboardVC
+    }
+    
+    func getToken() -> String? {
+        
+        return model.token
+    }
+    
+    func updateToken(newToken: String?) {
+        
+        guard let newToken = newToken else { return }
+        model.token = newToken
+        print("token = \(model.token)")
     }
 }

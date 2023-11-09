@@ -18,6 +18,7 @@ enum Constants {
         static let tabBar2 = UIImage(named: "LatestPicture")
         static let tabBar3 = UIImage(named: "AllFilesPicture")
         static let menu = UIImage(named: "Menu")
+        static let arrow = UIImage(named: "Arrow")
     }
     
     enum Text {
@@ -36,6 +37,9 @@ enum Constants {
             static let alertMessage = Bundle.main.localizedString(forKey: "FirstVC.alertMessage", value: "", table: "Localize")
             static let alertYes = Bundle.main.localizedString(forKey: "FirstVC.alertYes", value: "", table: "Localize")
             static let alertNo = Bundle.main.localizedString(forKey: "FirstVC.alertNo", value: "", table: "Localize")
+            static let gbFilled = Bundle.main.localizedString(forKey: "FirstVC.gbFilled", value: "", table: "Localize")
+            static let gbRemains = Bundle.main.localizedString(forKey: "FirstVC.gbRemains", value: "", table: "Localize")
+            static let publicFiles = Bundle.main.localizedString(forKey: "FirstVC.publicFiles", value: "", table: "Localize")
         }
         
         enum SecondVC {
@@ -68,6 +72,9 @@ enum Constants {
         }
         static var gray: UIColor? {
             UIColor(named: "Gray")
+        }
+        static var pink: UIColor? {
+            UIColor(named: "Pink")
         }
     }
 }

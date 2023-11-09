@@ -9,10 +9,6 @@ import UIKit
 
 final class LoginScreenViewController: UIViewController {
     
-    // TOKEN - потом перенести его в модель LoginScreenModel
-    private var token: String = ""
-    private var isFirst = true
-    
     private let presenter: LoginScreenPresenterProtocol = LoginScreenPresenter()
     private let logoImage = UIImageView()
     private let enterButton = UIButton()
@@ -21,7 +17,6 @@ final class LoginScreenViewController: UIViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        view.backgroundColor = .white
         configureViews()
         configureConstraints()
     }
@@ -31,7 +26,7 @@ final class LoginScreenViewController: UIViewController {
 
         // MARK: - Showing the Onboarding
         // Если надо устанавливаем заново Нового пользователя в Юзер дефолтс
-        Core.shared.setNewUser()
+//        Core.shared.setNewUser()
         
         // Показываем Онборд новому пользователю 1 раз
         if Core.shared.isNewUser() {
@@ -39,18 +34,10 @@ final class LoginScreenViewController: UIViewController {
             present(vc, animated: false)
         }
     }
-    
-//    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
-//
-//        if isFirst {
-//            updateData()
-//        }
-//        isFirst = false
-//    }
-    
+
     private func configureViews() {
         
+        view.backgroundColor = .white
         logoImage.image = presenter.getImage()
         logoImage.contentMode = .center
         
@@ -69,6 +56,7 @@ final class LoginScreenViewController: UIViewController {
     
     @objc private func didTapOnEnterButton() {
         
+        updateData()
         guard let tabBarController = presenter.didTapOnButton() else { return }
         present(tabBarController, animated: true, completion: nil)
     }
@@ -109,34 +97,26 @@ final class LoginScreenViewController: UIViewController {
     
     private func updateData() {
         
-        guard !token.isEmpty else {
+        if Core.shared.isNewUser() {
             let requestTokenViewController = AuthViewController()
             requestTokenViewController.delegate = self
             present(requestTokenViewController, animated: false, completion: nil)
             return
         }
-        
-//        var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk/resources/files")
-//        components?.queryItems = [URLQueryItem(name: "media_type", value: "image")]
-//        
-//        guard let url = components?.url else { return }
-//        var request = URLRequest(url: url)
-//        request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
-//        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
-//            guard let self = self, let data = data else { return }
-//            guard let newFiles = try?
-//                    JSONDecoder().decode(DiskResponse.self, from: data) else { return }
-//            print("Received: \(newFiles.items?.count ?? 0) files")
-//        }
-//        task.resume()
+        print("UpdateData. Token is Empty? - \(String(describing: presenter.getToken()?.isEmpty))")
+        guard !(presenter.getToken()?.isEmpty ?? true) else {
+            let requestTokenViewController = AuthViewController()
+            requestTokenViewController.delegate = self
+            present(requestTokenViewController, animated: false, completion: nil)
+            return
+        }
     }
 }
 
 extension LoginScreenViewController: AuthViewControllerDelegate {
     
     func handleTokenChanged(token: String) {
-        self.token = token
-        print("New token: \(token)")
+        presenter.updateToken(newToken: token)
         updateData()
     }
 }
