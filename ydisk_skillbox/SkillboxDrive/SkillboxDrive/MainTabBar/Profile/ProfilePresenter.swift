@@ -13,10 +13,12 @@ protocol ProfilePresenterProtocol {
     func setView(_ view: ProfileViewControllerProtocol)
     func didTapOnYesAlert()
     func didTapOnPublicButton()
+    func getToken() -> String
+    func updateToken(newToken: String?)
 }
 
 final class ProfilePresenter: ProfilePresenterProtocol {
-
+    
     private var view: ProfileViewControllerProtocol?
     private var model: ProfileModel = ProfileModel()
 
@@ -34,6 +36,7 @@ final class ProfilePresenter: ProfilePresenterProtocol {
             cookiesCleaner.clean()
         }
         loginModel.token.removeAll()
+        UserDefaults.standard.removeObject(forKey: Keys.apiToken)
         print("Did token deleted? = \(loginModel.token.isEmpty)")
         Core.shared.setNewUser()
         print("Did user deleted? = \(Core.shared.isNewUser())")
@@ -41,5 +44,17 @@ final class ProfilePresenter: ProfilePresenterProtocol {
     
     func didTapOnPublicButton() {
         print("Called method didTapOnPublicButton")
+    }
+    
+    func getToken() -> String {
+        guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return ""}
+        return token
+    }
+    
+    func updateToken(newToken: String?) {
+        
+        guard let newToken = newToken else { return }
+        model.token = newToken
+        print("token = \(model.token)")
     }
 }

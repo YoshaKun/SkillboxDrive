@@ -8,7 +8,12 @@
 import Foundation
 import WebKit
 
-protocol AuthViewControllerDelegate: class {
+// MARK: - Keys for UserDefaults
+enum Keys {
+    static let apiToken = "apiToken"
+}
+
+protocol AuthViewControllerDelegate: AnyObject {
     
     func handleTokenChanged(token: String)
 }
@@ -17,9 +22,10 @@ final class AuthViewController: UIViewController {
     
     weak var delegate: AuthViewControllerDelegate?
     
+    private let model: LoginScreenModel = LoginScreenModel()
     private let scheme = "https"
     private let webView = WKWebView()
-    private let clientId = "f07af6f0e2114816908f7f0989b2e212"
+    private let clientId = "1e126bd76e7e4406bf4d15babd07e8d8"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,7 +78,8 @@ extension AuthViewController: WKNavigationDelegate {
             
             if let token = token {
                 delegate?.handleTokenChanged(token: token)
-                dismiss(animated: true, completion: nil)
+                UserDefaults.standard.set(token, forKey: Keys.apiToken)
+                dismiss(animated: false, completion: nil)
             }
         } else {
             print("url.scheme invalid")

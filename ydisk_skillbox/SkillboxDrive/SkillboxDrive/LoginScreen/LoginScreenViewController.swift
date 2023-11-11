@@ -98,13 +98,14 @@ final class LoginScreenViewController: UIViewController {
     private func updateData() {
         
         if Core.shared.isNewUser() {
+            Core.shared.setIsNotNewUser()
             let requestTokenViewController = AuthViewController()
             requestTokenViewController.delegate = self
             present(requestTokenViewController, animated: false, completion: nil)
             return
         }
-        print("UpdateData. Token is Empty? - \(String(describing: presenter.getToken()?.isEmpty))")
-        guard !(presenter.getToken()?.isEmpty ?? true) else {
+        print("UpdateData. Token is Empty? - \(String(describing: presenter.getToken().isEmpty))")
+        guard !(presenter.getToken().isEmpty ?? true) else {
             let requestTokenViewController = AuthViewController()
             requestTokenViewController.delegate = self
             present(requestTokenViewController, animated: false, completion: nil)

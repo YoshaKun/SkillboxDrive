@@ -14,6 +14,7 @@ protocol ProfileViewControllerProtocol {
 
 class ProfileViewController: UIViewController, ChartViewDelegate {
     
+    private var storageData: DiskSpaceResponse?
     private let presenter: ProfilePresenterProtocol = ProfilePresenter()
     private var pieChart = PieChartView()
     private var menuButton = UIBarButtonItem()
@@ -25,28 +26,27 @@ class ProfileViewController: UIViewController, ChartViewDelegate {
     private var firstStackView = UIStackView()
     private var secondStackView = UIStackView()
     
-    private let size: CGFloat = 30
-    private let filledGb = 10
-    private let remainsGb = 20
-    private var sizeOfDiskStorage = "30 гб"
+    private let sizeOfTheCircles: CGFloat = 30
+    private var sizeOfDiskStorage = 30
+    private var filledGb = 10
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        pieChart.delegate = self
         configureViews()
         configureStackView()
         configureTabBar()
         configureNavigationBar()
         configureConstraints()
         configurePieChart()
+        updateData()
     }
         
     private func configureViews() {
         
         
         let firstString = "\(filledGb) "
-        let secondString = "\(remainsGb) "
+        let secondString = "\(sizeOfDiskStorage - filledGb) "
         
         view.backgroundColor = .white
         
@@ -74,10 +74,10 @@ class ProfileViewController: UIViewController, ChartViewDelegate {
         remainsLabel.textAlignment = .left
         remainsLabel.textColor = .black
         
-        filledCircle.layer.cornerRadius = CGFloat(size/2)
+        filledCircle.layer.cornerRadius = CGFloat(sizeOfTheCircles/2)
         filledCircle.backgroundColor = Constants.Colors.pink
         
-        remainsCircle.layer.cornerRadius = CGFloat(size/2)
+        remainsCircle.layer.cornerRadius = CGFloat(sizeOfTheCircles/2)
         remainsCircle.backgroundColor = Constants.Colors.gray
     }
     
@@ -175,8 +175,9 @@ class ProfileViewController: UIViewController, ChartViewDelegate {
     
     private func configurePieChart() {
         
+        pieChart.delegate = self
         let filled: Double = Double(filledGb)
-        let remains: Double = Double(remainsGb)
+        let remains: Double = Double(sizeOfDiskStorage - filledGb)
         let memoryRemains = PieChartDataEntry(value: remains, data: 1)
         let memoryFilled = PieChartDataEntry(value: filled, data: 1)
         
@@ -189,7 +190,7 @@ class ProfileViewController: UIViewController, ChartViewDelegate {
         pieChart.data = data
         pieChart.data?.setDrawValues(false)
         pieChart.transparentCircleColor = .white
-        pieChart.centerText = sizeOfDiskStorage
+        pieChart.centerText = "\(String(sizeOfDiskStorage)) Гб"
         pieChart.centerTextRadiusPercent = 100
     }
     
@@ -218,11 +219,11 @@ class ProfileViewController: UIViewController, ChartViewDelegate {
             pieChart.heightAnchor.constraint(equalToConstant: 300),
             pieChart.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            filledCircle.heightAnchor.constraint(equalToConstant: size),
-            filledCircle.widthAnchor.constraint(equalToConstant: size),
+            filledCircle.heightAnchor.constraint(equalToConstant: sizeOfTheCircles),
+            filledCircle.widthAnchor.constraint(equalToConstant: sizeOfTheCircles),
             
-            remainsCircle.heightAnchor.constraint(equalToConstant: size),
-            remainsCircle.widthAnchor.constraint(equalToConstant: size),
+            remainsCircle.heightAnchor.constraint(equalToConstant: sizeOfTheCircles),
+            remainsCircle.widthAnchor.constraint(equalToConstant: sizeOfTheCircles),
             
             firstStackView.topAnchor.constraint(equalTo: pieChart.bottomAnchor, constant: 0),
             firstStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
@@ -239,6 +240,35 @@ class ProfileViewController: UIViewController, ChartViewDelegate {
             publicFilesButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
             publicFilesButton.heightAnchor.constraint(equalToConstant: 50),
         ])
+    }
+    
+    private func updateData() {
+        // MARK: - Получение данных с сервера (переписать в модель)
+        var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk")
+        
+        guard let url = components?.url else { return }
+        var request = URLRequest(url: url)
+        request.setValue("OAuth \(presenter.getToken())", forHTTPHeaderField: "Authorization")
+        print("Request\(request.value(forHTTPHeaderField: "Authorization"))")
+        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
+            guard let self = self, let data = data else {
+                print("Error: \(String(describing: error))")
+                return }
+            guard let newFiles = try? JSONDecoder().decode(DiskSpaceResponse.self, from: data) else { return }
+            print("Received: \(newFiles.total_space ?? 333) total space")
+            print("Received: \(newFiles.used_space ?? 444) used space")
+            self.sizeOfDiskStorage = newFiles.total_space ?? 0
+            self.filledGb = newFiles.used_space ?? 0
+        }
+        task.resume()
+    }
+}
+
+extension ProfileViewController: AuthViewControllerDelegate {
+    
+    func handleTokenChanged(token: String) {
+        presenter.updateToken(newToken: token)
+        updateData()
     }
 }
 
