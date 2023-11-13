@@ -22,6 +22,9 @@
 "FirstVC.alertYes" = "Да";
 "FirstVC.alertNo" = "Нет";
 "OnboardButton" = "Инфо";
-"FirstVC.gbFilled" = "гб - занято";
-"FirstVC.gbRemains" = "гб - свободно";
+"FirstVC.gbFilled" = " - занято";
+"FirstVC.gbRemains" = " - свободно";
 "FirstVC.publicFiles" = "   Опубликованные файлы                                  ";
+"gb" = "гб";
+"mb" = "мб";
+"kb" = "кб";

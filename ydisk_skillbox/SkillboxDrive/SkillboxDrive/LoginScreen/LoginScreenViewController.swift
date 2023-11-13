@@ -25,9 +25,6 @@ final class LoginScreenViewController: UIViewController {
         super.viewDidLayoutSubviews()
 
         // MARK: - Showing the Onboarding
-        // Если надо устанавливаем заново Нового пользователя в Юзер дефолтс
-//        Core.shared.setNewUser()
-        
         // Показываем Онборд новому пользователю 1 раз
         if Core.shared.isNewUser() {
             guard let vc = presenter.didTapOnOnboardButton() else { return }
@@ -56,6 +53,10 @@ final class LoginScreenViewController: UIViewController {
     
     @objc private func didTapOnEnterButton() {
         
+        if Core.shared.isNewUser() {
+            guard let vc = presenter.didTapOnOnboardButton() else { return }
+            present(vc, animated: true)
+        }
         updateData()
         guard let tabBarController = presenter.didTapOnButton() else { return }
         present(tabBarController, animated: true, completion: nil)

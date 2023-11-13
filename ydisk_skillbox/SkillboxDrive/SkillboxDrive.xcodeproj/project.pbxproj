@@ -19,6 +19,9 @@
 		6BA0F76F2AE95D3D007EE8FC /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA0F76E2AE95D3D007EE8FC /* ProfileModel.swift */; };
 		6BA0F7712AE95D56007EE8FC /* ProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA0F7702AE95D56007EE8FC /* ProfilePresenter.swift */; };
 		6BC3FC382AD71EB800A86FF6 /* LoginScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC3FC372AD71EB800A86FF6 /* LoginScreenViewController.swift */; };
+		6BEAF40D2B0276E900A80A4E /* PublicFilesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BEAF40C2B0276E900A80A4E /* PublicFilesModel.swift */; };
+		6BEAF40F2B0276F800A80A4E /* PublicFilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BEAF40E2B0276F800A80A4E /* PublicFilesViewController.swift */; };
+		6BEAF4112B02770500A80A4E /* PublicFilesPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BEAF4102B02770500A80A4E /* PublicFilesPresenter.swift */; };
 		6BEEF0E62ACEC47000BBE68D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BEEF0E52ACEC47000BBE68D /* AppDelegate.swift */; };
 		6BEEF0E82ACEC47000BBE68D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BEEF0E72ACEC47000BBE68D /* SceneDelegate.swift */; };
 		6BEEF0EA2ACEC47000BBE68D /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BEEF0E92ACEC47000BBE68D /* ProfileViewController.swift */; };
@@ -46,6 +49,9 @@
 		6BA0F76E2AE95D3D007EE8FC /* ProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
 		6BA0F7702AE95D56007EE8FC /* ProfilePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePresenter.swift; sourceTree = "<group>"; };
 		6BC3FC372AD71EB800A86FF6 /* LoginScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreenViewController.swift; sourceTree = "<group>"; };
+		6BEAF40C2B0276E900A80A4E /* PublicFilesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicFilesModel.swift; sourceTree = "<group>"; };
+		6BEAF40E2B0276F800A80A4E /* PublicFilesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicFilesViewController.swift; sourceTree = "<group>"; };
+		6BEAF4102B02770500A80A4E /* PublicFilesPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicFilesPresenter.swift; sourceTree = "<group>"; };
 		6BEEF0E22ACEC47000BBE68D /* SkillboxDrive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SkillboxDrive.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6BEEF0E52ACEC47000BBE68D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6BEEF0E72ACEC47000BBE68D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -103,6 +109,16 @@
 			path = LoginScreen;
 			sourceTree = "<group>";
 		};
+		6BEAF40B2B0276BC00A80A4E /* PublicFiles */ = {
+			isa = PBXGroup;
+			children = (
+				6BEAF40C2B0276E900A80A4E /* PublicFilesModel.swift */,
+				6BEAF40E2B0276F800A80A4E /* PublicFilesViewController.swift */,
+				6BEAF4102B02770500A80A4E /* PublicFilesPresenter.swift */,
+			);
+			path = PublicFiles;
+			sourceTree = "<group>";
+		};
 		6BEEF0D92ACEC47000BBE68D = {
 			isa = PBXGroup;
 			children = (
@@ -157,6 +173,7 @@
 				6BA0F76E2AE95D3D007EE8FC /* ProfileModel.swift */,
 				6BEEF0E92ACEC47000BBE68D /* ProfileViewController.swift */,
 				6BA0F7702AE95D56007EE8FC /* ProfilePresenter.swift */,
+				6BEAF40B2B0276BC00A80A4E /* PublicFiles */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -334,6 +351,7 @@
 				6BEEF0F02ACEC47000BBE68D /* SkillboxDrive.xcdatamodeld in Sources */,
 				6BEEF0EA2ACEC47000BBE68D /* ProfileViewController.swift in Sources */,
 				6BC3FC382AD71EB800A86FF6 /* LoginScreenViewController.swift in Sources */,
+				6BEAF4112B02770500A80A4E /* PublicFilesPresenter.swift in Sources */,
 				6B295E8A2AD81DC4003FD56C /* LoginScreenModel.swift in Sources */,
 				6BEEF0E62ACEC47000BBE68D /* AppDelegate.swift in Sources */,
 				6B205F342AD587ED001BB4CD /* CustomOnboardingCell.swift in Sources */,
@@ -341,6 +359,8 @@
 				6B205F322AD5736A001BB4CD /* Constants.swift in Sources */,
 				6B177E812AF942B900F43811 /* AuthViewController.swift in Sources */,
 				6BEEF0E82ACEC47000BBE68D /* SceneDelegate.swift in Sources */,
+				6BEAF40D2B0276E900A80A4E /* PublicFilesModel.swift in Sources */,
+				6BEAF40F2B0276F800A80A4E /* PublicFilesViewController.swift in Sources */,
 				6BA0F7712AE95D56007EE8FC /* ProfilePresenter.swift in Sources */,
 				6B4C4B812AFCF7B30048D1B3 /* WebCacheCleaner.swift in Sources */,
 				6BEEF1082ACED9EE00BBE68D /* OnboardingModel.swift in Sources */,

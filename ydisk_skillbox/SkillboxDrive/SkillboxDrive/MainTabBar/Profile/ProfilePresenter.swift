@@ -10,24 +10,21 @@ import UIKit
 
 protocol ProfilePresenterProtocol {
     
-    func setView(_ view: ProfileViewControllerProtocol)
     func didTapOnYesAlert()
     func didTapOnPublicButton()
-    func getToken() -> String
     func updateToken(newToken: String?)
+    func getConvertedBytesTotal(value: Int) -> Double
+    func getConvertedBytesUsed(value: Int) -> Double
+    func getConvertedBytesTotalToString(value: Int) -> String
+    func getConvertedBytesUsedToString(value: Int) -> String
+    func getConvertedBytesRemainsToString(total: Int, used: Int) -> String
 }
 
 final class ProfilePresenter: ProfilePresenterProtocol {
     
-    private var view: ProfileViewControllerProtocol?
     private var model: ProfileModel = ProfileModel()
 
     private let loginModel: LoginScreenModel = LoginScreenModel()
-    
-    func setView(_ view: ProfileViewControllerProtocol) {
-        
-        self.view = view
-    }
     
     func didTapOnYesAlert() {
         
@@ -46,15 +43,42 @@ final class ProfilePresenter: ProfilePresenterProtocol {
         print("Called method didTapOnPublicButton")
     }
     
-    func getToken() -> String {
-        guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return ""}
-        return token
-    }
-    
     func updateToken(newToken: String?) {
         
         guard let newToken = newToken else { return }
-        model.token = newToken
-        print("token = \(model.token)")
+        loginModel.token = newToken
+        UserDefaults.standard.set(newToken, forKey: Keys.apiToken)
+        print("token = \(loginModel.token)")
+    }
+    
+    func getConvertedBytesTotal(value: Int) -> Double {
+        
+        let converter = Units(bytes: Int64(value))
+        return converter.gigabytes
+    }
+    
+    func getConvertedBytesUsed(value: Int) -> Double {
+        
+        let converter = Units(bytes: Int64(value))
+        return converter.gigabytes
+    }
+    
+    func getConvertedBytesTotalToString(value: Int) -> String {
+        
+        let converter = Units(bytes: Int64(value))
+        return converter.getReadableUnit()
+    }
+    
+    func getConvertedBytesUsedToString(value: Int) -> String {
+        
+        let converter = Units(bytes: Int64(value))
+        return converter.getReadableUnit()
+    }
+    
+    func getConvertedBytesRemainsToString(total: Int, used: Int) -> String {
+
+        let remain = total - used
+        let converter = Units(bytes: Int64(remain))
+        return converter.getReadableUnit()
     }
 }

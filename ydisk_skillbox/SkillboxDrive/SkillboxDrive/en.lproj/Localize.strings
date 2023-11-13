@@ -22,6 +22,9 @@
 "FirstVC.alertYes" = "Yes";
 "FirstVC.alertNo" = "No";
 "OnboardButton" = "Info";
-"FirstVC.gbFilled" = "gb - filled";
-"FirstVC.gbRemains" = "gb - free";
+"FirstVC.gbFilled" = " - used";
+"FirstVC.gbRemains" = " - free";
 "FirstVC.publicFiles" = "   Published files                                ";
+"gb" = "gb";
+"mb" = "mb";
+"kb" = "kb";

@@ -28,6 +28,9 @@ enum Constants {
         static let nextButton = Bundle.main.localizedString(forKey: "nextButton", value: "", table: "Localize")
         static let loginButton = Bundle.main.localizedString(forKey: "loginButton", value: "", table: "Localize")
         static let OnboardButton = Bundle.main.localizedString(forKey: "OnboardButton", value: "", table: "Localize")
+        static let gb = Bundle.main.localizedString(forKey: "gb", value: "", table: "Localize")
+        static let mb = Bundle.main.localizedString(forKey: "mb", value: "", table: "Localize")
+        static let kb = Bundle.main.localizedString(forKey: "kb", value: "", table: "Localize")
         
         enum FirstVC {
             static let title = Bundle.main.localizedString(forKey: "FirstVC.title", value: "", table: "Localize")

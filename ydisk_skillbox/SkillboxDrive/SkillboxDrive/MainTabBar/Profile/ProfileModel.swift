@@ -8,8 +8,7 @@
 import Foundation
 
 final class ProfileModel {
-    
-    var token: String = ""
+
     
 }
 
@@ -39,11 +38,11 @@ public struct Units {
     case 0..<1_024:
       return "\(bytes) bytes"
     case 1_024..<(1_024 * 1_024):
-      return "\(String(format: "%.2f", kilobytes)) kb"
+      return "\(String(format: "%.2f", kilobytes)) " + Constants.Text.kb
     case 1_024..<(1_024 * 1_024 * 1_024):
-      return "\(String(format: "%.2f", megabytes)) mb"
+        return "\(String(format: "%.2f", megabytes)) " + Constants.Text.mb
     case (1_024 * 1_024 * 1_024)...Int64.max:
-      return "\(String(format: "%.2f", gigabytes)) gb"
+        return "\(String(format: "%.2f", gigabytes)) " + Constants.Text.gb
     default:
       return "\(bytes) bytes"
     }
