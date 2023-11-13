@@ -28,3 +28,6 @@
 "gb" = "gb";
 "mb" = "mb";
 "kb" = "kb";
+"FirstVC.publicFilesTitle" = "Published files";
+"FirstVC.noFilesDescr" = "You don't have any published files yet";
+"FirstVC.update" = "Update";

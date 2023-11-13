@@ -45,7 +45,7 @@ class OnboardingViewController: UIViewController {
         pageControl.currentPageIndicatorTintColor = Constants.Colors.blueSpecial
         pageControl.addTarget(self, action: #selector(pageControlDidChange(_:)), for: .valueChanged)
         
-        nextButton.backgroundColor = .blue
+        nextButton.backgroundColor = Constants.Colors.blueSpecial
         nextButton.setTitle(Constants.Text.nextButton, for: .normal)
         nextButton.setTitleColor(.white, for: .normal)
         nextButton.layer.cornerRadius = 7

@@ -19,6 +19,8 @@ enum Constants {
         static let tabBar3 = UIImage(named: "AllFilesPicture")
         static let menu = UIImage(named: "Menu")
         static let arrow = UIImage(named: "Arrow")
+        static let noFiles = UIImage(named: "NoFiles")
+        static let backArrow = UIImage(named: "BackArrow")
     }
     
     enum Text {
@@ -43,6 +45,9 @@ enum Constants {
             static let gbFilled = Bundle.main.localizedString(forKey: "FirstVC.gbFilled", value: "", table: "Localize")
             static let gbRemains = Bundle.main.localizedString(forKey: "FirstVC.gbRemains", value: "", table: "Localize")
             static let publicFiles = Bundle.main.localizedString(forKey: "FirstVC.publicFiles", value: "", table: "Localize")
+            static let publicFilesTitle = Bundle.main.localizedString(forKey: "FirstVC.publicFilesTitle", value: "", table: "Localize")
+            static let noFilesDescr = Bundle.main.localizedString(forKey: "FirstVC.noFilesDescr", value: "", table: "Localize")
+            static let update = Bundle.main.localizedString(forKey: "FirstVC.update", value: "", table: "Localize")
         }
         
         enum SecondVC {

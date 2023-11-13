@@ -28,3 +28,6 @@
 "gb" = "гб";
 "mb" = "мб";
 "kb" = "кб";
+"FirstVC.publicFilesTitle" = "Опубликованные файлы";
+"FirstVC.noFilesDescr" = "У вас пока нет опубликованных файлов";
+"FirstVC.update" = "Обновить";

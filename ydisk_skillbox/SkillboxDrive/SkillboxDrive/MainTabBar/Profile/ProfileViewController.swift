@@ -8,6 +8,8 @@
 import DGCharts
 import UIKit
 
+protocol ProfileViewControllerProtocol: AnyObject {}
+
 final class ProfileViewController: UIViewController, ChartViewDelegate {
     
     private let presenter: ProfilePresenterProtocol = ProfilePresenter()
@@ -74,11 +76,13 @@ final class ProfileViewController: UIViewController, ChartViewDelegate {
     
     @objc private func didTappedOnPublicFiles() {
         
-        presenter.didTapOnPublicButton()
+        let vc = PublicFilesViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     private func updatePieChart() {
         
+        pieChart.delegate = self
         let totalGigabytes = presenter.getConvertedBytesTotal(value: totalSpaceGb)
         let usedGigabytes = presenter.getConvertedBytesUsed(value: usedSpaceGb)
         let remainsGigabytes = totalGigabytes - usedGigabytes

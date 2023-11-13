@@ -11,7 +11,6 @@ import UIKit
 protocol ProfilePresenterProtocol {
     
     func didTapOnYesAlert()
-    func didTapOnPublicButton()
     func updateToken(newToken: String?)
     func getConvertedBytesTotal(value: Int) -> Double
     func getConvertedBytesUsed(value: Int) -> Double
@@ -23,7 +22,6 @@ protocol ProfilePresenterProtocol {
 final class ProfilePresenter: ProfilePresenterProtocol {
     
     private var model: ProfileModel = ProfileModel()
-
     private let loginModel: LoginScreenModel = LoginScreenModel()
     
     func didTapOnYesAlert() {
@@ -37,10 +35,6 @@ final class ProfilePresenter: ProfilePresenterProtocol {
         print("Did token deleted? = \(loginModel.token.isEmpty)")
         Core.shared.setNewUser()
         print("Did user deleted? = \(Core.shared.isNewUser())")
-    }
-    
-    func didTapOnPublicButton() {
-        print("Called method didTapOnPublicButton")
     }
     
     func updateToken(newToken: String?) {

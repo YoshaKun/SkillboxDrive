@@ -22,6 +22,7 @@ class CustomOnboardingCell: UICollectionViewCell {
     }
     
     func setup() {
+        
         self.contentView.addSubview(imageView)
         self.contentView.addSubview(descriptionOnboard)
         

@@ -6,3 +6,12 @@
 //
 
 import Foundation
+
+protocol PublicFilesPresenterProtocol {
+    
+}
+
+final class PublicFilesPresenter: PublicFilesPresenterProtocol {
+    
+    
+}
