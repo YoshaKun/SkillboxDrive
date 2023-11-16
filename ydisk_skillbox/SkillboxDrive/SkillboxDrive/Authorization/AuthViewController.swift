@@ -79,7 +79,7 @@ extension AuthViewController: WKNavigationDelegate {
             if let token = token {
                 delegate?.handleTokenChanged(token: token)
                 UserDefaults.standard.set(token, forKey: Keys.apiToken)
-                dismiss(animated: false, completion: nil)
+                dismiss(animated: true, completion: nil)
             }
         } else {
             print("url.scheme invalid")

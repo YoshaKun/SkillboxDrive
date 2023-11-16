@@ -28,7 +28,7 @@ final class LoginScreenViewController: UIViewController {
         // Показываем Онборд новому пользователю 1 раз
         if Core.shared.isNewUser() {
             guard let vc = presenter.didTapOnOnboardButton() else { return }
-            present(vc, animated: false)
+            present(vc, animated: true)
         }
     }
 
@@ -102,14 +102,14 @@ final class LoginScreenViewController: UIViewController {
             Core.shared.setIsNotNewUser()
             let requestTokenViewController = AuthViewController()
             requestTokenViewController.delegate = self
-            present(requestTokenViewController, animated: false, completion: nil)
+            present(requestTokenViewController, animated: true, completion: nil)
             return
         }
         print("UpdateData. Token is Empty? - \(String(describing: presenter.getToken().isEmpty))")
         guard !(presenter.getToken().isEmpty ?? true) else {
             let requestTokenViewController = AuthViewController()
             requestTokenViewController.delegate = self
-            present(requestTokenViewController, animated: false, completion: nil)
+            present(requestTokenViewController, animated: true, completion: nil)
             return
         }
     }

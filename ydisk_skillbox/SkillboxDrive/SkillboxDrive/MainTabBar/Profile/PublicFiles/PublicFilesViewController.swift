@@ -10,41 +10,28 @@ import UIKit
 
 final class PublicFilesViewController: UIViewController {
     
+    var dataResponse: PublishedFiles = PublishedFiles(items: [PublishedItems(name: "file", created: "15.11.23", size: 3033, type: "file", preview: "wqwdfsdv"), PublishedItems(name: "2file", created: "15.11.23", size: 2922, type: "file", preview: "9uweoijfkln")])
+    
+    private let customCell = "customCell"
     private let presenter: PublicFilesPresenterProtocol = PublicFilesPresenter()
     private var noFilesImageView = UIImageView()
     private var descriptionLabel = UILabel()
     private var backButton = UIBarButtonItem()
     private var updateButton = UIButton()
     private var noFilesView = UIView()
-    
-    private lazy var activityIndicator: UIActivityIndicatorView = {
-        let view = UIActivityIndicatorView(frame: CGRect(x: 150, y: 400, width: 140, height: 140))
-        return view
-    }()
+    private var activityIndicator = UIActivityIndicatorView()
+    private var tableView = UITableView(frame: CGRect.zero, style: UITableView.Style.grouped)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureNoFiViews()
-        configureUIView()
+        view.backgroundColor = .white
+        configureNoFilesView()
+        configureNoFilesConstraints()
         configureNavigationBar()
-//        configureConstraints()
     }
     
-    private func configureNoFiViews() {
-        
-        view.backgroundColor = .white
-        
-        noFilesView.addSubview(noFilesImageView)
-        noFilesView.addSubview(descriptionLabel)
-        noFilesView.addSubview(updateButton)
-        
-        let offsetForImage = view.frame.size.width / 2
-        let offsetForDescription = view.frame.size.width / 4
-        
-        noFilesImageView.translatesAutoresizingMaskIntoConstraints = false
-        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-        updateButton.translatesAutoresizingMaskIntoConstraints = false
+    private func configureNoFilesView() {
         
         noFilesImageView.image = Constants.Image.noFiles
         noFilesImageView.contentMode = .scaleAspectFit
@@ -59,8 +46,38 @@ final class PublicFilesViewController: UIViewController {
         updateButton.setTitleColor(.black, for: .normal)
         updateButton.layer.cornerRadius = 7
         updateButton.addTarget(self, action: #selector(didTappedOnUpdateButton), for: .touchUpInside)
+    }
+    
+    @objc private func didTappedOnUpdateButton() {
+        
+        self.noFilesView.removeFromSuperview()
+//        configureActivityIndicator()
+        configureTableView()
+        updateData()
+    }
+    
+    private func configureNoFilesConstraints() {
+        
+        let offsetForImage = view.frame.size.width / 2
+        let offsetForDescription = view.frame.size.width / 4
+        
+        view.addSubview(noFilesView)
+        
+        noFilesView.addSubview(noFilesImageView)
+        noFilesView.addSubview(descriptionLabel)
+        noFilesView.addSubview(updateButton)
+        
+        noFilesView.translatesAutoresizingMaskIntoConstraints = false
+        noFilesImageView.translatesAutoresizingMaskIntoConstraints = false
+        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        updateButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
+            noFilesView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            noFilesView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            noFilesView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            noFilesView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
             noFilesImageView.centerXAnchor.constraint(equalTo: noFilesView.centerXAnchor),
             noFilesImageView.topAnchor.constraint(equalTo: noFilesView.topAnchor, constant: offsetForImage / 1.5),
             noFilesImageView.widthAnchor.constraint(equalToConstant: offsetForImage),
@@ -77,23 +94,17 @@ final class PublicFilesViewController: UIViewController {
         ])
     }
     
-    @objc private func didTappedOnUpdateButton() {
+    private func configureActivityIndicator() {
         
-        self.noFilesView.removeFromSuperview()
-        activityIndicator.startAnimating()
         view.addSubview(activityIndicator)
-    }
-    
-    private func configureUIView() {
-        
-        view.addSubview(noFilesView)
-        noFilesView.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.startAnimating()
         
         NSLayoutConstraint.activate([
-            noFilesView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            noFilesView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            noFilesView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            noFilesView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            activityIndicator.widthAnchor.constraint(equalToConstant: 150),
+            activityIndicator.heightAnchor.constraint(equalToConstant: 150),
         ])
     }
     
@@ -115,8 +126,73 @@ final class PublicFilesViewController: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
     
-    private func configureConstraints() {
-                
+    private func configureTableView() {
+        tableView.register(CustomCell.self, forCellReuseIdentifier: customCell)
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.backgroundColor = .white
+        tableView.separatorStyle = .none
+        configureConstraints()
     }
+    
+    private func configureConstraints() {
+        
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(tableView)
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+        ])
+    }
+    
+    private func updateData() {
+        // MARK: - Получение данных с сервера для PieChart
+        guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
+        var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk/resources/public")
+        
+        guard let url = components?.url else { return }
+        var request = URLRequest(url: url)
+        request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
+            guard let self = self, let data = data else {
+                print("Error: \(String(describing: error))")
+                return }
+            guard let newFiles = try? JSONDecoder().decode(PublishedFiles.self, from: data) else {
+                print("Error serialization")
+                return }
+            print("Received: \(newFiles.items?.count ?? 0) files")
+            
+            DispatchQueue.main.async {
+                
+            }
+        }
+        task.resume()
+    }
+}
+
+extension PublicFilesViewController: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return dataResponse.items?.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: customCell) as? CustomCell
+        guard let viewModel = dataResponse.items, viewModel.count > indexPath.row else {
+            return UITableViewCell()
+        }
+        let item = viewModel[indexPath.row]
+        cell?.configureCell(item)
+        cell?.backgroundColor = .white
+        return cell ?? UITableViewCell()
+    }
+}
+
+extension PublicFilesViewController: UITableViewDelegate {
+    
     
 }
