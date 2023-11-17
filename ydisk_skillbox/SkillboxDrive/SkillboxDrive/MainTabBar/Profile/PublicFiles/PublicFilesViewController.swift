@@ -10,25 +10,66 @@ import UIKit
 
 final class PublicFilesViewController: UIViewController {
     
-    var dataResponse: PublishedFiles = PublishedFiles(items: [PublishedItems(name: "file", created: "15.11.23", size: 3033, type: "file", preview: "wqwdfsdv"), PublishedItems(name: "2file", created: "15.11.23", size: 2922, type: "file", preview: "9uweoijfkln")])
-    
-    private let customCell = "customCell"
+    private let publicCell = "publicCell"
     private let presenter: PublicFilesPresenterProtocol = PublicFilesPresenter()
+    private let refreshControl = UIRefreshControl()
     private var noFilesImageView = UIImageView()
     private var descriptionLabel = UILabel()
     private var backButton = UIBarButtonItem()
     private var updateButton = UIButton()
     private var noFilesView = UIView()
     private var activityIndicator = UIActivityIndicatorView()
+    private var activityIndicatorView = UIView()
     private var tableView = UITableView(frame: CGRect.zero, style: UITableView.Style.grouped)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .white
+        configureNavigationBar()
         configureNoFilesView()
         configureNoFilesConstraints()
-        configureNavigationBar()
+        
+    }
+    
+    private func configureNavigationBar() {
+    
+        backButton = UIBarButtonItem(
+            image: Constants.Image.backArrow,
+            style: .plain,
+            target: self,
+            action: #selector(didTappedOnBackButton)
+        )
+        backButton.tintColor = Constants.Colors.gray
+        navigationItem.leftBarButtonItem = backButton
+        navigationItem.title = Constants.Text.FirstVC.publicFilesTitle
+    }
+    
+    @objc private func didTappedOnBackButton() {
+        
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    private func configureActivityIndicatorView() {
+        
+        view.addSubview(activityIndicatorView)
+        activityIndicatorView.addSubview(activityIndicator)
+        
+        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.startAnimating()
+        
+        NSLayoutConstraint.activate([
+            activityIndicatorView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            activityIndicatorView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            activityIndicatorView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            activityIndicatorView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: activityIndicatorView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: activityIndicatorView.centerYAnchor),
+            activityIndicator.widthAnchor.constraint(equalToConstant: 50),
+            activityIndicator.heightAnchor.constraint(equalToConstant: 50),
+        ])
     }
     
     private func configureNoFilesView() {
@@ -51,9 +92,20 @@ final class PublicFilesViewController: UIViewController {
     @objc private func didTappedOnUpdateButton() {
         
         self.noFilesView.removeFromSuperview()
-//        configureActivityIndicator()
+        configureActivityIndicatorView()
+        updateView()
+    }
+    
+    private func updateView() {
+
         configureTableView()
-        updateData()
+        updateDataOfTableView()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            guard let self = self else { return }
+            self.activityIndicator.stopAnimating()
+            self.activityIndicatorView.removeFromSuperview()
+            self.tableView.isHidden = false
+        }
     }
     
     private func configureNoFilesConstraints() {
@@ -94,40 +146,11 @@ final class PublicFilesViewController: UIViewController {
         ])
     }
     
-    private func configureActivityIndicator() {
-        
-        view.addSubview(activityIndicator)
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        activityIndicator.startAnimating()
-        
-        NSLayoutConstraint.activate([
-            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            activityIndicator.widthAnchor.constraint(equalToConstant: 150),
-            activityIndicator.heightAnchor.constraint(equalToConstant: 150),
-        ])
-    }
-    
-    private func configureNavigationBar() {
-    
-        backButton = UIBarButtonItem(
-            image: Constants.Image.backArrow,
-            style: .plain,
-            target: self,
-            action: #selector(didTappedOnBackButton)
-        )
-        backButton.tintColor = Constants.Colors.gray
-        navigationItem.leftBarButtonItem = backButton
-        navigationItem.title = Constants.Text.FirstVC.publicFilesTitle
-    }
-    
-    @objc private func didTappedOnBackButton() {
-        
-        self.navigationController?.popViewController(animated: true)
-    }
-    
     private func configureTableView() {
-        tableView.register(CustomCell.self, forCellReuseIdentifier: customCell)
+        
+        refreshControl.addTarget(self, action: #selector(didSwipeToRefresh), for: .valueChanged)
+        tableView.refreshControl = self.refreshControl
+        tableView.register(PublicCell.self, forCellReuseIdentifier: publicCell)
         tableView.dataSource = self
         tableView.delegate = self
         tableView.backgroundColor = .white
@@ -135,58 +158,69 @@ final class PublicFilesViewController: UIViewController {
         configureConstraints()
     }
     
+    @objc private func didSwipeToRefresh() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            self?.updateDataOfTableView()
+            self?.tableView.refreshControl?.endRefreshing()
+        }
+    }
+    
+    private func updateDataOfTableView() {
+        
+        presenter.updateDataTableView {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
     private func configureConstraints() {
         
+        tableView.isHidden = true
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
         ])
     }
     
-    private func updateData() {
-        // MARK: - Получение данных с сервера для PieChart
-        guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
-        var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk/resources/public")
+    private func createActionSheet(titleCell: String) -> UIAlertController {
         
-        guard let url = components?.url else { return }
-        var request = URLRequest(url: url)
-        request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
-        
-        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
-            guard let self = self, let data = data else {
-                print("Error: \(String(describing: error))")
-                return }
-            guard let newFiles = try? JSONDecoder().decode(PublishedFiles.self, from: data) else {
-                print("Error serialization")
-                return }
-            print("Received: \(newFiles.items?.count ?? 0) files")
-            
-            DispatchQueue.main.async {
-                
-            }
-        }
-        task.resume()
+        let alert = UIAlertController(title: titleCell, message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: Constants.Text.FirstVC.cancel, style: .cancel, handler: nil))
+        alert.addAction(
+            UIAlertAction(
+                title: Constants.Text.FirstVC.removePost,
+                style: .destructive,
+                handler: nil
+//                handler: {  [weak self] _ in
+//                    self?.
+                // MARK: - Добавить вызов сетевого запроса PUT на удаление публикации + удалить из списка, либо делать REFRESH TableView
+//                }
+            )
+        )
+        return alert
     }
 }
 
 extension PublicFilesViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataResponse.items?.count ?? 0
+        return presenter.getModelDataItemsCount() ?? 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: customCell) as? CustomCell
-        guard let viewModel = dataResponse.items, viewModel.count > indexPath.row else {
+        let cell = tableView.dequeueReusableCell(withIdentifier: publicCell) as? PublicCell
+        guard let viewModel = presenter.getModelData().items, viewModel.count > indexPath.row else {
             return UITableViewCell()
         }
         let item = viewModel[indexPath.row]
         cell?.configureCell(item)
+        cell?.delegate = self
         cell?.backgroundColor = .white
         return cell ?? UITableViewCell()
     }
@@ -195,4 +229,12 @@ extension PublicFilesViewController: UITableViewDataSource {
 extension PublicFilesViewController: UITableViewDelegate {
     
     
+}
+
+extension PublicFilesViewController: PublicCellDelegate {
+    
+    func didTapButton(with title: String) {
+        let alert = self.createActionSheet(titleCell: title)
+        self.present(alert, animated: true, completion: nil)
+    }
 }

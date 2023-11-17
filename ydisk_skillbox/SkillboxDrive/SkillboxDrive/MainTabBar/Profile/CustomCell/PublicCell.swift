@@ -8,14 +8,26 @@
 import Foundation
 import UIKit
 
-final class CustomCell: UITableViewCell {
+protocol PublicCellDelegate: AnyObject {
+
+    func didTapButton(with title: String)
+}
+
+final class PublicCell: UITableViewCell {
     
+    // MARK: - Delegate
+    weak var delegate: PublicCellDelegate?
+    
+    private let presenter: PublicCellPresenterProtocol = PublicCellPresenter()
+    
+    // MARK: - Private variables
     private var nameFile = UILabel()
     private var sizeFile = UILabel()
     private var dateFile = UILabel()
     private var timeFile = UILabel()
     private var imageViewFile = UIImageView()
     private var menuButton = UIButton()
+    private var activityIndicator = UIActivityIndicatorView()
 
     private var firstStackView = UIStackView()
     private var secondStackView = UIStackView()
@@ -35,21 +47,23 @@ final class CustomCell: UITableViewCell {
     
     private func configureViews() {
         
-        nameFile.font = .systemFont(ofSize: 16, weight: .semibold)
+        nameFile.font = .systemFont(ofSize: 15, weight: .regular)
         nameFile.textColor = .black
         
-        sizeFile.font = .systemFont(ofSize: 12, weight: .regular)
-        sizeFile.textColor = .lightGray
+        sizeFile.font = .systemFont(ofSize: 13, weight: .regular)
+        sizeFile.textColor = Constants.Colors.gray
         
-        dateFile.font = .systemFont(ofSize: 12, weight: .regular)
-        dateFile.textColor = .lightGray
+        dateFile.font = .systemFont(ofSize: 13, weight: .regular)
+        dateFile.textColor = Constants.Colors.gray
         
-        timeFile.font = .systemFont(ofSize: 12, weight: .regular)
-        timeFile.textColor = .lightGray
+        timeFile.font = .systemFont(ofSize: 13, weight: .regular)
+        timeFile.textColor = Constants.Colors.gray
         
-        imageViewFile.image = Constants.Image.folder
+        imageViewFile.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
         
         menuButton.setImage(Constants.Image.menu, for: .normal)
+        menuButton.addTarget(self, action: #selector(didTappedOnMenuButton), for: .touchUpInside)
         
         firstStackView.axis = .horizontal
         firstStackView.alignment = .center
@@ -63,6 +77,14 @@ final class CustomCell: UITableViewCell {
         thirdStackView.alignment = .center
         thirdStackView.spacing = 16
     }
+
+    @objc private func didTappedOnMenuButton() {
+        
+        // MARK: - Добавить метод presentAlert
+        guard let nameOfCell = nameFile.text else { return }
+        delegate?.didTapButton(with: nameOfCell)
+        print("Сработал метод didTappedOnMenuButton ячейки \(nameOfCell)")
+    }
     
     private func setupConstraints() {
         nameFile.translatesAutoresizingMaskIntoConstraints = false
@@ -74,6 +96,7 @@ final class CustomCell: UITableViewCell {
         firstStackView.translatesAutoresizingMaskIntoConstraints = false
         secondStackView.translatesAutoresizingMaskIntoConstraints = false
         thirdStackView.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         
         contentView.addSubview(thirdStackView)
         firstStackView.addArrangedSubview(sizeFile)
@@ -90,6 +113,9 @@ final class CustomCell: UITableViewCell {
             imageViewFile.widthAnchor.constraint(equalToConstant: 30),
             imageViewFile.heightAnchor.constraint(equalToConstant: 30),
             
+            activityIndicator.centerXAnchor.constraint(equalTo: imageViewFile.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: imageViewFile.centerYAnchor),
+            
             menuButton.widthAnchor.constraint(equalToConstant: 30),
             menuButton.heightAnchor.constraint(equalToConstant: 30),
             
@@ -100,15 +126,61 @@ final class CustomCell: UITableViewCell {
         ])
     }
     
+    // MARK: - ParseDate
+    private func parseDate(_ str: String) -> Date {
+        let dateFormat = DateFormatter()
+        dateFormat.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        let date = dateFormat.date(from: str) ?? Date()
+
+        return date
+    }
+    
+    private func getOnlyDateRu(date: Date) -> String {
+        let dateFormat = DateFormatter()
+        dateFormat.locale = Locale(identifier: "ru_RU")
+        dateFormat.dateStyle = .short
+        dateFormat.timeStyle = .none
+        return dateFormat.string(from: date)
+    }
+    
+    private func getOnlyTime(date: Date) -> String {
+        let dateFormat = DateFormatter()
+        dateFormat.locale = Locale(identifier: "ru_RU")
+        dateFormat.dateStyle = .none
+        dateFormat.timeStyle = .short
+        return dateFormat.string(from: date)
+    }
+    
+    // MARK: - ConfigureCell
+    
     func configureCell(_ viewModel: PublishedItems) {
-//        filmIDforCell = viewModel.filmID ?? 000
-        print("Сработал метод configure из модуля CustomCell")
-//        let url = URL(string: viewModel.posterUrl ?? "https://kinopoiskapiunofficial.tech/images/posters/kp/2213.jpg")
-//        downloadImage(from: url!)
-        let str = String(Int(viewModel.size ?? 0))
+        
+        let converter = Units.init(bytes: Int64(viewModel.size ?? 0))
+        let str = converter.getReadableUnit()
+        guard let initialDate = viewModel.created else { return }
+        let date = parseDate(initialDate ?? "2023-11-13T18:56:09+00:00")
+        
+        let onlyDate = getOnlyDateRu(date: date)
+        let time = getOnlyTime(date: date)
+        
         nameFile.text = viewModel.name
         sizeFile.text = str
-        dateFile.text = viewModel.created
-        timeFile.text = viewModel.created
+        dateFile.text = onlyDate
+        timeFile.text = time
+        
+        guard let url = viewModel.preview else {
+            activityIndicator.stopAnimating()
+            activityIndicator.removeFromSuperview()
+            imageViewFile.image = Constants.Image.folder
+            return
+        }
+        
+        presenter.getImageForLatestCell(urlStr: url) { data in
+            DispatchQueue.main.async() { [weak self] in
+                self?.activityIndicator.stopAnimating()
+                self?.activityIndicator.removeFromSuperview()
+                self?.imageViewFile.image = UIImage(data: data)
+            }
+        }
     }
 }

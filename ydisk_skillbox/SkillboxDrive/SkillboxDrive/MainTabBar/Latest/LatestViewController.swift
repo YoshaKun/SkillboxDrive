@@ -9,12 +9,10 @@ import UIKit
 
 final class LatestViewController: UIViewController {
     
-    var modelData = LatestFiles(items: [])
-    
     // MARK: - Private variables
     private let latestCell = "latestCell"
+    private let presenter: LatestPresenterProtocol = LatestPresenter()
     private let refreshControl = UIRefreshControl()
-//    private let presenter: PublicFilesPresenterProtocol = PublicFilesPresenter()
     private var activityIndicator = UIActivityIndicatorView()
     private var tableView = UITableView(frame: CGRect.zero, style: UITableView.Style.grouped)
     
@@ -28,26 +26,13 @@ final class LatestViewController: UIViewController {
         updateDataOfTableView()
     }
     
-    private func configureActivityIndicator() {
-        
-        view.addSubview(activityIndicator)
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        activityIndicator.startAnimating()
-        
-        NSLayoutConstraint.activate([
-            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            activityIndicator.widthAnchor.constraint(equalToConstant: 150),
-            activityIndicator.heightAnchor.constraint(equalToConstant: 150),
-        ])
-    }
-    
     private func configureNavigationBar() {
     
         navigationItem.title = Constants.Text.SecondVC.title
     }
     
     private func configureTableView() {
+        
         refreshControl.addTarget(self, action: #selector(didSwipeToRefresh), for: .valueChanged)
         tableView.refreshControl = self.refreshControl
         tableView.register(LatestCell.self, forCellReuseIdentifier: latestCell)
@@ -59,9 +44,19 @@ final class LatestViewController: UIViewController {
     }
     
     @objc private func didSwipeToRefresh() {
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             self?.updateDataOfTableView()
             self?.tableView.refreshControl?.endRefreshing()
+        }
+    }
+    
+    private func updateDataOfTableView() {
+        
+        presenter.updateDataTableView {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
     }
     
@@ -77,28 +72,17 @@ final class LatestViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
         ])
     }
-    
-    private func updateDataOfTableView() {
-        
-        LatestModel.shared.getLatestFiles { [weak self] viewModel in
-            DispatchQueue.main.async {
-                guard let self = self else { return }
-                self.modelData = viewModel
-                self.tableView.reloadData()
-            }
-        }
-    }
 }
 
 extension LatestViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return modelData.items?.count ?? 1
+        return presenter.getModelDataItemsCount() ?? 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: latestCell) as? LatestCell
-        guard let viewModel = modelData.items, viewModel.count > indexPath.row else {
+        guard let viewModel = presenter.getModelData().items, viewModel.count > indexPath.row else {
             return UITableViewCell()
         }
         let item = viewModel[indexPath.row]

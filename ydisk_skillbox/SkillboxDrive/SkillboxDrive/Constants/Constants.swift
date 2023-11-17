@@ -49,6 +49,7 @@ enum Constants {
             static let publicFilesTitle = Bundle.main.localizedString(forKey: "FirstVC.publicFilesTitle", value: "", table: "Localize")
             static let noFilesDescr = Bundle.main.localizedString(forKey: "FirstVC.noFilesDescr", value: "", table: "Localize")
             static let update = Bundle.main.localizedString(forKey: "FirstVC.update", value: "", table: "Localize")
+            static let removePost = Bundle.main.localizedString(forKey: "FirstVC.removePost", value: "", table: "Localize")
         }
         
         enum SecondVC {

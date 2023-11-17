@@ -8,8 +8,6 @@
 import DGCharts
 import UIKit
 
-protocol ProfileViewControllerProtocol: AnyObject {}
-
 final class ProfileViewController: UIViewController, ChartViewDelegate {
     
     private let presenter: ProfilePresenterProtocol = ProfilePresenter()

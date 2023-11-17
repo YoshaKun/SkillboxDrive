@@ -10,6 +10,7 @@ import UIKit
 
 final class LatestCell: UITableViewCell {
     
+    private let presenter: LatestCellPresenterProtocol = LatestCellPresenter()
     private var nameFile = UILabel()
     private var sizeFile = UILabel()
     private var dateFile = UILabel()
@@ -35,17 +36,17 @@ final class LatestCell: UITableViewCell {
     
     private func configureViews() {
         
-        nameFile.font = .systemFont(ofSize: 16, weight: .semibold)
+        nameFile.font = .systemFont(ofSize: 15, weight: .regular)
         nameFile.textColor = .black
         
-        sizeFile.font = .systemFont(ofSize: 12, weight: .regular)
-        sizeFile.textColor = .lightGray
+        sizeFile.font = .systemFont(ofSize: 13, weight: .regular)
+        sizeFile.textColor = Constants.Colors.gray
         
-        dateFile.font = .systemFont(ofSize: 12, weight: .regular)
-        dateFile.textColor = .lightGray
+        dateFile.font = .systemFont(ofSize: 13, weight: .regular)
+        dateFile.textColor = Constants.Colors.gray
         
-        timeFile.font = .systemFont(ofSize: 12, weight: .regular)
-        timeFile.textColor = .lightGray
+        timeFile.font = .systemFont(ofSize: 13, weight: .regular)
+        timeFile.textColor = Constants.Colors.gray
         
         imageViewFile.addSubview(activityIndicator)
         activityIndicator.startAnimating()
@@ -144,7 +145,8 @@ final class LatestCell: UITableViewCell {
             print("Error of URL")
             return
         }
-        LatestModel.shared.getImageForCell(urlStr: url) { data in
+        
+        presenter.getImageForLatestCell(urlStr: url) { data in
             DispatchQueue.main.async() { [weak self] in
                 self?.activityIndicator.stopAnimating()
                 self?.activityIndicator.removeFromSuperview()

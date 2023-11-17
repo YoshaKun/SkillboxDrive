@@ -31,3 +31,4 @@
 "FirstVC.publicFilesTitle" = "Опубликованные файлы";
 "FirstVC.noFilesDescr" = "У вас пока нет опубликованных файлов";
 "FirstVC.update" = "Обновить";
+"FirstVC.removePost" = "Убрать публикацию";

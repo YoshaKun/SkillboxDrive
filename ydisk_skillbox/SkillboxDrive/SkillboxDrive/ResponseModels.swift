@@ -18,6 +18,7 @@ struct PublishedFiles: Codable {
 
 struct PublishedItems: Codable {
     let name: String?
+    let public_url: String?
     let created: String?
     let size: Int?
     let type: String?
