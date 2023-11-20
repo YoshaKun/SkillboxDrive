@@ -12,6 +12,8 @@ protocol PublicFilesPresenterProtocol {
     func updateDataTableView(completion: @escaping () -> Void)
     func getModelDataItemsCount() -> Int?
     func getModelData() -> PublishedFiles
+    func removePublishedData(path: String?, completion: @escaping () -> Void)
+    func fetchDataOfPublishedFolder(publicUrl: String?, completion: @escaping () -> Void)
 }
 
 final class PublicFilesPresenter: PublicFilesPresenterProtocol {
@@ -34,5 +36,15 @@ final class PublicFilesPresenter: PublicFilesPresenterProtocol {
         
         let data = model.modelData
         return data
+    }
+    
+    func removePublishedData(path: String?, completion: @escaping () -> Void) {
+        
+        model.removePublishedFile(path: path, completion: completion)
+    }
+    
+    func fetchDataOfPublishedFolder(publicUrl: String?, completion: @escaping () -> Void) {
+        
+        model.getDataOfPublishedFolder(publicUrl: publicUrl, completion: completion)
     }
 }

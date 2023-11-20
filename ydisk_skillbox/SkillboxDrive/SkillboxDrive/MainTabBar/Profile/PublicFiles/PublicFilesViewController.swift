@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-final class PublicFilesViewController: UIViewController {
+class PublicFilesViewController: UIViewController {
     
     private let publicCell = "publicCell"
     private let presenter: PublicFilesPresenterProtocol = PublicFilesPresenter()
@@ -188,7 +188,7 @@ final class PublicFilesViewController: UIViewController {
         ])
     }
     
-    private func createActionSheet(titleCell: String) -> UIAlertController {
+    private func createActionSheet(titleCell: String, path: String?) -> UIAlertController {
         
         let alert = UIAlertController(title: titleCell, message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: Constants.Text.FirstVC.cancel, style: .cancel, handler: nil))
@@ -196,14 +196,24 @@ final class PublicFilesViewController: UIViewController {
             UIAlertAction(
                 title: Constants.Text.FirstVC.removePost,
                 style: .destructive,
-                handler: nil
-//                handler: {  [weak self] _ in
-//                    self?.
-                // MARK: - Добавить вызов сетевого запроса PUT на удаление публикации + удалить из списка, либо делать REFRESH TableView
-//                }
+                handler: {  [weak self] _ in
+                    self?.presenter.removePublishedData(path: path, completion: {
+                        self?.updateDataOfTableView()
+                    })
+                }
             )
         )
         return alert
+    }
+    
+    private func openFolder(type: String) {
+        
+        let folder = "dir"
+        if type == folder {
+            // MARK: - написать метод перехода на экран с содержимым Папки
+        } else {
+            print("This is the File")
+        }
     }
 }
 
@@ -228,13 +238,21 @@ extension PublicFilesViewController: UITableViewDataSource {
 
 extension PublicFilesViewController: UITableViewDelegate {
     
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let viewModel = presenter.getModelData().items else { return }
+        guard let typeFile = viewModel[indexPath.row].type else { return }
+        guard let strUrl = viewModel[indexPath.row].public_url else { return }
+
+        self.presenter.fetchDataOfPublishedFolder(publicUrl: strUrl) {
+            self.openFolder(type: typeFile)
+        }
+    }
 }
 
 extension PublicFilesViewController: PublicCellDelegate {
     
-    func didTapButton(with title: String) {
-        let alert = self.createActionSheet(titleCell: title)
+    func didTapButton(with title: String, and path: String?) {
+        let alert = self.createActionSheet(titleCell: title, path: path)
         self.present(alert, animated: true, completion: nil)
     }
 }

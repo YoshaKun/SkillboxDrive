@@ -10,7 +10,7 @@ import UIKit
 
 protocol PublicCellDelegate: AnyObject {
 
-    func didTapButton(with title: String)
+    func didTapButton(with title: String, and path: String?)
 }
 
 final class PublicCell: UITableViewCell {
@@ -28,6 +28,8 @@ final class PublicCell: UITableViewCell {
     private var imageViewFile = UIImageView()
     private var menuButton = UIButton()
     private var activityIndicator = UIActivityIndicatorView()
+    private var pathOfFileOrFolder = UILabel()
+    private var folderFileFlag = UILabel()
 
     private var firstStackView = UIStackView()
     private var secondStackView = UIStackView()
@@ -81,8 +83,8 @@ final class PublicCell: UITableViewCell {
     @objc private func didTappedOnMenuButton() {
         
         // MARK: - Добавить метод presentAlert
-        guard let nameOfCell = nameFile.text else { return }
-        delegate?.didTapButton(with: nameOfCell)
+        guard let nameOfCell = nameFile.text, let pathOfCell = pathOfFileOrFolder.text else { return }
+        delegate?.didTapButton(with: nameOfCell, and: pathOfCell)
         print("Сработал метод didTappedOnMenuButton ячейки \(nameOfCell)")
     }
     
@@ -167,6 +169,8 @@ final class PublicCell: UITableViewCell {
         sizeFile.text = str
         dateFile.text = onlyDate
         timeFile.text = time
+        pathOfFileOrFolder.text = viewModel.path
+        folderFileFlag.text = viewModel.type
         
         guard let url = viewModel.preview else {
             activityIndicator.stopAnimating()

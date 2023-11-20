@@ -88,9 +88,9 @@ final class ProfileViewController: UIViewController, ChartViewDelegate {
         let secondString = presenter.getConvertedBytesRemainsToString(total: totalSpaceGb, used: usedSpaceGb)
         totalDataEntry.value = totalGigabytes
         usedDataEntry.value = usedGigabytes
-        allMemorySpaceDataEntry = [totalDataEntry, usedDataEntry]
+        allMemorySpaceDataEntry = [usedDataEntry, totalDataEntry]
         let set = PieChartDataSet(entries: allMemorySpaceDataEntry)
-        let colors = [Constants.Colors.gray, Constants.Colors.pink]
+        let colors = [Constants.Colors.pink, Constants.Colors.gray]
         set.colors = colors as! [NSUIColor]
         let data = PieChartData(dataSet: set)
         pieChart.data = data
@@ -238,27 +238,14 @@ final class ProfileViewController: UIViewController, ChartViewDelegate {
 
     private func updateData() {
         // MARK: - Получение данных с сервера для PieChart
-        guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
-        var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk")
         
-        guard let url = components?.url else { return }
-        var request = URLRequest(url: url)
-        request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
-        
-        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
-            guard let self = self, let data = data else {
-                print("Error: \(String(describing: error))")
-                return }
-            guard let newFiles = try? JSONDecoder().decode(DiskSpaceResponse.self, from: data) else { return }
-            print("Received: \(newFiles.total_space ?? 333) total space")
-            print("Received: \(newFiles.used_space ?? 444) used space")
+        presenter.updatePieData { totalSpace, usedSpace in
             DispatchQueue.main.async {
-                self.totalSpaceGb = newFiles.total_space ?? 0
-                self.usedSpaceGb = newFiles.used_space ?? 0
+                self.totalSpaceGb = totalSpace ?? 00
+                self.usedSpaceGb = usedSpace ?? 00
                 self.updatePieChart()
             }
         }
-        task.resume()
     }
 }
 

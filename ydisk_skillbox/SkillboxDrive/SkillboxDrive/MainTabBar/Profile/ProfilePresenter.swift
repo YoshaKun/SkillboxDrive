@@ -17,9 +17,16 @@ protocol ProfilePresenterProtocol {
     func getConvertedBytesTotalToString(value: Int) -> String
     func getConvertedBytesUsedToString(value: Int) -> String
     func getConvertedBytesRemainsToString(total: Int, used: Int) -> String
+    func updatePieData(completion: @escaping (_ totalSpace: Int?, _ usedSpace: Int?) -> Void)
 }
 
 final class ProfilePresenter: ProfilePresenterProtocol {
+    
+    func updatePieData(completion: @escaping (_ totalSpace: Int?, _ usedSpace: Int?) -> Void) {
+        
+        model.updatePieChartData(completion: completion)
+    }
+    
     
     private var model: ProfileModel = ProfileModel()
     private let loginModel: LoginScreenModel = LoginScreenModel()

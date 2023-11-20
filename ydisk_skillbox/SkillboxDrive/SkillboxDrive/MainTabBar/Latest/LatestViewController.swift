@@ -40,7 +40,6 @@ final class LatestViewController: UIViewController {
         tableView.delegate = self
         tableView.backgroundColor = .white
         tableView.separatorStyle = .none
-        
     }
     
     @objc private func didSwipeToRefresh() {
