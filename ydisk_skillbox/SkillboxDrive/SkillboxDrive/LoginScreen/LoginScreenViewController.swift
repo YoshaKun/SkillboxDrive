@@ -34,7 +34,7 @@ final class LoginScreenViewController: UIViewController {
 
     private func configureViews() {
         
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         logoImage.image = presenter.getImage()
         logoImage.contentMode = .center
         

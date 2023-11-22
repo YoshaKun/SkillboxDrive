@@ -49,7 +49,16 @@ struct LatestFiles: Codable {
 struct LatestItems: Codable {
     let name: String?
     let created: String?
-    let size: Int?
+    let sizes: [Images]
+    let file: String?
+    let path: String?
     let type: String?
+    let size: Int?
     let preview: String?
+}
+
+// MARK: - Images
+struct Images: Codable {
+    let url: String?
+    let name: String?
 }

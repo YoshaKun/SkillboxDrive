@@ -22,6 +22,9 @@ enum Constants {
         static let noFiles = UIImage(named: "NoFiles")
         static let backArrow = UIImage(named: "BackArrow")
         static let folder = UIImage(named: "Folder")
+        static let editLogo = UIImage(named: "EditLogo")
+        static let linkLogo = UIImage(named: "LinkLogo")
+        static let trash = UIImage(named: "Trash")
     }
     
     enum Text {

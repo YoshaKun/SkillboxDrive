@@ -14,21 +14,56 @@ final class LatestViewController: UIViewController {
     private let presenter: LatestPresenterProtocol = LatestPresenter()
     private let refreshControl = UIRefreshControl()
     private var activityIndicator = UIActivityIndicatorView()
+    private var activityIndicatorView = UIView()
     private var tableView = UITableView(frame: CGRect.zero, style: UITableView.Style.grouped)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         configureNavigationBar()
-        configureTableView()
-        configureConstraints()
-        updateDataOfTableView()
+        configureActivityIndicatorView()
+        updateView()
     }
     
     private func configureNavigationBar() {
     
         navigationItem.title = Constants.Text.SecondVC.title
+    }
+    
+    private func configureActivityIndicatorView() {
+        activityIndicatorView.backgroundColor = .systemBackground
+        
+        view.addSubview(activityIndicatorView)
+        activityIndicatorView.addSubview(activityIndicator)
+        
+        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.startAnimating()
+        
+        NSLayoutConstraint.activate([
+            activityIndicatorView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            activityIndicatorView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            activityIndicatorView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            activityIndicatorView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: activityIndicatorView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: activityIndicatorView.centerYAnchor),
+            activityIndicator.widthAnchor.constraint(equalToConstant: 50),
+            activityIndicator.heightAnchor.constraint(equalToConstant: 50),
+        ])
+    }
+    
+    private func updateView() {
+
+        configureTableView()
+        updateDataOfTableView()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            guard let self = self else { return }
+            self.activityIndicator.stopAnimating()
+            self.activityIndicatorView.removeFromSuperview()
+            self.tableView.isHidden = false
+        }
     }
     
     private func configureTableView() {
@@ -40,6 +75,7 @@ final class LatestViewController: UIViewController {
         tableView.delegate = self
         tableView.backgroundColor = .white
         tableView.separatorStyle = .none
+        configureConstraints()
     }
     
     @objc private func didSwipeToRefresh() {
@@ -61,6 +97,7 @@ final class LatestViewController: UIViewController {
     
     private func configureConstraints() {
         
+        tableView.isHidden = true
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
         
@@ -93,7 +130,30 @@ extension LatestViewController: UITableViewDataSource {
 
 extension LatestViewController: UITableViewDelegate {
     
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        configureActivityIndicatorView()
+        
+        guard let viewModel = presenter.getModelData().items else { return }
+        guard let pathItem = viewModel[indexPath.row].path else { return }
+        guard let title = viewModel[indexPath.row].name else { return }
+        guard let created = viewModel[indexPath.row].created else { return }
+        guard let fileUrl = viewModel[indexPath.row].file else { return }
+        
+        presenter.getFileFromPath(path: pathItem) { urlStr in
+            
+            guard let urlStr = urlStr else { return }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                guard let self = self else { return }
+                let vc = ViewingScreenViewController(title: title, created: created, urlStr: urlStr)
+                vc.modalPresentationStyle = .fullScreen
+                self.navigationController?.present(vc, animated: true, completion: {
+                    self.activityIndicator.stopAnimating()
+                    self.activityIndicatorView.removeFromSuperview()
+                })
+            }
+        }
+    }
 }
 
 

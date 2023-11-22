@@ -41,7 +41,7 @@ final class ProfileViewController: UIViewController, ChartViewDelegate {
         
     private func configureViews() {
         
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         
         publicFilesButton.backgroundColor = .white
         publicFilesButton.setTitle(Constants.Text.FirstVC.publicFiles, for: .normal)

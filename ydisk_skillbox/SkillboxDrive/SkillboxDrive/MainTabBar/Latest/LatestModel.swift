@@ -35,4 +35,30 @@ final class LatestModel {
         }
         task.resume()
     }
+    
+    func getFileFromPath(path: String?, completion: @escaping (String?) -> Void) {
+        
+        guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
+        guard let path = path else { return }
+        let pathUrl = URL(string: path)
+
+        var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk/resources")
+        components?.queryItems = [URLQueryItem(name: "path", value: "\(pathUrl)")]
+
+        guard let url = components?.url else { return }
+        var request = URLRequest(url: url)
+        request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
+
+        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
+            guard let data = data else {
+                print("Error: \(String(describing: error))")
+                return }
+            guard let files = try? JSONDecoder().decode(LatestItems.self, from: data) else {
+                print("Error serialization")
+                return }
+            guard let urlStr = files.sizes[0].url else { return }
+            completion(urlStr)
+        }
+        task.resume()
+    }
 }

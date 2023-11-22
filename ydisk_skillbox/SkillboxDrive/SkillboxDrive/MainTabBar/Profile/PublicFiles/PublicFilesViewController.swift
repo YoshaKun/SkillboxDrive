@@ -25,7 +25,7 @@ class PublicFilesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         configureNavigationBar()
         configureNoFilesView()
         configureNoFilesConstraints()
