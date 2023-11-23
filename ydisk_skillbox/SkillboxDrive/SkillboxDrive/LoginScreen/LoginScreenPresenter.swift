@@ -61,18 +61,20 @@ final class LoginScreenPresenter: LoginScreenPresenterProtocol {
         
         let onboardVC = OnboardingViewController()
         onboardVC.modalPresentationStyle = .fullScreen
+        
         return onboardVC
     }
     
     func getToken() -> String {
         
-        return model.token
+        guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return ""}
+        return token
     }
     
     func updateToken(newToken: String?) {
         
         guard let newToken = newToken else { return }
-        model.token = newToken
-        print("token = \(model.token)")
+        UserDefaults.standard.set(newToken, forKey: Keys.apiToken)
+        print("token = \(newToken)")
     }
 }

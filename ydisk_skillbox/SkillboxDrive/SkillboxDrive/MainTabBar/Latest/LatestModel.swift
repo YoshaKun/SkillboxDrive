@@ -22,7 +22,6 @@ final class LatestModel {
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
 
         let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
-            print("response = \(String(describing: response))")
             guard let data = data else {
                 print("Error: \(String(describing: error))")
                 return }

@@ -29,7 +29,6 @@ final class ProfilePresenter: ProfilePresenterProtocol {
     
     
     private var model: ProfileModel = ProfileModel()
-    private let loginModel: LoginScreenModel = LoginScreenModel()
     
     func didTapOnYesAlert() {
         
@@ -37,9 +36,9 @@ final class ProfilePresenter: ProfilePresenterProtocol {
             let cookiesCleaner = WebCacheCleaner()
             cookiesCleaner.clean()
         }
-        loginModel.token.removeAll()
         UserDefaults.standard.removeObject(forKey: Keys.apiToken)
-        print("Did token deleted? = \(loginModel.token.isEmpty)")
+        guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
+        print("Did token deleted? = \(token.isEmpty)")
         Core.shared.setNewUser()
         print("Did user deleted? = \(Core.shared.isNewUser())")
     }
@@ -47,9 +46,8 @@ final class ProfilePresenter: ProfilePresenterProtocol {
     func updateToken(newToken: String?) {
         
         guard let newToken = newToken else { return }
-        loginModel.token = newToken
         UserDefaults.standard.set(newToken, forKey: Keys.apiToken)
-        print("token = \(loginModel.token)")
+        print("token = \(newToken)")
     }
     
     func getConvertedBytesTotal(value: Int) -> Double {

@@ -7,11 +7,23 @@
 
 import Foundation
 import UIKit
+import PDFKit
+import WebKit
 
 final class ViewingScreenViewController: UIViewController {
     
+    private let webView: WKWebView = {
+        let preferences = WKWebpagePreferences()
+        preferences.allowsContentJavaScript = true
+        let configuration = WKWebViewConfiguration()
+        configuration.defaultWebpagePreferences = preferences
+        let webView = WKWebView(frame: .zero, configuration: configuration)
+        return webView
+    }()
+    
     private let presenter: ViewingScreenPresenterProtocol = ViewingScreenPresenter()
     private var fileView = UIView()
+    private let pdfView = PDFView()
     private var backButton = UIButton()
     private var editButton = UIButton()
     private var sendLinkButton = UIButton()
@@ -22,17 +34,19 @@ final class ViewingScreenViewController: UIViewController {
     private var dateOfCreated = UILabel()
     private var titleStackView = UIStackView()
     private var imageView = UIImageView()
-    
-    private var fileStr: String?
     private var createdDate: String?
+    private var type: String?
+    private var fileUrlStr: String?
     
     init(title: String?,
          created: String?,
-         urlStr: String?
+         type: String?,
+         file: String?
         ) {
         self.titleFile.text = title
         self.createdDate = created
-        self.fileStr = urlStr
+        self.type = type
+        self.fileUrlStr = file
      
         super.init(nibName: nil, bundle: nil)
     }
@@ -45,13 +59,118 @@ final class ViewingScreenViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .black
+        handleTypeOfFiles(type: type)
         configureViews()
         configureConstraints()
-        confugureGestureRecognizers()
-        configureFileView()
-        
     }
     
+    // MARK: - Handle Type of Files
+    private func handleTypeOfFiles(type: String?) {
+        
+        switch type {
+            
+        case "jpg":
+            print("Это картинка jpg")
+            configureFileViewForImage()
+        case "jpeg":
+            print("Это картинка jpeg")
+            configureFileViewForImage()
+        case "png":
+            print("Это картинка png")
+            configureFileViewForImage()
+        case "pdf":
+            print("Это pdf")
+            configureFileViewPdf()
+        case "docx":
+            print("Это docx")
+            configureFileViewMSOffice()
+        case "xlsx":
+            print("Это ЭКСЕЛЬ")
+            configureFileViewMSOffice()
+        default:
+            print("Unknown file")
+            configureFileViewMSOffice()
+        }
+    }
+    
+    // MARK: - Configure FileViewForImage
+    private func configureFileViewForImage() {
+        
+        confugureGestureRecognizers()
+        
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        fileView.addSubview(imageView)
+        
+        NSLayoutConstraint.activate([
+            imageView.leadingAnchor.constraint(equalTo: fileView.leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: fileView.trailingAnchor),
+            imageView.topAnchor.constraint(equalTo: fileView.topAnchor),
+            imageView.bottomAnchor.constraint(equalTo: fileView.bottomAnchor),
+        ])
+        
+        guard let fileStr = fileUrlStr else {
+            print("error FileStr")
+            return
+        }
+        presenter.getImage(urlStr: fileStr) { data in
+            DispatchQueue.main.async {
+                self.imageView.image = UIImage(data: data)
+            }
+        }
+    }
+    
+    // MARK: - Configure FileViewPdf
+    private func configureFileViewPdf() {
+        
+        pdfView.translatesAutoresizingMaskIntoConstraints = false
+        fileView.addSubview(pdfView)
+        
+        NSLayoutConstraint.activate([
+            pdfView.leadingAnchor.constraint(equalTo: fileView.leadingAnchor),
+            pdfView.trailingAnchor.constraint(equalTo: fileView.trailingAnchor),
+            pdfView.topAnchor.constraint(equalTo: fileView.topAnchor, constant: 50),
+            pdfView.bottomAnchor.constraint(equalTo: fileView.bottomAnchor, constant: -50),
+        ])
+        
+        guard let str = fileUrlStr else { return }
+        guard let url = URL(string: str) else {
+            print("error")
+            return
+        }
+        
+        if let document = PDFDocument(url: url) {
+            
+            pdfView.autoScales = true
+            pdfView.displayMode = .singlePage
+            pdfView.displayDirection = .vertical
+            pdfView.document = document
+        }
+    }
+    
+    // MARK: - Configure FileViewMSOffice
+    private func configureFileViewMSOffice() {
+        
+        webView.translatesAutoresizingMaskIntoConstraints = false
+        fileView.addSubview(webView)
+        
+        NSLayoutConstraint.activate([
+            webView.leadingAnchor.constraint(equalTo: fileView.leadingAnchor),
+            webView.trailingAnchor.constraint(equalTo: fileView.trailingAnchor),
+            webView.topAnchor.constraint(equalTo: fileView.topAnchor, constant: 50),
+            webView.bottomAnchor.constraint(equalTo: fileView.bottomAnchor, constant: -50),
+        ])
+        
+        guard let str = fileUrlStr else { return }
+        guard let url = URL(string: str) else {
+            print("error")
+            return
+        }
+        
+        webView.load(URLRequest(url: url))
+    }
+    
+    // MARK: - Configure GestureRecognizer
     private func confugureGestureRecognizers() {
         
         let panRecognazer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGest))
@@ -95,22 +214,7 @@ final class ViewingScreenViewController: UIViewController {
         fileView.transform = CGAffineTransform(scaleX: x, y: y)
     }
     
-    // MARK: - Configure FileView
-    private func configureFileView() {
-        
-        guard let fileStr = fileStr else {
-            print("error FileStr")
-            return
-        }
-        presenter.getImage(urlStr: fileStr) { data in
-            DispatchQueue.main.async {
-                self.imageView.image = UIImage(data: data)
-            }
-        }
-        
-        imageView.contentMode = .scaleAspectFit
-    }
-    
+    // MARK: - Configure Views
     private func configureViews() {
     
         backButton.setImage(Constants.Image.backArrow, for: .normal)
@@ -137,31 +241,34 @@ final class ViewingScreenViewController: UIViewController {
         titleStackView.spacing = 8
     }
     
+    // MARK: - Action Back button
     @objc private func didTapOnBackButton() {
         
         self.dismiss(animated: true, completion: nil)
     }
     
+    // MARK: - Action Edit button
     @objc private func didTapOnEditButton() {
         
         print("Сработа метод didTappedOnEditButton")
     }
     
+    // MARK: - Action Link button
     @objc private func didTapOnSendLinkButton() {
         
         print("Сработа метод didTapOnSendLinkButton")
     }
     
+    // MARK: - Action Trash button
     @objc private func didTapOnTrashButton() {
         
         print("Сработа метод didTapOnTrashButton")
     }
     
+    // MARK: - Configure constraints
     private func configureConstraints() {
         
         let offsetWidth = view.frame.size.width / 2
-        
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         
         fileView.translatesAutoresizingMaskIntoConstraints = false
         backButton.translatesAutoresizingMaskIntoConstraints = false
@@ -180,8 +287,6 @@ final class ViewingScreenViewController: UIViewController {
         view.addSubview(trashButton)
         titleStackView.addArrangedSubview(titleFile)
         titleStackView.addArrangedSubview(dateOfCreated)
-        
-        fileView.addSubview(imageView)
         
         NSLayoutConstraint.activate([
             fileView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
@@ -213,11 +318,6 @@ final class ViewingScreenViewController: UIViewController {
             trashButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
             trashButton.heightAnchor.constraint(equalToConstant: 30),
             trashButton.widthAnchor.constraint(equalToConstant: 30),
-            
-            imageView.leadingAnchor.constraint(equalTo: fileView.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: fileView.trailingAnchor),
-            imageView.topAnchor.constraint(equalTo: fileView.topAnchor),
-            imageView.bottomAnchor.constraint(equalTo: fileView.bottomAnchor),
         ])
     }
     

@@ -108,6 +108,15 @@ final class LatestViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
         ])
     }
+    
+    private func determinationOfFileType(path: String) -> String {
+        
+        let index = path.firstIndex(of: ".") ?? path.endIndex
+        var fileType = path[index ..< path.endIndex]
+        fileType.removeFirst()
+        let newString = String(fileType)
+        return newString
+    }
 }
 
 extension LatestViewController: UITableViewDataSource {
@@ -135,17 +144,17 @@ extension LatestViewController: UITableViewDelegate {
         configureActivityIndicatorView()
         
         guard let viewModel = presenter.getModelData().items else { return }
-        guard let pathItem = viewModel[indexPath.row].path else { return }
         guard let title = viewModel[indexPath.row].name else { return }
         guard let created = viewModel[indexPath.row].created else { return }
         guard let fileUrl = viewModel[indexPath.row].file else { return }
+        guard let pathItem = viewModel[indexPath.row].path else { return }
+        let fileType = determinationOfFileType(path: pathItem)
         
         presenter.getFileFromPath(path: pathItem) { urlStr in
-            
             guard let urlStr = urlStr else { return }
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
                 guard let self = self else { return }
-                let vc = ViewingScreenViewController(title: title, created: created, urlStr: urlStr)
+                let vc = ViewingScreenViewController(title: title, created: created, type: fileType, file: fileUrl)
                 vc.modalPresentationStyle = .fullScreen
                 self.navigationController?.present(vc, animated: true, completion: {
                     self.activityIndicator.stopAnimating()

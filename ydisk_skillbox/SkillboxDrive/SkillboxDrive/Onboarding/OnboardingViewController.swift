@@ -68,7 +68,10 @@ class OnboardingViewController: UIViewController {
             collectionView.setContentOffset(CGPoint(x: CGFloat(2) * view.frame.size.width, y: 0), animated: true)
         case 2:
             Core.shared.setIsNotNewUser()
-            self.dismiss(animated: true, completion: nil)
+            self.dismiss(animated: true, completion: {
+                
+                
+            })
         default:
             print("default action")
         }

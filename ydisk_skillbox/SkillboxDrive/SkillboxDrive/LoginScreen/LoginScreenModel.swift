@@ -10,5 +10,5 @@ import UIKit
 class LoginScreenModel {
     
     let constant = Constants.self
-    var token: String = ""
+    
 }

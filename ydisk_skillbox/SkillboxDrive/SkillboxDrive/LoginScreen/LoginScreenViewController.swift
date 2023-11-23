@@ -104,9 +104,8 @@ final class LoginScreenViewController: UIViewController {
             requestTokenViewController.delegate = self
             present(requestTokenViewController, animated: true, completion: nil)
             return
-        }
-        print("UpdateData. Token is Empty? - \(String(describing: presenter.getToken().isEmpty))")
-        guard !(presenter.getToken().isEmpty ?? true) else {
+        }        
+        guard !(UserDefaults.standard.string(forKey: Keys.apiToken)?.isEmpty ?? true) else {
             let requestTokenViewController = AuthViewController()
             requestTokenViewController.delegate = self
             present(requestTokenViewController, animated: true, completion: nil)

@@ -62,7 +62,6 @@ final class PublicFilesModel {
     
     func getDataOfPublishedFolder (publicUrl: String?, completion: @escaping () -> Void) {
         
-//        guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
         guard let publicUrl = publicUrl else { return }
 
         let valueUrl = URLComponents(string: "\(publicUrl)")
@@ -70,7 +69,6 @@ final class PublicFilesModel {
         components?.queryItems = [URLQueryItem(name: "public_key", value: "\(String(describing: valueUrl))")]
         guard let url = components?.url else { return }
         var request = URLRequest(url: url)
-//        request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
 
         let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
             guard let data = data else {
@@ -82,7 +80,6 @@ final class PublicFilesModel {
                 return
             }
             guard let self = self else { return }
-            print("Received: \(publishedFolder.embedded.items?.count ?? 0) files")
             self.modelData = publishedFolder.embedded
             completion()
         }
