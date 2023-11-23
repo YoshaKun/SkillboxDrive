@@ -22,6 +22,7 @@ final class LatestModel {
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
 
         let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
+            print("response = \(String(describing: response))")
             guard let data = data else {
                 print("Error: \(String(describing: error))")
                 return }
@@ -29,7 +30,6 @@ final class LatestModel {
                 print("Error serialization")
                 return }
             guard let self = self else { return }
-            print("Received: \(latestFiles.items?.count ?? 0) files")
             self.modelData = latestFiles
             completion()
         }
@@ -39,8 +39,7 @@ final class LatestModel {
     func getFileFromPath(path: String?, completion: @escaping (String?) -> Void) {
         
         guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
-        guard let path = path else { return }
-        let pathUrl = URL(string: path)
+        guard let pathUrl = path else { return }
 
         var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk/resources")
         components?.queryItems = [URLQueryItem(name: "path", value: "\(pathUrl)")]

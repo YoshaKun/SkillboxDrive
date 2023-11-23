@@ -48,6 +48,7 @@ final class ViewingScreenViewController: UIViewController {
         configureViews()
         configureConstraints()
         confugureGestureRecognizers()
+        configureFileView()
         
     }
     
@@ -88,8 +89,8 @@ final class ViewingScreenViewController: UIViewController {
         
         print("one tap")
         
-        let x = CGFloat(1.5)
-        let y = CGFloat(1.5)
+        let x = CGFloat(2)
+        let y = CGFloat(2)
         
         fileView.transform = CGAffineTransform(scaleX: x, y: y)
     }
