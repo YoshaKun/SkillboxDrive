@@ -62,3 +62,8 @@ struct Images: Codable {
     let url: String?
     let name: String?
 }
+
+// MARK: - ShareLink
+struct ShareLink: Codable {
+    let href: String?
+}

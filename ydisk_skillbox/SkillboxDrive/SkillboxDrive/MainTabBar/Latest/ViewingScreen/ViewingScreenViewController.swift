@@ -10,7 +10,14 @@ import UIKit
 import PDFKit
 import WebKit
 
+protocol ViewingScreenVCProtocol: AnyObject {
+    
+    func updateTableView()
+}
+
 final class ViewingScreenViewController: UIViewController {
+    
+    weak var delegate: ViewingScreenVCProtocol?
     
     private let webView: WKWebView = {
         let preferences = WKWebpagePreferences()
@@ -37,16 +44,19 @@ final class ViewingScreenViewController: UIViewController {
     private var createdDate: String?
     private var type: String?
     private var fileUrlStr: String?
+    private var path: String?
     
     init(title: String?,
          created: String?,
          type: String?,
-         file: String?
+         file: String?,
+         path: String?
         ) {
         self.titleFile.text = title
         self.createdDate = created
         self.type = type
         self.fileUrlStr = file
+        self.path = path
      
         super.init(nibName: nil, bundle: nil)
     }
@@ -199,19 +209,17 @@ final class ViewingScreenViewController: UIViewController {
     @objc private func handleDoubleTapGest(recognizer: UITapGestureRecognizer) {
         
         print("double tap")
-        guard let targetView = recognizer.view else { return }
-        targetView.transform = CGAffineTransform.identity
-        targetView.center = self.view.center
+        let x = CGFloat(2)
+        let y = CGFloat(2)
+        fileView.transform = CGAffineTransform(scaleX: x, y: y)
     }
     
     @objc private func handleTapGest(recognizer: UITapGestureRecognizer) {
         
         print("one tap")
-        
-        let x = CGFloat(2)
-        let y = CGFloat(2)
-        
-        fileView.transform = CGAffineTransform(scaleX: x, y: y)
+        guard let targetView = recognizer.view else { return }
+        targetView.transform = CGAffineTransform.identity
+        targetView.center = self.view.center
     }
     
     // MARK: - Configure Views
@@ -250,20 +258,93 @@ final class ViewingScreenViewController: UIViewController {
     // MARK: - Action Edit button
     @objc private func didTapOnEditButton() {
         
-        print("Сработа метод didTappedOnEditButton")
+        let vc = RenameFileVC()
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: true)
     }
     
     // MARK: - Action Link button
     @objc private func didTapOnSendLinkButton() {
         
-        print("Сработа метод didTapOnSendLinkButton")
+        let alert = self.createShareActionSheet()
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func createShareActionSheet() -> UIAlertController {
+        
+        let alert = UIAlertController(title: Constants.Text.SecondVC.shareMessage, message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: Constants.Text.FirstVC.cancel, style: .cancel, handler: nil))
+        alert.addAction(
+            UIAlertAction(
+                title: Constants.Text.SecondVC.shareFile,
+                style: .default,
+                handler: {  [weak self] _ in
+                    self?.didTapOnLink()
+                }
+            )
+        )
+        alert.addAction(
+            UIAlertAction(
+                title: Constants.Text.SecondVC.shareLink,
+                style: .default,
+                handler: {  [weak self] _ in
+                    self?.didTapOnLink()
+                }
+            )
+        )
+        return alert
+    }
+    
+    private func didTapOnLink() {
+        
+        guard let path = path else {
+            print("error path")
+            return }
+        guard let url = fileUrlStr else { return }
+        presenter.getLinkFile(path: path) {
+            let shareSheetVC = UIActivityViewController(
+                activityItems: [url],
+                applicationActivities: nil
+            )
+            DispatchQueue.main.async {
+                self.present(shareSheetVC, animated: true, completion: nil)
+            }
+        }
     }
     
     // MARK: - Action Trash button
     @objc private func didTapOnTrashButton() {
         
-        print("Сработа метод didTapOnTrashButton")
+        let alert = self.createDeleteActionSheet()
+        self.present(alert, animated: true, completion: nil)
     }
+    
+    private func createDeleteActionSheet() -> UIAlertController {
+        
+        let alert = UIAlertController(title: Constants.Text.SecondVC.deleteMessage, message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: Constants.Text.FirstVC.cancel, style: .cancel, handler: nil))
+        alert.addAction(
+            UIAlertAction(
+                title: Constants.Text.SecondVC.delete,
+                style: .destructive,
+                handler: {  [weak self] _ in
+                    self?.didTappedOnYesAlert()
+                }
+            )
+        )
+        return alert
+    }
+    
+    private func didTappedOnYesAlert() {
+        
+        presenter.delete(path: path) {
+            DispatchQueue.main.async {
+                self.dismiss(animated: true, completion: nil)
+            }
+            self.delegate?.updateTableView()
+        }
+    }
+    
     
     // MARK: - Configure constraints
     private func configureConstraints() {

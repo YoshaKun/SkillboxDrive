@@ -12,7 +12,7 @@ protocol LatestPresenterProtocol {
     func updateDataTableView(completion: @escaping () -> Void)
     func getModelDataItemsCount() -> Int?
     func getModelData() -> LatestFiles
-    func getFileFromPath(path: String?, completion: @escaping (String?) -> Void)
+    func getFileFromPath(path: String?, completion: @escaping (String?) -> Void, errorHandler: @escaping () -> Void)
 }
 
 final class LatestPresenter: LatestPresenterProtocol {
@@ -37,8 +37,8 @@ final class LatestPresenter: LatestPresenterProtocol {
         return data
     }
     
-    func getFileFromPath(path: String?, completion: @escaping (String?) -> Void) {
+    func getFileFromPath(path: String?, completion: @escaping (String?) -> Void, errorHandler: @escaping () -> Void) {
         
-        model.getFileFromPath(path: path, completion: completion)
+        model.getFileFromPath(path: path, completion: completion, errorHandler: errorHandler)
     }
 }

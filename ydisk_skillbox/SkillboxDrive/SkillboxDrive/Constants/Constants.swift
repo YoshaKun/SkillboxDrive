@@ -57,6 +57,13 @@ enum Constants {
         
         enum SecondVC {
             static let title = Bundle.main.localizedString(forKey: "SecondVC.title", value: "", table: "Localize")
+            static let deleteMessage = Bundle.main.localizedString(forKey: "SecondVC.deleteMessage", value: "", table: "Localize")
+            static let delete = Bundle.main.localizedString(forKey: "SecondVC.delete", value: "", table: "Localize")
+            static let shareMessage = Bundle.main.localizedString(forKey: "SecondVC.shareMessage", value: "", table: "Localize")
+            static let shareFile = Bundle.main.localizedString(forKey: "SecondVC.shareFile", value: "", table: "Localize")
+            static let shareLink = Bundle.main.localizedString(forKey: "SecondVC.shareLink", value: "", table: "Localize")
+            static let ready = Bundle.main.localizedString(forKey: "SecondVC.ready", value: "", table: "Localize")
+            static let rename = Bundle.main.localizedString(forKey: "SecondVC.rename", value: "", table: "Localize")
         }
         
         enum ThirdVC {

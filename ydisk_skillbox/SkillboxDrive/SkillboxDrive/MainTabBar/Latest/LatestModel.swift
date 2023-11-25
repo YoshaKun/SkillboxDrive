@@ -35,7 +35,7 @@ final class LatestModel {
         task.resume()
     }
     
-    func getFileFromPath(path: String?, completion: @escaping (String?) -> Void) {
+    func getFileFromPath(path: String?, completion: @escaping (String?) -> Void, errorHandler: @escaping () -> Void) {
         
         guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
         guard let pathUrl = path else { return }
@@ -53,6 +53,7 @@ final class LatestModel {
                 return }
             guard let files = try? JSONDecoder().decode(LatestItems.self, from: data) else {
                 print("Error serialization")
+                errorHandler()
                 return }
             guard let urlStr = files.sizes[0].url else { return }
             completion(urlStr)

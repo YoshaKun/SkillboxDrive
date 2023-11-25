@@ -111,6 +111,7 @@ final class LoginScreenViewController: UIViewController {
             present(requestTokenViewController, animated: true, completion: nil)
             return
         }
+        print("\(String(describing: UserDefaults.standard.string(forKey: Keys.apiToken)))")
     }
 }
 

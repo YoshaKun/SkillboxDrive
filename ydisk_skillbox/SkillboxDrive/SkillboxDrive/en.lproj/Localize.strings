@@ -32,3 +32,10 @@
 "FirstVC.noFilesDescr" = "You don't have any published files yet";
 "FirstVC.update" = "Update";
 "FirstVC.removePost" = "Remove post";
+"SecondVC.deleteMessage" = "This file will be deleted";
+"SecondVC.delete" = "Delete file";
+"SecondVC.shareMessage" = "Share";
+"SecondVC.shareFile" = "File";
+"SecondVC.shareLink" = "Link";
+"SecondVC.ready" = "Ready";
+"SecondVC.rename" = "Rename";

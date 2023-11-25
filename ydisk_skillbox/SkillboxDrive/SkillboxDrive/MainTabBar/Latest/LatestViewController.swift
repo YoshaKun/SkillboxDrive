@@ -26,6 +26,12 @@ final class LatestViewController: UIViewController {
         updateView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureActivityIndicatorView()
+        updateView()
+    }
+    
     private func configureNavigationBar() {
     
         navigationItem.title = Constants.Text.SecondVC.title
@@ -119,6 +125,15 @@ final class LatestViewController: UIViewController {
     }
 }
 
+extension LatestViewController: ViewingScreenVCProtocol {
+    
+    func updateTableView() {
+        DispatchQueue.main.async {
+            self.updateDataOfTableView()
+        }
+    }
+}
+
 extension LatestViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -154,12 +169,19 @@ extension LatestViewController: UITableViewDelegate {
             guard let urlStr = urlStr else { return }
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
                 guard let self = self else { return }
-                let vc = ViewingScreenViewController(title: title, created: created, type: fileType, file: fileUrl)
+                let vc = ViewingScreenViewController(title: title, created: created, type: fileType, file: fileUrl, path: pathItem)
                 vc.modalPresentationStyle = .fullScreen
                 self.navigationController?.present(vc, animated: true, completion: {
                     self.activityIndicator.stopAnimating()
                     self.activityIndicatorView.removeFromSuperview()
                 })
+            }
+        } errorHandler: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                guard let self = self else { return }
+                self.updateDataOfTableView()
+                self.activityIndicator.stopAnimating()
+                self.activityIndicatorView.removeFromSuperview()
             }
         }
     }
