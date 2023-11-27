@@ -28,6 +28,7 @@
 "gb" = "гб";
 "mb" = "мб";
 "kb" = "кб";
+"errorInternet" = "Отсутствует подключение к интернету";
 "FirstVC.publicFilesTitle" = "Опубликованные файлы";
 "FirstVC.noFilesDescr" = "У вас пока нет опубликованных файлов";
 "FirstVC.update" = "Обновить";
@@ -39,7 +40,3 @@
 "SecondVC.shareLink" = "Ссылкой";
 "SecondVC.ready" = "Готово";
 "SecondVC.rename" = "Переименовать";
-
-
-
-

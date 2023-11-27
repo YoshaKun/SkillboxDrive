@@ -9,9 +9,9 @@ import Foundation
 
 final class PublicFilesModel {
     
-    var modelData = PublishedFiles(items: [])
+    var modelData = LatestFiles(items: [])
     
-    func getPublishedFiles (completion: @escaping () -> Void) {
+    func getPublishedFiles (completion: @escaping () -> Void, errorHandler: @escaping () -> Void) {
         
         guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
         var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk/resources/public")
@@ -24,11 +24,14 @@ final class PublicFilesModel {
             guard let data = data else {
                 print("Error: \(String(describing: error))")
                 return }
-            guard let latestFiles = try? JSONDecoder().decode(PublishedFiles.self, from: data) else {
+            guard let latestFiles = try? JSONDecoder().decode(LatestFiles.self, from: data) else {
                 print("Error serialization")
                 return }
             guard let self = self else { return }
-            print("Received: \(latestFiles.items?.count ?? 0) files")
+            guard latestFiles.items?.count != 0 else { 
+                errorHandler()
+                return }
+            print("Received: \(String(describing: latestFiles.items?.count)) files")
             self.modelData = latestFiles
             completion()
         }
@@ -46,7 +49,7 @@ final class PublicFilesModel {
         request.httpMethod = "PUT"
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
         
-        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let response = response  as? HTTPURLResponse {
                 switch response.statusCode {
                 case 200..<300:
@@ -68,19 +71,19 @@ final class PublicFilesModel {
         var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk/public/resources")
         components?.queryItems = [URLQueryItem(name: "public_key", value: "\(String(describing: valueUrl))")]
         guard let url = components?.url else { return }
-        var request = URLRequest(url: url)
+        let request = URLRequest(url: url)
 
         let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
             guard let data = data else {
                 print("Error: \(String(describing: error))")
                 return
             }
-            guard let publishedFolder = try? JSONDecoder().decode(PublishedFolder.self, from: data) else {
+            guard let publishedFolder = try? JSONDecoder().decode(LatestFiles.self, from: data) else {
                 print("Error DataFolder serialization")
                 return
             }
             guard let self = self else { return }
-            self.modelData = publishedFolder.embedded
+            self.modelData = publishedFolder
             completion()
         }
         task.resume()

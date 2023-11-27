@@ -17,16 +17,11 @@ protocol ProfilePresenterProtocol {
     func getConvertedBytesTotalToString(value: Int) -> String
     func getConvertedBytesUsedToString(value: Int) -> String
     func getConvertedBytesRemainsToString(total: Int, used: Int) -> String
-    func updatePieData(completion: @escaping (_ totalSpace: Int?, _ usedSpace: Int?) -> Void)
+    func updatePieChartData(completion: @escaping (_ totalSpace: Int?, _ usedSpace: Int?) -> Void, errorHandler: @escaping () -> Void)
+    func readPieChartDataRealm(completion: @escaping (_ totalSpace: Int?, _ usedSpace: Int?) -> Void)
 }
 
 final class ProfilePresenter: ProfilePresenterProtocol {
-    
-    func updatePieData(completion: @escaping (_ totalSpace: Int?, _ usedSpace: Int?) -> Void) {
-        
-        model.updatePieChartData(completion: completion)
-    }
-    
     
     private var model: ProfileModel = ProfileModel()
     
@@ -79,5 +74,14 @@ final class ProfilePresenter: ProfilePresenterProtocol {
         let remain = total - used
         let converter = Units(bytes: Int64(remain))
         return converter.getReadableUnit()
+    }
+    
+    func updatePieChartData(completion: @escaping (_ totalSpace: Int?, _ usedSpace: Int?) -> Void, errorHandler: @escaping () -> Void) {
+        
+        model.updatePieChartData(completion: completion, errorHandler: errorHandler)
+    }
+    
+    func readPieChartDataRealm(completion: @escaping (Int?, Int?) -> Void) {
+        model.readPieChartDataRealm(completion: completion)
     }
 }

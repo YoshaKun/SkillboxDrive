@@ -10,15 +10,9 @@ import UIKit
 import PDFKit
 import WebKit
 
-protocol ViewingScreenVCProtocol: AnyObject {
-    
-    func updateTableView()
-}
-
 final class ViewingScreenViewController: UIViewController {
     
-    weak var delegate: ViewingScreenVCProtocol?
-    
+    // MARK: - Private constants
     private let webView: WKWebView = {
         let preferences = WKWebpagePreferences()
         preferences.allowsContentJavaScript = true
@@ -27,10 +21,11 @@ final class ViewingScreenViewController: UIViewController {
         let webView = WKWebView(frame: .zero, configuration: configuration)
         return webView
     }()
-    
     private let presenter: ViewingScreenPresenterProtocol = ViewingScreenPresenter()
-    private var fileView = UIView()
     private let pdfView = PDFView()
+    
+    // MARK: - Private variables
+    private var fileView = UIView()
     private var backButton = UIButton()
     private var editButton = UIButton()
     private var sendLinkButton = UIButton()
@@ -46,6 +41,7 @@ final class ViewingScreenViewController: UIViewController {
     private var fileUrlStr: String?
     private var path: String?
     
+    // MARK: - Initialization
     init(title: String?,
          created: String?,
          type: String?,
@@ -81,15 +77,19 @@ final class ViewingScreenViewController: UIViewController {
             
         case "jpg":
             print("Это картинка jpg")
+            configureActivityIndicatorView()
             configureFileViewForImage()
         case "jpeg":
             print("Это картинка jpeg")
+            configureActivityIndicatorView()
             configureFileViewForImage()
         case "png":
             print("Это картинка png")
+            configureActivityIndicatorView()
             configureFileViewForImage()
         case "pdf":
             print("Это pdf")
+            configureActivityIndicatorView()
             configureFileViewPdf()
         case "docx":
             print("Это docx")
@@ -101,6 +101,29 @@ final class ViewingScreenViewController: UIViewController {
             print("Unknown file")
             configureFileViewMSOffice()
         }
+    }
+    
+    // MARK: - ActivityIndicatorView
+    private func configureActivityIndicatorView() {
+        
+        view.addSubview(activityIndicatorView)
+        activityIndicatorView.addSubview(activityIndicator)
+        
+        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.startAnimating()
+        
+        NSLayoutConstraint.activate([
+            activityIndicatorView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            activityIndicatorView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            activityIndicatorView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            activityIndicatorView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: activityIndicatorView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: activityIndicatorView.centerYAnchor),
+            activityIndicator.widthAnchor.constraint(equalToConstant: 50),
+            activityIndicator.heightAnchor.constraint(equalToConstant: 50),
+        ])
     }
     
     // MARK: - Configure FileViewForImage
@@ -125,6 +148,8 @@ final class ViewingScreenViewController: UIViewController {
         }
         presenter.getImage(urlStr: fileStr) { data in
             DispatchQueue.main.async {
+                self.activityIndicator.stopAnimating()
+                self.activityIndicatorView.removeFromSuperview()
                 self.imageView.image = UIImage(data: data)
             }
         }
@@ -132,6 +157,9 @@ final class ViewingScreenViewController: UIViewController {
     
     // MARK: - Configure FileViewPdf
     private func configureFileViewPdf() {
+        
+        activityIndicator.stopAnimating()
+        activityIndicatorView.removeFromSuperview()
         
         pdfView.translatesAutoresizingMaskIntoConstraints = false
         fileView.addSubview(pdfView)
@@ -148,11 +176,9 @@ final class ViewingScreenViewController: UIViewController {
             print("error")
             return
         }
-        
         if let document = PDFDocument(url: url) {
-            
             pdfView.autoScales = true
-            pdfView.displayMode = .singlePage
+            pdfView.displayMode = .singlePageContinuous
             pdfView.displayDirection = .vertical
             pdfView.document = document
         }
@@ -258,7 +284,7 @@ final class ViewingScreenViewController: UIViewController {
     // MARK: - Action Edit button
     @objc private func didTapOnEditButton() {
         
-        let vc = RenameFileVC()
+        let vc = RenameFileVC(nameFile: titleFile.text, path: path)
         vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true)
     }
@@ -341,7 +367,6 @@ final class ViewingScreenViewController: UIViewController {
             DispatchQueue.main.async {
                 self.dismiss(animated: true, completion: nil)
             }
-            self.delegate?.updateTableView()
         }
     }
     

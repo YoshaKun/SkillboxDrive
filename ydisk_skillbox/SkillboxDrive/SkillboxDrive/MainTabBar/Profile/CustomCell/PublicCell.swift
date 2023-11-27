@@ -155,7 +155,7 @@ final class PublicCell: UITableViewCell {
     
     // MARK: - ConfigureCell
     
-    func configureCell(_ viewModel: PublishedItems) {
+    func configureCell(_ viewModel: LatestItems) {
         
         let converter = Units.init(bytes: Int64(viewModel.size ?? 0))
         let str = converter.getReadableUnit()

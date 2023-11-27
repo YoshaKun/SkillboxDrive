@@ -11,7 +11,7 @@ final class LatestModel {
     
     var modelData = LatestFiles(items: [])
     
-    func getLatestFiles(completion: @escaping () -> Void) {
+    func getLatestFiles(completion: @escaping () -> Void, errorHandler: @escaping () -> Void) {
         
         guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
         var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk/resources/last-uploaded")
@@ -24,6 +24,7 @@ final class LatestModel {
         let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
             guard let data = data else {
                 print("Error: \(String(describing: error))")
+                errorHandler()
                 return }
             guard let latestFiles = try? JSONDecoder().decode(LatestFiles.self, from: data) else {
                 print("Error serialization")
@@ -35,7 +36,7 @@ final class LatestModel {
         task.resume()
     }
     
-    func getFileFromPath(path: String?, completion: @escaping (String?) -> Void, errorHandler: @escaping () -> Void) {
+    func getFileFromPath(path: String?, completion: @escaping () -> Void, errorHandler: @escaping () -> Void) {
         
         guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
         guard let pathUrl = path else { return }
@@ -55,8 +56,7 @@ final class LatestModel {
                 print("Error serialization")
                 errorHandler()
                 return }
-            guard let urlStr = files.sizes[0].url else { return }
-            completion(urlStr)
+            completion()
         }
         task.resume()
     }

@@ -9,19 +9,19 @@ import Foundation
 
 protocol LatestPresenterProtocol {
     
-    func updateDataTableView(completion: @escaping () -> Void)
+    func updateDataTableView(completion: @escaping () -> Void, errorHandler: @escaping () -> Void)
     func getModelDataItemsCount() -> Int?
     func getModelData() -> LatestFiles
-    func getFileFromPath(path: String?, completion: @escaping (String?) -> Void, errorHandler: @escaping () -> Void)
+    func getFileFromPath(path: String?, completion: @escaping () -> Void, errorHandler: @escaping () -> Void)
 }
 
 final class LatestPresenter: LatestPresenterProtocol {
     
     private var model: LatestModel = LatestModel()
     
-    func updateDataTableView(completion: @escaping () -> Void) {
+    func updateDataTableView(completion: @escaping () -> Void, errorHandler: @escaping () -> Void) {
         
-        model.getLatestFiles(completion: completion)
+        model.getLatestFiles(completion: completion, errorHandler: errorHandler)
     }
     
     func getModelDataItemsCount() -> Int? {
@@ -37,7 +37,7 @@ final class LatestPresenter: LatestPresenterProtocol {
         return data
     }
     
-    func getFileFromPath(path: String?, completion: @escaping (String?) -> Void, errorHandler: @escaping () -> Void) {
+    func getFileFromPath(path: String?, completion: @escaping () -> Void, errorHandler: @escaping () -> Void) {
         
         model.getFileFromPath(path: path, completion: completion, errorHandler: errorHandler)
     }

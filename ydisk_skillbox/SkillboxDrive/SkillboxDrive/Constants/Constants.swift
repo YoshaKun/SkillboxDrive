@@ -37,6 +37,7 @@ enum Constants {
         static let gb = Bundle.main.localizedString(forKey: "gb", value: "", table: "Localize")
         static let mb = Bundle.main.localizedString(forKey: "mb", value: "", table: "Localize")
         static let kb = Bundle.main.localizedString(forKey: "kb", value: "", table: "Localize")
+        static let errorInternet = Bundle.main.localizedString(forKey: "errorInternet", value: "", table: "Localize")
         
         enum FirstVC {
             static let title = Bundle.main.localizedString(forKey: "FirstVC.title", value: "", table: "Localize")
@@ -95,6 +96,9 @@ enum Constants {
         }
         static var pink: UIColor? {
             UIColor(named: "Pink")
+        }
+        static var red: UIColor? {
+            UIColor(named: "Red")
         }
     }
 }

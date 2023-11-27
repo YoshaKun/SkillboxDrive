@@ -6,10 +6,45 @@
 //
 
 import Foundation
+import RealmSwift
 
 final class ProfileModel {
 
-    func updatePieChartData(completion: @escaping (_ totalSpace: Int?, _ usedSpace: Int?) -> Void) {
+    // MARK: - Initializing member of Realm
+    let realm = try! Realm()
+    
+    // MARK: - Realm saving Data
+    private func savePieChartDataUsingRealm(used: Int, total: Int) {
+        
+        let chartData = PieChartModel()
+        chartData.busy = used
+        chartData.free = total
+        print("used: \(chartData.busy), total: \(chartData.free)")
+        realm.beginWrite()
+        realm.add(chartData)
+        try! realm.commitWrite()
+    }
+    
+    // MARK: - Realm delete Data
+    private func deletePieChartDataFromRealm() {
+    
+        realm.beginWrite()
+        realm.delete(realm.objects(PieChartModel.self))
+        try! realm.commitWrite()
+    }
+    
+    // MARK: - Realm READ data
+    func readPieChartDataRealm(completion: @escaping (_ totalSpace: Int?, _ usedSpace: Int?) -> Void) {
+        
+        let someDate = self.realm.objects(PieChartModel.self)
+        let usedData = someDate[0].busy
+        let totalData = someDate[0].free
+        completion(totalData, usedData)
+    }
+    
+    // MARK: - Update PieChart data
+    
+    func updatePieChartData(completion: @escaping (_ totalSpace: Int?, _ usedSpace: Int?) -> Void, errorHandler: @escaping () -> Void) {
         
         guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
         var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk")
@@ -18,13 +53,17 @@ final class ProfileModel {
         var request = URLRequest(url: url)
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
         
-        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
-            guard let self = self, let data = data else {
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data else {
                 print("Error: \(String(describing: error))")
+                errorHandler()
                 return }
             guard let newFiles = try? JSONDecoder().decode(DiskSpaceResponse.self, from: data) else { return }
             guard let total = newFiles.total_space, let used = newFiles.used_space else { return }
-            
+            DispatchQueue.main.async {
+                self.deletePieChartDataFromRealm()
+                self.savePieChartDataUsingRealm(used: used, total: total)
+            }
             completion(total, used)
         }
         task.resume()

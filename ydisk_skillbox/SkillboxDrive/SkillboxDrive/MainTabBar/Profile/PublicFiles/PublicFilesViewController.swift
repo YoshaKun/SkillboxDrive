@@ -27,9 +27,13 @@ class PublicFilesViewController: UIViewController {
         
         view.backgroundColor = .systemBackground
         configureNavigationBar()
-        configureNoFilesView()
-        configureNoFilesConstraints()
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        noFilesView.removeFromSuperview()
+        configureActivityIndicatorView()
+        updateView()
     }
     
     private func configureNavigationBar() {
@@ -87,6 +91,8 @@ class PublicFilesViewController: UIViewController {
         updateButton.setTitleColor(.black, for: .normal)
         updateButton.layer.cornerRadius = 7
         updateButton.addTarget(self, action: #selector(didTappedOnUpdateButton), for: .touchUpInside)
+        
+        configureNoFilesConstraints()
     }
     
     @objc private func didTappedOnUpdateButton() {
@@ -100,12 +106,6 @@ class PublicFilesViewController: UIViewController {
 
         configureTableView()
         updateDataOfTableView()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            guard let self = self else { return }
-            self.activityIndicator.stopAnimating()
-            self.activityIndicatorView.removeFromSuperview()
-            self.tableView.isHidden = false
-        }
     }
     
     private func configureNoFilesConstraints() {
@@ -168,8 +168,22 @@ class PublicFilesViewController: UIViewController {
     private func updateDataOfTableView() {
         
         presenter.updateDataTableView {
-            DispatchQueue.main.async {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                guard let self = self else { return }
+                self.activityIndicator.stopAnimating()
+                self.activityIndicatorView.removeFromSuperview()
                 self.tableView.reloadData()
+                self.tableView.isHidden = false
+                self.noFilesView.removeFromSuperview()
+            }
+        } errorHandler: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                guard let self = self else { return }
+                self.activityIndicator.stopAnimating()
+                self.activityIndicatorView.removeFromSuperview()
+                self.tableView.reloadData()
+                self.tableView.isHidden = true
+                self.configureNoFilesView()
             }
         }
     }
@@ -197,6 +211,8 @@ class PublicFilesViewController: UIViewController {
                 title: Constants.Text.FirstVC.removePost,
                 style: .destructive,
                 handler: {  [weak self] _ in
+                    self?.configureActivityIndicatorView()
+                    self?.tableView.isHidden = true
                     self?.presenter.removePublishedData(path: path, completion: {
                         self?.updateDataOfTableView()
                     })
@@ -206,21 +222,21 @@ class PublicFilesViewController: UIViewController {
         return alert
     }
     
-    private func openFolder(type: String) {
+    private func determinationOfFileType(path: String) -> String {
         
-        let folder = "dir"
-        if type == folder {
-            // MARK: - написать метод перехода на экран с содержимым Папки
-        } else {
-            print("This is the File")
-        }
+        let index = path.firstIndex(of: ".") ?? path.endIndex
+        var fileType = path[index ..< path.endIndex]
+        fileType.removeFirst()
+        let newString = String(fileType)
+        return newString
     }
 }
 
 extension PublicFilesViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return presenter.getModelDataItemsCount() ?? 1
+        
+        return presenter.getModelDataItemsCount() ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -239,13 +255,38 @@ extension PublicFilesViewController: UITableViewDataSource {
 extension PublicFilesViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        configureActivityIndicatorView()
+        
         guard let viewModel = presenter.getModelData().items else { return }
         guard let typeFile = viewModel[indexPath.row].type else { return }
         guard let strUrl = viewModel[indexPath.row].public_url else { return }
+        guard let title = viewModel[indexPath.row].name else { return }
+        guard let created = viewModel[indexPath.row].created else { return }
+        guard let fileUrl = viewModel[indexPath.row].file else { return }
+        guard let pathItem = viewModel[indexPath.row].path else { return }
+        let fileType = determinationOfFileType(path: pathItem)
 
-        self.presenter.fetchDataOfPublishedFolder(publicUrl: strUrl) {
-            self.openFolder(type: typeFile)
+        let folder = "dir"
+        if fileType == folder {
+//            self.presenter.fetchDataOfPublishedFolder(publicUrl: strUrl) {
+//                
+//            }
+        } else {
+            self.presenter.fetchDataOfPublishedFolder(publicUrl: strUrl) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                    guard let self = self else { return }
+                    let vc = ViewingScreenViewController(title: title, created: created, type: fileType, file: fileUrl, path: pathItem)
+                    vc.modalPresentationStyle = .fullScreen
+                    self.navigationController?.present(vc, animated: true, completion: {
+                        self.activityIndicator.stopAnimating()
+                        self.activityIndicatorView.removeFromSuperview()
+                    })
+                }
+            }
         }
+        
+        
     }
 }
 

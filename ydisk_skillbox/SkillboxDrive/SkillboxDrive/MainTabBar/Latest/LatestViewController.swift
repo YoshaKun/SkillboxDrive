@@ -16,14 +16,14 @@ final class LatestViewController: UIViewController {
     private var activityIndicator = UIActivityIndicatorView()
     private var activityIndicatorView = UIView()
     private var tableView = UITableView(frame: CGRect.zero, style: UITableView.Style.grouped)
+    private var errorView = UIView()
+    private var errorLabel = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
         configureNavigationBar()
-        configureActivityIndicatorView()
-        updateView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -64,12 +64,6 @@ final class LatestViewController: UIViewController {
 
         configureTableView()
         updateDataOfTableView()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            guard let self = self else { return }
-            self.activityIndicator.stopAnimating()
-            self.activityIndicatorView.removeFromSuperview()
-            self.tableView.isHidden = false
-        }
     }
     
     private func configureTableView() {
@@ -92,11 +86,27 @@ final class LatestViewController: UIViewController {
         }
     }
     
+    // MARK: - Update Data
     private func updateDataOfTableView() {
         
         presenter.updateDataTableView {
             DispatchQueue.main.async {
+                self.errorView.removeFromSuperview()
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                guard let self = self else { return }
                 self.tableView.reloadData()
+                self.activityIndicator.stopAnimating()
+                self.activityIndicatorView.removeFromSuperview()
+                self.tableView.isHidden = false
+            }
+        } errorHandler: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                guard let self = self else { return }
+                self.tableView.isHidden = true
+                self.activityIndicator.stopAnimating()
+                self.activityIndicatorView.removeFromSuperview()
+                self.configureErrorView()
             }
         }
     }
@@ -115,6 +125,34 @@ final class LatestViewController: UIViewController {
         ])
     }
     
+    // MARK: - Error View
+    private func configureErrorView() {
+        
+        errorLabel.text = Constants.Text.errorInternet
+        errorLabel.font = .systemFont(ofSize: 15, weight: .regular)
+        errorLabel.textColor = .white
+        errorLabel.textAlignment = .center
+        errorLabel.numberOfLines = 0
+        errorView.backgroundColor = Constants.Colors.red
+        
+        errorView.translatesAutoresizingMaskIntoConstraints = false
+        errorLabel.translatesAutoresizingMaskIntoConstraints = false
+        errorView.addSubview(errorLabel)
+        view.addSubview(errorView)
+        
+        NSLayoutConstraint.activate([
+            errorView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            errorView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            errorView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            errorView.heightAnchor.constraint(equalToConstant: 50),
+            
+            errorLabel.topAnchor.constraint(equalTo: errorView.topAnchor),
+            errorLabel.leadingAnchor.constraint(equalTo: errorView.leadingAnchor, constant: 80),
+            errorLabel.trailingAnchor.constraint(equalTo: errorView.trailingAnchor, constant: -80),
+            errorLabel.bottomAnchor.constraint(equalTo: errorView.bottomAnchor),
+        ])
+    }
+    
     private func determinationOfFileType(path: String) -> String {
         
         let index = path.firstIndex(of: ".") ?? path.endIndex
@@ -122,15 +160,6 @@ final class LatestViewController: UIViewController {
         fileType.removeFirst()
         let newString = String(fileType)
         return newString
-    }
-}
-
-extension LatestViewController: ViewingScreenVCProtocol {
-    
-    func updateTableView() {
-        DispatchQueue.main.async {
-            self.updateDataOfTableView()
-        }
     }
 }
 
@@ -165,8 +194,7 @@ extension LatestViewController: UITableViewDelegate {
         guard let pathItem = viewModel[indexPath.row].path else { return }
         let fileType = determinationOfFileType(path: pathItem)
         
-        presenter.getFileFromPath(path: pathItem) { urlStr in
-            guard let urlStr = urlStr else { return }
+        presenter.getFileFromPath(path: pathItem) {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
                 guard let self = self else { return }
                 let vc = ViewingScreenViewController(title: title, created: created, type: fileType, file: fileUrl, path: pathItem)

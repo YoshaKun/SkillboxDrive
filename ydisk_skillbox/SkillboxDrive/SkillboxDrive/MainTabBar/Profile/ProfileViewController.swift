@@ -21,27 +21,63 @@ final class ProfileViewController: UIViewController, ChartViewDelegate {
     private var firstStackView = UIStackView()
     private var secondStackView = UIStackView()
     private let sizeOfTheCircles: CGFloat = 30
+    private var mainView = UIView()
     
     private var totalSpaceGb: Int = 0
     private var usedSpaceGb: Int = 0
     private var totalDataEntry = PieChartDataEntry(value: 0)
     private var usedDataEntry = PieChartDataEntry(value: 0)
     private var allMemorySpaceDataEntry = [PieChartDataEntry]()
+    private var activityIndicator = UIActivityIndicatorView()
+    private var activityIndicatorView = UIView()
+    private var errorView = UIView()
+    private var errorLabel = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureViews()
-        configureStackView()
         configureTabBar()
         configureNavigationBar()
+        configureViews()
+        configureStackView()
         configureConstraints()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        configureActivityIndicatorView()
         updateData()
+    }
+    
+    private func configureActivityIndicatorView() {
+        activityIndicatorView.backgroundColor = .systemBackground
+        
+        view.addSubview(activityIndicatorView)
+        activityIndicatorView.addSubview(activityIndicator)
+        
+        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.startAnimating()
+        
+        NSLayoutConstraint.activate([
+            activityIndicatorView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            activityIndicatorView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            activityIndicatorView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            activityIndicatorView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: activityIndicatorView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: activityIndicatorView.centerYAnchor),
+            activityIndicator.widthAnchor.constraint(equalToConstant: 50),
+            activityIndicator.heightAnchor.constraint(equalToConstant: 50),
+        ])
     }
         
     private func configureViews() {
         
         view.backgroundColor = .systemBackground
+        
+        mainView.isHidden = true
         
         publicFilesButton.backgroundColor = .white
         publicFilesButton.setTitle(Constants.Text.FirstVC.publicFiles, for: .normal)
@@ -83,7 +119,6 @@ final class ProfileViewController: UIViewController, ChartViewDelegate {
         pieChart.delegate = self
         let totalGigabytes = presenter.getConvertedBytesTotal(value: totalSpaceGb)
         let usedGigabytes = presenter.getConvertedBytesUsed(value: usedSpaceGb)
-        let remainsGigabytes = totalGigabytes - usedGigabytes
         let firstString = presenter.getConvertedBytesUsedToString(value: usedSpaceGb)
         let secondString = presenter.getConvertedBytesRemainsToString(total: totalSpaceGb, used: usedSpaceGb)
         totalDataEntry.value = totalGigabytes
@@ -194,11 +229,13 @@ final class ProfileViewController: UIViewController, ChartViewDelegate {
         secondStackView.addArrangedSubview(usedSpaceCircle)
         secondStackView.addArrangedSubview(usedSpaceLabel)
         
-        view.addSubview(pieChart)
-        view.addSubview(firstStackView)
-        view.addSubview(secondStackView)
-        view.addSubview(publicFilesButton)
+        view.addSubview(mainView)
+        mainView.addSubview(pieChart)
+        mainView.addSubview(firstStackView)
+        mainView.addSubview(secondStackView)
+        mainView.addSubview(publicFilesButton)
         
+        mainView.translatesAutoresizingMaskIntoConstraints = false
         pieChart.translatesAutoresizingMaskIntoConstraints = false
         totalSpaceCircle.translatesAutoresizingMaskIntoConstraints = false
         usedSpaceCircle.translatesAutoresizingMaskIntoConstraints = false
@@ -208,10 +245,15 @@ final class ProfileViewController: UIViewController, ChartViewDelegate {
         
         NSLayoutConstraint.activate([
             
-            pieChart.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
-            pieChart.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -80),
+            mainView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            mainView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            mainView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            mainView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            pieChart.topAnchor.constraint(equalTo: mainView.topAnchor, constant: 0),
+            pieChart.widthAnchor.constraint(equalTo: mainView.widthAnchor, constant: -80),
             pieChart.heightAnchor.constraint(equalToConstant: 300),
-            pieChart.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            pieChart.centerXAnchor.constraint(equalTo: mainView.centerXAnchor),
             
             totalSpaceCircle.heightAnchor.constraint(equalToConstant: sizeOfTheCircles),
             totalSpaceCircle.widthAnchor.constraint(equalToConstant: sizeOfTheCircles),
@@ -220,31 +262,84 @@ final class ProfileViewController: UIViewController, ChartViewDelegate {
             usedSpaceCircle.widthAnchor.constraint(equalToConstant: sizeOfTheCircles),
             
             firstStackView.topAnchor.constraint(equalTo: pieChart.bottomAnchor, constant: 0),
-            firstStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
-            firstStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            firstStackView.leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: 30),
+            firstStackView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -30),
             firstStackView.heightAnchor.constraint(equalToConstant: 40),
             
             secondStackView.topAnchor.constraint(equalTo: firstStackView.bottomAnchor, constant: 0),
-            secondStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
-            secondStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            secondStackView.leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: 30),
+            secondStackView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -30),
             secondStackView.heightAnchor.constraint(equalToConstant: 40),
             
             publicFilesButton.topAnchor.constraint(equalTo: secondStackView.bottomAnchor, constant: 16),
-            publicFilesButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
-            publicFilesButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            publicFilesButton.leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: 30),
+            publicFilesButton.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -30),
             publicFilesButton.heightAnchor.constraint(equalToConstant: 50),
         ])
     }
-
-    private func updateData() {
-        // MARK: - Получение данных с сервера для PieChart
+    
+    // MARK: - Error View
+    private func configureErrorView() {
         
-        presenter.updatePieData { totalSpace, usedSpace in
+        errorLabel.text = Constants.Text.errorInternet
+        errorLabel.font = .systemFont(ofSize: 15, weight: .regular)
+        errorLabel.textColor = .white
+        errorLabel.textAlignment = .center
+        errorLabel.numberOfLines = 0
+        errorView.backgroundColor = Constants.Colors.red
+        
+        errorView.translatesAutoresizingMaskIntoConstraints = false
+        errorLabel.translatesAutoresizingMaskIntoConstraints = false
+        errorView.addSubview(errorLabel)
+        view.addSubview(errorView)
+        
+        NSLayoutConstraint.activate([
+            errorView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            errorView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            errorView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            errorView.heightAnchor.constraint(equalToConstant: 50),
+            
+            errorLabel.topAnchor.constraint(equalTo: errorView.topAnchor),
+            errorLabel.leadingAnchor.constraint(equalTo: errorView.leadingAnchor, constant: 80),
+            errorLabel.trailingAnchor.constraint(equalTo: errorView.trailingAnchor, constant: -80),
+            errorLabel.bottomAnchor.constraint(equalTo: errorView.bottomAnchor),
+        ])
+    }
+
+    // MARK: - Update PieChart Data
+    private func updateData() {
+        
+        presenter.updatePieChartData { totalSpace, usedSpace in
             DispatchQueue.main.async {
-                self.totalSpaceGb = totalSpace ?? 00
-                self.usedSpaceGb = usedSpace ?? 00
-                self.updatePieChart()
+                self.errorView.removeFromSuperview()
             }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                guard let self = self else { return }
+                self.activityIndicator.stopAnimating()
+                self.activityIndicatorView.removeFromSuperview()
+                self.totalSpaceGb = totalSpace ?? 0
+                self.usedSpaceGb = usedSpace ?? 0
+                self.updatePieChart()
+                self.mainView.isHidden = false
+            }
+        } errorHandler: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                guard let self = self else { return }
+                self.updateDataIfNotInternetConnection()
+                self.activityIndicator.stopAnimating()
+                self.activityIndicatorView.removeFromSuperview()
+                self.configureErrorView()
+                self.updatePieChart()
+                self.mainView.isHidden = false
+            }
+        }
+    }
+    
+    private func updateDataIfNotInternetConnection() {
+        
+        presenter.readPieChartDataRealm { totalSpace, usedSpace in
+            self.totalSpaceGb = totalSpace ?? 0
+            self.usedSpaceGb = usedSpace ?? 0
         }
     }
 }

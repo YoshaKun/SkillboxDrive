@@ -28,6 +28,7 @@
 "gb" = "gb";
 "mb" = "mb";
 "kb" = "kb";
+"errorInternet" = "No internet connection";
 "FirstVC.publicFilesTitle" = "Published files";
 "FirstVC.noFilesDescr" = "You don't have any published files yet";
 "FirstVC.update" = "Update";
