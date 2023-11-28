@@ -142,7 +142,9 @@ final class LatestCell: UITableViewCell {
         timeFile.text = time
         
         guard let url = viewModel.preview else {
-            print("Error of URL")
+            activityIndicator.stopAnimating()
+            activityIndicator.removeFromSuperview()
+            imageViewFile.image = Constants.Image.folder
             return
         }
         

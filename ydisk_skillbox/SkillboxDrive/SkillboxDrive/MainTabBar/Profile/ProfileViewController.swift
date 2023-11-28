@@ -294,7 +294,7 @@ final class ProfileViewController: UIViewController, ChartViewDelegate {
         view.addSubview(errorView)
         
         NSLayoutConstraint.activate([
-            errorView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            errorView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
             errorView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             errorView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
             errorView.heightAnchor.constraint(equalToConstant: 50),

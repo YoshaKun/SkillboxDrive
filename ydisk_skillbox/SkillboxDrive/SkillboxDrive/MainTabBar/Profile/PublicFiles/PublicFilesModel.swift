@@ -6,12 +6,67 @@
 //
 
 import Foundation
+import RealmSwift
 
 final class PublicFilesModel {
     
+    // MARK: - Initializing member of Realm
+    let realm = try! Realm()
+    
+    // MARK: - Base Model data
     var modelData = LatestFiles(items: [])
     
-    func getPublishedFiles (completion: @escaping () -> Void, errorHandler: @escaping () -> Void) {
+    // MARK: - Realm saving Data
+    private func savePublicFilesUsingRealm(filesList: LatestFiles) {
+        
+        guard let array = filesList.items else { return }
+        var savedArray: [PublicRealmModel] = []
+        for items in array {
+            let publicFilesList = PublicRealmModel()
+            publicFilesList.name = items.name
+            publicFilesList.created = items.created
+            publicFilesList.path = items.path
+            publicFilesList.type = items.type
+            publicFilesList.size = items.size ?? 0
+            savedArray.append(publicFilesList)
+            realm.beginWrite()
+            realm.add(publicFilesList)
+            try! realm.commitWrite()
+        }
+    }
+    
+    // MARK: - Realm delete Data
+    private func deletePublicFilesRealm() {
+    
+        realm.beginWrite()
+        realm.delete(realm.objects(PublicRealmModel.self))
+        try! realm.commitWrite()
+    }
+    
+    // MARK: - Realm READ data
+    func readPublicFilesRealm() -> LatestFiles {
+        
+        let savedDataInRealm = realm.objects(PublicRealmModel.self)
+        var publicFiles = LatestFiles(items: [])
+        
+        for data in savedDataInRealm {
+            let latestItem = LatestItems(
+                name: data.name!,
+                created: data.created!,
+                sizes: [],
+                file: nil,
+                path: data.path!,
+                type: data.type!,
+                size: data.size,
+                preview: data.preview,
+                public_url: nil
+            )
+            publicFiles.items?.append(latestItem)
+        }
+        return publicFiles
+    }
+    
+    func getPublishedFiles (completion: @escaping () -> Void, errorHandler: @escaping () -> Void, noInternet: @escaping () -> Void) {
         
         guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
         var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk/resources/public")
@@ -23,6 +78,7 @@ final class PublicFilesModel {
         let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
             guard let data = data else {
                 print("Error: \(String(describing: error))")
+                noInternet()
                 return }
             guard let latestFiles = try? JSONDecoder().decode(LatestFiles.self, from: data) else {
                 print("Error serialization")
@@ -31,7 +87,10 @@ final class PublicFilesModel {
             guard latestFiles.items?.count != 0 else { 
                 errorHandler()
                 return }
-            print("Received: \(String(describing: latestFiles.items?.count)) files")
+            DispatchQueue.main.async {
+                self.deletePublicFilesRealm()
+                self.savePublicFilesUsingRealm(filesList: latestFiles)
+            }
             self.modelData = latestFiles
             completion()
         }

@@ -9,8 +9,7 @@ import Foundation
 
 protocol LatestPresenterProtocol {
     
-    func updateDataTableView(completion: @escaping () -> Void, errorHandler: @escaping () -> Void)
-    func getModelDataItemsCount() -> Int?
+    func updateDataTableView(completion: @escaping () -> Void, noInternet: @escaping () -> Void)
     func getModelData() -> LatestFiles
     func getFileFromPath(path: String?, completion: @escaping () -> Void, errorHandler: @escaping () -> Void)
 }
@@ -19,21 +18,18 @@ final class LatestPresenter: LatestPresenterProtocol {
     
     private var model: LatestModel = LatestModel()
     
-    func updateDataTableView(completion: @escaping () -> Void, errorHandler: @escaping () -> Void) {
+    func updateDataTableView(completion: @escaping () -> Void, noInternet: @escaping () -> Void) {
         
-        model.getLatestFiles(completion: completion, errorHandler: errorHandler)
-    }
-    
-    func getModelDataItemsCount() -> Int? {
-        
-        guard let data = model.modelData.items else { return 1 }
-        let countOfItems = data.count
-        return countOfItems
+        model.getLatestFiles(completion: completion, noInternet: noInternet)
     }
     
     func getModelData() -> LatestFiles {
         
         let data = model.modelData
+        if data.items!.isEmpty {
+            print("сработал метод readPublicFilesRealm")
+            return model.readPublicFilesRealm()
+        }
         return data
     }
     

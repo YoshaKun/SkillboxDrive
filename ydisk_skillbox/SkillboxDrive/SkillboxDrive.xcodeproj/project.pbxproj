@@ -21,6 +21,8 @@
 		6B76FB6A2B0BC5E200B66E93 /* ViewingScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B76FB692B0BC5E200B66E93 /* ViewingScreenViewController.swift */; };
 		6B76FB6C2B0BC60900B66E93 /* ViewingScreenPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B76FB6B2B0BC60900B66E93 /* ViewingScreenPresenter.swift */; };
 		6B76FB6E2B0BC61A00B66E93 /* ViewingScreenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B76FB6D2B0BC61A00B66E93 /* ViewingScreenModel.swift */; };
+		6B7FC6612B16101D0002573E /* LatestRealmModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7FC6602B16101D0002573E /* LatestRealmModel.swift */; };
+		6B7FC6632B1672350002573E /* PublicRealmModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7FC6622B1672350002573E /* PublicRealmModel.swift */; };
 		6B9924292B07E67400002F8A /* LatestCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9924282B07E67400002F8A /* LatestCellModel.swift */; };
 		6B99242B2B07E68500002F8A /* LatestCellPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B99242A2B07E68500002F8A /* LatestCellPresenter.swift */; };
 		6B99242D2B07E91200002F8A /* PublicCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B99242C2B07E91100002F8A /* PublicCellModel.swift */; };
@@ -66,6 +68,8 @@
 		6B76FB692B0BC5E200B66E93 /* ViewingScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewingScreenViewController.swift; sourceTree = "<group>"; };
 		6B76FB6B2B0BC60900B66E93 /* ViewingScreenPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewingScreenPresenter.swift; sourceTree = "<group>"; };
 		6B76FB6D2B0BC61A00B66E93 /* ViewingScreenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewingScreenModel.swift; sourceTree = "<group>"; };
+		6B7FC6602B16101D0002573E /* LatestRealmModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestRealmModel.swift; sourceTree = "<group>"; };
+		6B7FC6622B1672350002573E /* PublicRealmModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicRealmModel.swift; sourceTree = "<group>"; };
 		6B9924282B07E67400002F8A /* LatestCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestCellModel.swift; sourceTree = "<group>"; };
 		6B99242A2B07E68500002F8A /* LatestCellPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestCellPresenter.swift; sourceTree = "<group>"; };
 		6B99242C2B07E91100002F8A /* PublicCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCellModel.swift; sourceTree = "<group>"; };
@@ -133,6 +137,8 @@
 			isa = PBXGroup;
 			children = (
 				6B358D602B14F40000AE4454 /* PieChartModel.swift */,
+				6B7FC6602B16101D0002573E /* LatestRealmModel.swift */,
+				6B7FC6622B1672350002573E /* PublicRealmModel.swift */,
 			);
 			path = RealmModels;
 			sourceTree = "<group>";
@@ -242,6 +248,7 @@
 			children = (
 				6BEEF0FD2ACED7D300BBE68D /* Profile */,
 				6BEEF0FE2ACED7E300BBE68D /* Latest */,
+				6BD139AF2B068CD900BE5B42 /* ViewingScreen */,
 				6BEEF0FF2ACED7F400BBE68D /* AllFiles */,
 			);
 			path = MainTabBar;
@@ -265,7 +272,6 @@
 				6BD139A82B0664EE00BE5B42 /* LatestModel.swift */,
 				6BEEF1002ACED85700BBE68D /* LatestViewController.swift */,
 				6BD139AA2B06654800BE5B42 /* LatestPresenter.swift */,
-				6BD139AF2B068CD900BE5B42 /* ViewingScreen */,
 				6BD139AC2B068AF000BE5B42 /* CustomCell */,
 			);
 			path = Latest;
@@ -431,6 +437,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B7FC6612B16101D0002573E /* LatestRealmModel.swift in Sources */,
 				6BD831552B121B7500A59441 /* RenameFilePresenter.swift in Sources */,
 				6B5FFAAF2B03AC9700300019 /* PublicCell.swift in Sources */,
 				6BA0F76F2AE95D3D007EE8FC /* ProfileModel.swift in Sources */,
@@ -458,6 +465,7 @@
 				6B358D612B14F40000AE4454 /* PieChartModel.swift in Sources */,
 				6BEEF0E82ACEC47000BBE68D /* SceneDelegate.swift in Sources */,
 				6BEAF40D2B0276E900A80A4E /* PublicFilesModel.swift in Sources */,
+				6B7FC6632B1672350002573E /* PublicRealmModel.swift in Sources */,
 				6BD139AB2B06654800BE5B42 /* LatestPresenter.swift in Sources */,
 				6BEAF40F2B0276F800A80A4E /* PublicFilesViewController.swift in Sources */,
 				6BA0F7712AE95D56007EE8FC /* ProfilePresenter.swift in Sources */,

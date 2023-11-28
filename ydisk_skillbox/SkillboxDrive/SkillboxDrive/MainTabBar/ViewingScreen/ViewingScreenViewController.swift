@@ -91,12 +91,22 @@ final class ViewingScreenViewController: UIViewController {
             print("Это pdf")
             configureActivityIndicatorView()
             configureFileViewPdf()
-        case "docx":
-            print("Это docx")
-            configureFileViewMSOffice()
-        case "xlsx":
-            print("Это ЭКСЕЛЬ")
-            configureFileViewMSOffice()
+        case "JPG":
+            print("Это картинка jpg")
+            configureActivityIndicatorView()
+            configureFileViewForImage()
+        case "JPEG":
+            print("Это картинка jpeg")
+            configureActivityIndicatorView()
+            configureFileViewForImage()
+        case "PNG":
+            print("Это картинка png")
+            configureActivityIndicatorView()
+            configureFileViewForImage()
+        case "PDF":
+            print("Это pdf")
+            configureActivityIndicatorView()
+            configureFileViewPdf()
         default:
             print("Unknown file")
             configureFileViewMSOffice()

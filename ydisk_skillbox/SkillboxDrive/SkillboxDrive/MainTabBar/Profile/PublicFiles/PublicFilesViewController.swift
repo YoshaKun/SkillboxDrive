@@ -21,6 +21,8 @@ class PublicFilesViewController: UIViewController {
     private var activityIndicator = UIActivityIndicatorView()
     private var activityIndicatorView = UIView()
     private var tableView = UITableView(frame: CGRect.zero, style: UITableView.Style.grouped)
+    private var errorView = UIView()
+    private var errorLabel = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,6 +59,7 @@ class PublicFilesViewController: UIViewController {
     private func configureActivityIndicatorView() {
         
         view.addSubview(activityIndicatorView)
+        activityIndicatorView.backgroundColor = .systemBackground
         activityIndicatorView.addSubview(activityIndicator)
         
         activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
@@ -168,6 +171,9 @@ class PublicFilesViewController: UIViewController {
     private func updateDataOfTableView() {
         
         presenter.updateDataTableView {
+            DispatchQueue.main.async {
+                self.errorView.removeFromSuperview()
+            }
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
                 guard let self = self else { return }
                 self.activityIndicator.stopAnimating()
@@ -185,7 +191,45 @@ class PublicFilesViewController: UIViewController {
                 self.tableView.isHidden = true
                 self.configureNoFilesView()
             }
+        } noInternet: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                guard let self = self else { return }
+                self.activityIndicator.stopAnimating()
+                self.activityIndicatorView.removeFromSuperview()
+                self.tableView.reloadData()
+                self.tableView.isHidden = false
+                self.noFilesView.removeFromSuperview()
+                self.configureErrorView()
+            }
         }
+    }
+    
+    // MARK: - Error View
+    private func configureErrorView() {
+        
+        errorLabel.text = Constants.Text.errorInternet
+        errorLabel.font = .systemFont(ofSize: 15, weight: .regular)
+        errorLabel.textColor = .white
+        errorLabel.textAlignment = .center
+        errorLabel.numberOfLines = 0
+        errorView.backgroundColor = Constants.Colors.red
+        
+        errorView.translatesAutoresizingMaskIntoConstraints = false
+        errorLabel.translatesAutoresizingMaskIntoConstraints = false
+        errorView.addSubview(errorLabel)
+        view.addSubview(errorView)
+        
+        NSLayoutConstraint.activate([
+            errorView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            errorView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            errorView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            errorView.heightAnchor.constraint(equalToConstant: 50),
+            
+            errorLabel.topAnchor.constraint(equalTo: errorView.topAnchor),
+            errorLabel.leadingAnchor.constraint(equalTo: errorView.leadingAnchor, constant: 80),
+            errorLabel.trailingAnchor.constraint(equalTo: errorView.trailingAnchor, constant: -80),
+            errorLabel.bottomAnchor.constraint(equalTo: errorView.bottomAnchor),
+        ])
     }
     
     private func configureConstraints() {
@@ -236,7 +280,7 @@ extension PublicFilesViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return presenter.getModelDataItemsCount() ?? 0
+        return presenter.getModelData().items?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

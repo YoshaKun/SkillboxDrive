@@ -38,9 +38,9 @@ final class LatestViewController: UIViewController {
     }
     
     private func configureActivityIndicatorView() {
-        activityIndicatorView.backgroundColor = .systemBackground
         
         view.addSubview(activityIndicatorView)
+        activityIndicatorView.backgroundColor = .systemBackground
         activityIndicatorView.addSubview(activityIndicator)
         
         activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
@@ -100,12 +100,13 @@ final class LatestViewController: UIViewController {
                 self.activityIndicatorView.removeFromSuperview()
                 self.tableView.isHidden = false
             }
-        } errorHandler: {
+        } noInternet: {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
                 guard let self = self else { return }
-                self.tableView.isHidden = true
                 self.activityIndicator.stopAnimating()
                 self.activityIndicatorView.removeFromSuperview()
+                self.tableView.reloadData()
+                self.tableView.isHidden = false
                 self.configureErrorView()
             }
         }
@@ -141,7 +142,7 @@ final class LatestViewController: UIViewController {
         view.addSubview(errorView)
         
         NSLayoutConstraint.activate([
-            errorView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            errorView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
             errorView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             errorView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
             errorView.heightAnchor.constraint(equalToConstant: 50),
@@ -166,7 +167,8 @@ final class LatestViewController: UIViewController {
 extension LatestViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return presenter.getModelDataItemsCount() ?? 1
+        
+        return presenter.getModelData().items?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

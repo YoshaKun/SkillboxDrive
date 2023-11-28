@@ -157,20 +157,24 @@ final class PublicCell: UITableViewCell {
     
     func configureCell(_ viewModel: LatestItems) {
         
-        let converter = Units.init(bytes: Int64(viewModel.size ?? 0))
-        let str = converter.getReadableUnit()
+        guard let name = viewModel.name else { return }
         guard let initialDate = viewModel.created else { return }
-        let date = parseDate(initialDate ?? "2023-11-13T18:56:09+00:00")
+        guard let size = viewModel.size else { return }
+        guard let path = viewModel.path else { return }
+        guard let type = viewModel.type else { return }
         
+        let converter = Units.init(bytes: Int64(size ?? 0))
+        let str = converter.getReadableUnit()
+        let date = parseDate(initialDate ?? "2023-11-13T18:56:09+00:00")
         let onlyDate = getOnlyDateRu(date: date)
         let time = getOnlyTime(date: date)
         
-        nameFile.text = viewModel.name
+        nameFile.text = name
         sizeFile.text = str
         dateFile.text = onlyDate
         timeFile.text = time
-        pathOfFileOrFolder.text = viewModel.path
-        folderFileFlag.text = viewModel.type
+        pathOfFileOrFolder.text = path
+        folderFileFlag.text = type
         
         guard let url = viewModel.preview else {
             activityIndicator.stopAnimating()

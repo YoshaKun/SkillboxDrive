@@ -15,7 +15,7 @@ struct DiskSpaceResponse: Codable {
 
 // MARK: - LatestFiles
 struct LatestFiles: Codable {
-    let items: [LatestItems]?
+    var items: [LatestItems]?
 }
 
 // MARK: - LatestItems
