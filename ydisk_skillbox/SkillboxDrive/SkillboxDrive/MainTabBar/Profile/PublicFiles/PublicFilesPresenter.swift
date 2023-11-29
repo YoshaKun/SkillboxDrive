@@ -9,19 +9,38 @@ import Foundation
 
 protocol PublicFilesPresenterProtocol {
     
-    func updateDataTableView(completion: @escaping () -> Void, errorHandler: @escaping () -> Void, noInternet: @escaping () -> Void)
+    func updateDataTableView(completion: @escaping () -> Void, 
+                             errorHandler: @escaping () -> Void,
+                             noInternet: @escaping () -> Void)
+    
     func getModelData() -> LatestFiles
-    func removePublishedData(path: String?, completion: @escaping () -> Void)
-    func fetchDataOfPublishedFolder(publicUrl: String?, completion: @escaping () -> Void)
+    
+    func removePublishedData(path: String?,
+                             completion: @escaping () -> Void,
+                             errorHendler: @escaping () -> Void)
+    
+    func fetchDataOfPublishedFile(publicUrl: String?,
+                                  completion: @escaping () -> Void,
+                                  errorHandler: @escaping () -> Void,
+                                  noInternet: @escaping () -> Void)
+    
+    func fetchDataOfPublishedFolder (publicUrl: String?,
+                                     completion: @escaping () -> Void,
+                                     errorHandler: @escaping () -> Void,
+                                     noInternet: @escaping () -> Void)
 }
 
 final class PublicFilesPresenter: PublicFilesPresenterProtocol {
     
     private var model: PublicFilesModel = PublicFilesModel()
     
-    func updateDataTableView(completion: @escaping () -> Void, errorHandler: @escaping () -> Void, noInternet: @escaping () -> Void) {
+    func updateDataTableView(completion: @escaping () -> Void, 
+                             errorHandler: @escaping () -> Void,
+                             noInternet: @escaping () -> Void) {
         
-        model.getPublishedFiles(completion: completion, errorHandler: errorHandler, noInternet: noInternet)
+        model.getPublishedFiles(completion: completion, 
+                                errorHandler: errorHandler,
+                                noInternet: noInternet)
     }
     
     func getModelData() -> LatestFiles {
@@ -34,13 +53,34 @@ final class PublicFilesPresenter: PublicFilesPresenterProtocol {
         return data
     }
     
-    func removePublishedData(path: String?, completion: @escaping () -> Void) {
+    func removePublishedData(path: String?, 
+                             completion: @escaping () -> Void,
+                             errorHendler: @escaping () -> Void) {
         
-        model.removePublishedFile(path: path, completion: completion)
+        model.removePublishedFile(path: path, 
+                                  completion: completion, 
+                                  errorHendler: errorHendler)
     }
     
-    func fetchDataOfPublishedFolder(publicUrl: String?, completion: @escaping () -> Void) {
+    func fetchDataOfPublishedFile(publicUrl: String?, 
+                                  completion: @escaping () -> Void,
+                                  errorHandler: @escaping () -> Void,
+                                  noInternet: @escaping () -> Void) {
         
-        model.getDataOfPublishedFolder(publicUrl: publicUrl, completion: completion)
+        model.getDataOfPublishedFiles(publicUrl: publicUrl, 
+                                      completion: completion,
+                                      errorHandler: errorHandler,
+                                      noInternet: noInternet)
+    }
+    
+    func fetchDataOfPublishedFolder(publicUrl: String?, 
+                                    completion: @escaping () -> Void,
+                                    errorHandler: @escaping () -> Void,
+                                    noInternet: @escaping () -> Void) {
+        
+        model.getDataOfPublishedFolder(publicUrl: publicUrl,
+                                       completion: completion,
+                                       errorHandler: errorHandler,
+                                       noInternet: noInternet)
     }
 }

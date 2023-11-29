@@ -13,6 +13,11 @@ struct DiskSpaceResponse: Codable {
     let used_space: Int?
 }
 
+// MARK: - PublishedFolder
+struct PublishedFolder: Codable {
+    let _embedded: LatestFiles
+}
+
 // MARK: - LatestFiles
 struct LatestFiles: Codable {
     var items: [LatestItems]?
@@ -22,7 +27,7 @@ struct LatestFiles: Codable {
 struct LatestItems: Codable {
     let name: String?
     let created: String?
-    let sizes: [Images]
+    let sizes: [Images]?
     let file: String?
     let path: String?
     let type: String?

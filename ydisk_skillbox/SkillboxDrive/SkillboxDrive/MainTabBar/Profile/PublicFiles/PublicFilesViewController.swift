@@ -23,6 +23,32 @@ class PublicFilesViewController: UIViewController {
     private var tableView = UITableView(frame: CGRect.zero, style: UITableView.Style.grouped)
     private var errorView = UIView()
     private var errorLabel = UILabel()
+    private var titleOfFolder: String?
+    private var type: String?
+    private var varPublicUrl: String?
+    private var pathFolder: String?
+    private var emptyFolderFlag: Bool?
+    private var emptyFolderErrorView = UIView()
+    private let labelError = UILabel()
+    
+    // MARK: - Initialization
+    init(title: String?,
+         type: String?,
+         publicUrl: String?,
+         pathFolder: String?,
+         folderIsEmpty: Bool?
+        ) {
+        super.init(nibName: nil, bundle: nil)
+        self.titleOfFolder = title
+        self.type = type
+        self.varPublicUrl = publicUrl
+        self.pathFolder = pathFolder
+        self.emptyFolderFlag = folderIsEmpty
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +59,18 @@ class PublicFilesViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        guard emptyFolderFlag != true else {
+            configureEmptyFolderError()
+            return
+        }
+        guard titleOfFolder == nil, type == nil else {
+            self.title = titleOfFolder
+            configureActivityIndicatorView()
+            updateViewFolder()
+            return
+        }
+        
         noFilesView.removeFromSuperview()
         configureActivityIndicatorView()
         updateView()
@@ -54,6 +92,33 @@ class PublicFilesViewController: UIViewController {
     @objc private func didTappedOnBackButton() {
         
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    private func configureEmptyFolderError() {
+        
+        labelError.text = Constants.Text.emptyFolder
+        labelError.textColor = .black
+        
+        view.addSubview(emptyFolderErrorView)
+        emptyFolderErrorView.backgroundColor = .systemBackground
+        emptyFolderErrorView.addSubview(labelError)
+        
+        labelError.translatesAutoresizingMaskIntoConstraints = false
+        emptyFolderErrorView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            
+            emptyFolderErrorView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            emptyFolderErrorView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            emptyFolderErrorView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            emptyFolderErrorView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            labelError.centerXAnchor.constraint(equalTo: emptyFolderErrorView.centerXAnchor),
+            labelError.centerYAnchor.constraint(equalTo: emptyFolderErrorView.centerYAnchor),
+            labelError.heightAnchor.constraint(equalToConstant: 100),
+            labelError.leadingAnchor.constraint(equalTo: emptyFolderErrorView.leadingAnchor, constant: 30),
+            labelError.trailingAnchor.constraint(equalTo: emptyFolderErrorView.trailingAnchor, constant: 30),
+        ])
     }
     
     private func configureActivityIndicatorView() {
@@ -105,12 +170,6 @@ class PublicFilesViewController: UIViewController {
         updateView()
     }
     
-    private func updateView() {
-
-        configureTableView()
-        updateDataOfTableView()
-    }
-    
     private func configureNoFilesConstraints() {
         
         let offsetForImage = view.frame.size.width / 2
@@ -147,6 +206,20 @@ class PublicFilesViewController: UIViewController {
             updateButton.heightAnchor.constraint(equalToConstant: 50),
             updateButton.trailingAnchor.constraint(equalTo: noFilesView.trailingAnchor, constant: -27),
         ])
+    }
+    
+    // MARK: - UpdateView - default
+    private func updateView() {
+
+        configureTableView()
+        updateDataOfTableView()
+    }
+    
+    // MARK: - UpdateView - for files in folder
+    private func updateViewFolder() {
+
+        configureTableView()
+        updateDataOfTableViewFolder()
     }
     
     private func configureTableView() {
@@ -204,6 +277,26 @@ class PublicFilesViewController: UIViewController {
         }
     }
     
+    private func updateDataOfTableViewFolder() {
+        presenter.fetchDataOfPublishedFolder(publicUrl: varPublicUrl) {
+            DispatchQueue.main.async {
+                self.errorView.removeFromSuperview()
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                guard let self = self else { return }
+                self.activityIndicator.stopAnimating()
+                self.activityIndicatorView.removeFromSuperview()
+                self.tableView.reloadData()
+                self.tableView.isHidden = false
+            }
+        } errorHandler: {
+            print("errorHandler")
+        } noInternet: {
+            print("noInternet")
+        }
+
+    }
+    
     // MARK: - Error View
     private func configureErrorView() {
         
@@ -248,6 +341,9 @@ class PublicFilesViewController: UIViewController {
     
     private func createActionSheet(titleCell: String, path: String?) -> UIAlertController {
         
+        let cellPath = path ?? ""
+        let folder = pathFolder ?? ""
+        let allPath = folder + cellPath
         let alert = UIAlertController(title: titleCell, message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: Constants.Text.FirstVC.cancel, style: .cancel, handler: nil))
         alert.addAction(
@@ -257,8 +353,14 @@ class PublicFilesViewController: UIViewController {
                 handler: {  [weak self] _ in
                     self?.configureActivityIndicatorView()
                     self?.tableView.isHidden = true
-                    self?.presenter.removePublishedData(path: path, completion: {
-                        self?.updateDataOfTableView()
+                    self?.presenter.removePublishedData(path: allPath, completion: {
+                        DispatchQueue.main.async {
+                            self?.updateDataOfTableView()
+                        }
+                    }, errorHendler: {
+                        DispatchQueue.main.async {
+                            self?.navigationController?.popToRootViewController(animated: true)
+                        }
                     })
                 }
             )
@@ -268,7 +370,9 @@ class PublicFilesViewController: UIViewController {
     
     private func determinationOfFileType(path: String) -> String {
         
-        let index = path.firstIndex(of: ".") ?? path.endIndex
+        guard let index = path.firstIndex(of: ".") else {
+            let str = "dir"
+            return str}
         var fileType = path[index ..< path.endIndex]
         fileType.removeFirst()
         let newString = String(fileType)
@@ -302,22 +406,41 @@ extension PublicFilesViewController: UITableViewDelegate {
         
         configureActivityIndicatorView()
         
-        guard let viewModel = presenter.getModelData().items else { return }
-        guard let typeFile = viewModel[indexPath.row].type else { return }
+        guard let viewModel = presenter.getModelData().items else { 
+            print("error getModelData")
+            return }
         guard let strUrl = viewModel[indexPath.row].public_url else { return }
         guard let title = viewModel[indexPath.row].name else { return }
         guard let created = viewModel[indexPath.row].created else { return }
-        guard let fileUrl = viewModel[indexPath.row].file else { return }
+        let fileUrl = viewModel[indexPath.row].file ?? "ljshdlgfhj"
         guard let pathItem = viewModel[indexPath.row].path else { return }
         let fileType = determinationOfFileType(path: pathItem)
 
         let folder = "dir"
         if fileType == folder {
-//            self.presenter.fetchDataOfPublishedFolder(publicUrl: strUrl) {
-//                
-//            }
-        } else {
             self.presenter.fetchDataOfPublishedFolder(publicUrl: strUrl) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                    guard let self = self else { return }
+                    let path = (pathFolder ?? "") + pathItem
+                    let vc = PublicFilesViewController(title: title, type: fileType, publicUrl: strUrl, pathFolder: path, folderIsEmpty: nil)
+                    self.navigationController?.pushViewController(vc, animated: true)
+                    self.activityIndicator.stopAnimating()
+                    self.activityIndicatorView.removeFromSuperview()
+                }
+            } errorHandler: {
+                print("errorHandler - Папка пустая")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                    guard let self = self else { return }
+                    self.activityIndicator.stopAnimating()
+                    self.activityIndicatorView.removeFromSuperview()
+                    let vc = PublicFilesViewController(title: title, type: fileType, publicUrl: strUrl, pathFolder: nil, folderIsEmpty: true)
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+            } noInternet: {
+                print("noInternet")
+            }
+        } else {
+            self.presenter.fetchDataOfPublishedFile(publicUrl: strUrl) {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
                     guard let self = self else { return }
                     let vc = ViewingScreenViewController(title: title, created: created, type: fileType, file: fileUrl, path: pathItem)
@@ -327,10 +450,23 @@ extension PublicFilesViewController: UITableViewDelegate {
                         self.activityIndicatorView.removeFromSuperview()
                     })
                 }
+            } errorHandler: {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                    guard let self = self else { return }
+                    guard self.titleOfFolder == nil else {
+                        self.activityIndicator.stopAnimating()
+                        self.activityIndicatorView.removeFromSuperview()
+                        self.navigationController?.popToRootViewController(animated: true)
+                        return
+                    }
+                    self.updateDataOfTableView()
+                    self.activityIndicator.stopAnimating()
+                    self.activityIndicatorView.removeFromSuperview()
+                }
+            } noInternet: {
+                print("noInternet")
             }
         }
-        
-        
     }
 }
 

@@ -159,11 +159,11 @@ final class PublicCell: UITableViewCell {
         
         guard let name = viewModel.name else { return }
         guard let initialDate = viewModel.created else { return }
-        guard let size = viewModel.size else { return }
         guard let path = viewModel.path else { return }
         guard let type = viewModel.type else { return }
+        let fileSize = viewModel.size ?? 0
         
-        let converter = Units.init(bytes: Int64(size ?? 0))
+        let converter = Units.init(bytes: Int64(fileSize ?? 0))
         let str = converter.getReadableUnit()
         let date = parseDate(initialDate ?? "2023-11-13T18:56:09+00:00")
         let onlyDate = getOnlyDateRu(date: date)

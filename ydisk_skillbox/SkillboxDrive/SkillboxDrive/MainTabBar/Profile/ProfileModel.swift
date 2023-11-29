@@ -19,7 +19,6 @@ final class ProfileModel {
         let chartData = PieChartModel()
         chartData.busy = used
         chartData.free = total
-        print("used: \(chartData.busy), total: \(chartData.free)")
         realm.beginWrite()
         realm.add(chartData)
         try! realm.commitWrite()
