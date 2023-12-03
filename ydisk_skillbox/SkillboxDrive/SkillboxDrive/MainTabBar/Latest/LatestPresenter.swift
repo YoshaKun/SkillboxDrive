@@ -12,6 +12,9 @@ protocol LatestPresenterProtocol {
     func updateDataTableView(completion: @escaping () -> Void, noInternet: @escaping () -> Void)
     func getModelData() -> LatestFiles
     func getFileFromPath(path: String?, completion: @escaping () -> Void, errorHandler: @escaping () -> Void)
+    func additionalGetingLatestFiles (completion: @escaping () -> Void, errorHandler: @escaping () -> Void)
+    func isPaginating() -> Bool
+    func changePaginatingStateOnFalse()
 }
 
 final class LatestPresenter: LatestPresenterProtocol {
@@ -36,5 +39,19 @@ final class LatestPresenter: LatestPresenterProtocol {
     func getFileFromPath(path: String?, completion: @escaping () -> Void, errorHandler: @escaping () -> Void) {
         
         model.getFileFromPath(path: path, completion: completion, errorHandler: errorHandler)
+    }
+    
+    func additionalGetingLatestFiles(completion: @escaping () -> Void, errorHandler: @escaping () -> Void) {
+        
+        model.additionalGetingLatestFiles(completion: completion, errorHandler: errorHandler)
+    }
+    
+    func isPaginating() -> Bool {
+        
+        return model.isPaginating
+    }
+    
+    func changePaginatingStateOnFalse() {
+        model.isPaginating = false
     }
 }

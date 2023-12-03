@@ -1,14 +1,14 @@
 //
-//  LatestModel.swift
+//  jkgsdjkhf.swift
 //  SkillboxDrive
 //
-//  Created by Yosha Kun on 16.11.2023.
+//  Created by Yosha Kun on 02.12.2023.
 //
 
 import Foundation
 import RealmSwift
 
-final class LatestModel {
+final class AllFilesModel {
     
     // MARK: - Pagination FLAG
     var isPaginating = false
@@ -23,9 +23,9 @@ final class LatestModel {
     private func savePublicFilesUsingRealm(filesList: LatestFiles) {
         
         guard let array = filesList.items else { return }
-        var savedArray: [LatestRealmModel] = []
+        var savedArray: [AllFilesRealmModel] = []
         for items in array {
-            let publicFilesList = LatestRealmModel()
+            let publicFilesList = AllFilesRealmModel()
             publicFilesList.name = items.name
             publicFilesList.created = items.created
             publicFilesList.path = items.path
@@ -42,14 +42,14 @@ final class LatestModel {
     private func deletePublicFilesRealm() {
     
         realm.beginWrite()
-        realm.delete(realm.objects(LatestRealmModel.self))
+        realm.delete(realm.objects(AllFilesRealmModel.self))
         try! realm.commitWrite()
     }
     
     // MARK: - Realm READ data
     func readPublicFilesRealm() -> LatestFiles {
         
-        let savedDataInRealm = realm.objects(LatestRealmModel.self)
+        let savedDataInRealm = realm.objects(AllFilesRealmModel.self)
         var latestFiles = LatestFiles(items: [])
         
         for data in savedDataInRealm {
@@ -70,69 +70,49 @@ final class LatestModel {
     }
     
     // MARK: - Update tableView method
-    func getLatestFiles(completion: @escaping () -> Void, noInternet: @escaping () -> Void) {
+    
+    func getAllFiles(completion: @escaping () -> Void, errorHandler: @escaping () -> Void, noInternet: @escaping () -> Void) {
         
         guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
-        var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk/resources/last-uploaded")
+
+        var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk/resources")
         components?.queryItems = [
+            URLQueryItem(name: "path", value: "disk:/"),
             URLQueryItem(name: "preview_size", value: "L"),
             URLQueryItem(name: "preview_crop", value: "false"),
-            URLQueryItem(name: "limit", value: "5")
+            URLQueryItem(name: "limit", value: "10")
         ]
+
         guard let url = components?.url else { return }
         var request = URLRequest(url: url)
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
 
         let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
             guard let data = data else {
-                print("Error: \(String(describing: error))")
+                print("No internet get data: \(String(describing: error))")
                 noInternet()
                 return
             }
-            guard let latestFiles = try? JSONDecoder().decode(LatestFiles.self, from: data) else {
+            guard let allFilesFolder = try? JSONDecoder().decode(PublishedFolder.self, from: data) else {
                 print("Error serialization")
+                errorHandler()
                 return
             }
             guard let self = self else { return }
             DispatchQueue.main.async {
                 self.deletePublicFilesRealm()
-                self.savePublicFilesUsingRealm(filesList: latestFiles)
+                self.savePublicFilesUsingRealm(filesList: allFilesFolder._embedded)
             }
-            self.modelData = latestFiles
-            completion()
-        }
-        task.resume()
-    }
-    
-    // MARK: - Get data for open files
-    func getFileFromPath(path: String?, completion: @escaping () -> Void, errorHandler: @escaping () -> Void) {
-        
-        guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
-        guard let pathUrl = path else { return }
-
-        var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk/resources")
-        components?.queryItems = [URLQueryItem(name: "path", value: "\(pathUrl)")]
-
-        guard let url = components?.url else { return }
-        var request = URLRequest(url: url)
-        request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
-
-        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
-            guard let data = data else {
-                print("Error: \(String(describing: error))")
-                return }
-            guard (try? JSONDecoder().decode(LatestItems.self, from: data)) != nil else {
-                print("Error serialization")
-                errorHandler()
-                return }
+            let items = allFilesFolder._embedded.items
+            self.modelData.items = items
             completion()
         }
         task.resume()
     }
     
     // MARK: - Additional getting all files (Пагинация)
-    func additionalGetingLatestFiles (completion: @escaping () -> Void, errorHandler: @escaping () -> Void) {
-        
+    func additionalGetingAllFiles (completion: @escaping () -> Void, errorHandler: @escaping () -> Void) {
+
         isPaginating = true
         
         guard let model = modelData.items else { return }
@@ -140,11 +120,13 @@ final class LatestModel {
         print("modelData.count = \(count)")
 
         guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
-        var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk/resources/last-uploaded")
+        var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk/resources")
         components?.queryItems = [
+            URLQueryItem(name: "path", value: "disk:/"),
             URLQueryItem(name: "preview_size", value: "L"),
             URLQueryItem(name: "preview_crop", value: "false"),
-            URLQueryItem(name: "limit", value: "\(count + 5)")
+            URLQueryItem(name: "limit", value: "5"),
+            URLQueryItem(name: "offset", value: "\(count)"),
         ]
         guard let url = components?.url else {
             self.isPaginating = false
@@ -155,28 +137,31 @@ final class LatestModel {
 
         let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
             guard let data = data else {
-                print("additionalGetting - No internet")
+                print("additionalGetting - No internet: \(String(describing: error))")
                 errorHandler()
                 return
             }
-            guard let latestFiles = try? JSONDecoder().decode(LatestFiles.self, from: data) else {
+            guard let allFilesFolder = try? JSONDecoder().decode(PublishedFolder.self, from: data) else {
                 print("Error serialization")
                 guard let self = self else { return }
                 self.isPaginating = false
                 return
             }
             guard let self = self else { return }
-            guard let items = latestFiles.items else {
+            guard let items = allFilesFolder._embedded.items else {
                 isPaginating = false
                 return
             }
-            self.modelData = latestFiles
-            DispatchQueue.main.async {
-                self.savePublicFilesUsingRealm(filesList: latestFiles)
-            }
+            self.modelData.items?.append(contentsOf: items)
             completion()
+            DispatchQueue.main.async {
+                self.savePublicFilesUsingRealm(filesList: allFilesFolder._embedded)
+            }
+            isPaginating = false
             print("isPaging = \(isPaginating)")
         }
         task.resume()
     }
 }
+
+    

@@ -28,6 +28,17 @@ protocol PublicFilesPresenterProtocol {
                                      completion: @escaping () -> Void,
                                      errorHandler: @escaping () -> Void,
                                      noInternet: @escaping () -> Void)
+    
+    func isPaginating() -> Bool
+    
+//    func additionalGetingPublishedFiles (pagination: Bool,
+//                                         completion: @escaping () -> Void,
+//                                         errorHandler: @escaping () -> Void)
+//    
+//    func additionalGetingPublishedFolder (pagination: Bool,
+//                                          publicUrl: String?,
+//                                          completion: @escaping () -> Void,
+//                                          errorHandler: @escaping () -> Void)
 }
 
 final class PublicFilesPresenter: PublicFilesPresenterProtocol {
@@ -83,4 +94,26 @@ final class PublicFilesPresenter: PublicFilesPresenterProtocol {
                                        errorHandler: errorHandler,
                                        noInternet: noInternet)
     }
+    
+    func isPaginating() -> Bool {
+        
+        return model.isPaginating 
+    }
+    
+//    func additionalGetingPublishedFiles (pagination: Bool,
+//                                         completion: @escaping () -> Void,
+//                                         errorHandler: @escaping () -> Void) {
+//        
+//        model.additionalGetingPublishedFiles(pagination: pagination,
+//                                             completion: completion,
+//                                             errorHandler: errorHandler)
+//    }
+//    
+//    func additionalGetingPublishedFolder (pagination: Bool = false,
+//                                          publicUrl: String?,
+//                                          completion: @escaping () -> Void,
+//                                          errorHandler: @escaping () -> Void) {
+//        
+//        model.additionalGetingPublishedFolder(pagination: pagination, publicUrl: publicUrl, completion: completion, errorHandler: errorHandler)
+//    }
 }

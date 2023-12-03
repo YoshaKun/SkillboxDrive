@@ -39,6 +39,7 @@ enum Constants {
         static let kb = Bundle.main.localizedString(forKey: "kb", value: "", table: "Localize")
         static let errorInternet = Bundle.main.localizedString(forKey: "errorInternet", value: "", table: "Localize")
         static let emptyFolder = Bundle.main.localizedString(forKey: "emptyFolder", value: "", table: "Localize")
+        static let fileError = Bundle.main.localizedString(forKey: "fileError", value: "", table: "Localize")
         
         enum FirstVC {
             static let title = Bundle.main.localizedString(forKey: "FirstVC.title", value: "", table: "Localize")

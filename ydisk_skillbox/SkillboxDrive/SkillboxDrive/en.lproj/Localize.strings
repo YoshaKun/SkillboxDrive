@@ -30,6 +30,7 @@
 "kb" = "kb";
 "errorInternet" = "No internet connection";
 "emptyFolder" = "The directory contains no files";
+"fileError" = "file opening error";
 "FirstVC.publicFilesTitle" = "Published files";
 "FirstVC.noFilesDescr" = "You don't have any published files yet";
 "FirstVC.update" = "Update";

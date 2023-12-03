@@ -30,6 +30,7 @@ class PublicFilesViewController: UIViewController {
     private var emptyFolderFlag: Bool?
     private var emptyFolderErrorView = UIView()
     private let labelError = UILabel()
+    private let fileNotFound = UILabel()
     
     // MARK: - Initialization
     init(title: String?,
@@ -50,6 +51,7 @@ class PublicFilesViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -58,14 +60,15 @@ class PublicFilesViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
         super.viewWillAppear(animated)
+        self.title = titleOfFolder
         
         guard emptyFolderFlag != true else {
             configureEmptyFolderError()
             return
         }
-        guard titleOfFolder == nil, type == nil else {
-            self.title = titleOfFolder
+        guard type == nil else {
             configureActivityIndicatorView()
             updateViewFolder()
             return
@@ -98,6 +101,8 @@ class PublicFilesViewController: UIViewController {
         
         labelError.text = Constants.Text.emptyFolder
         labelError.textColor = .black
+        labelError.numberOfLines = 0
+        labelError.textAlignment = .center
         
         view.addSubview(emptyFolderErrorView)
         emptyFolderErrorView.backgroundColor = .systemBackground
@@ -116,8 +121,8 @@ class PublicFilesViewController: UIViewController {
             labelError.centerXAnchor.constraint(equalTo: emptyFolderErrorView.centerXAnchor),
             labelError.centerYAnchor.constraint(equalTo: emptyFolderErrorView.centerYAnchor),
             labelError.heightAnchor.constraint(equalToConstant: 100),
-            labelError.leadingAnchor.constraint(equalTo: emptyFolderErrorView.leadingAnchor, constant: 30),
-            labelError.trailingAnchor.constraint(equalTo: emptyFolderErrorView.trailingAnchor, constant: 30),
+            labelError.leadingAnchor.constraint(equalTo: emptyFolderErrorView.leadingAnchor, constant: 70),
+            labelError.trailingAnchor.constraint(equalTo: emptyFolderErrorView.trailingAnchor, constant: -70),
         ])
     }
     
@@ -161,6 +166,35 @@ class PublicFilesViewController: UIViewController {
         updateButton.addTarget(self, action: #selector(didTappedOnUpdateButton), for: .touchUpInside)
         
         configureNoFilesConstraints()
+    }
+    
+    private func configureFileError() {
+        
+        fileNotFound.text = Constants.Text.fileError
+        fileNotFound.textColor = .black
+        fileNotFound.numberOfLines = 0
+        fileNotFound.textAlignment = .center
+        
+        view.addSubview(emptyFolderErrorView)
+        emptyFolderErrorView.backgroundColor = .systemBackground
+        emptyFolderErrorView.addSubview(fileNotFound)
+        
+        fileNotFound.translatesAutoresizingMaskIntoConstraints = false
+        emptyFolderErrorView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            
+            emptyFolderErrorView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            emptyFolderErrorView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            emptyFolderErrorView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            emptyFolderErrorView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            fileNotFound.centerXAnchor.constraint(equalTo: emptyFolderErrorView.centerXAnchor),
+            fileNotFound.centerYAnchor.constraint(equalTo: emptyFolderErrorView.centerYAnchor),
+            fileNotFound.heightAnchor.constraint(equalToConstant: 100),
+            fileNotFound.leadingAnchor.constraint(equalTo: emptyFolderErrorView.leadingAnchor, constant: 70),
+            fileNotFound.trailingAnchor.constraint(equalTo: emptyFolderErrorView.trailingAnchor, constant: -70),
+        ])
     }
     
     @objc private func didTappedOnUpdateButton() {
@@ -294,7 +328,6 @@ class PublicFilesViewController: UIViewController {
         } noInternet: {
             print("noInternet")
         }
-
     }
     
     // MARK: - Error View
@@ -409,11 +442,19 @@ extension PublicFilesViewController: UITableViewDelegate {
         guard let viewModel = presenter.getModelData().items else { 
             print("error getModelData")
             return }
-        guard let strUrl = viewModel[indexPath.row].public_url else { return }
+        guard let strUrl = viewModel[indexPath.row].public_url else { 
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                guard let self = self else { return }
+                self.activityIndicator.stopAnimating()
+                self.activityIndicatorView.removeFromSuperview()
+                self.configureFileError()
+            }
+            return }
         guard let title = viewModel[indexPath.row].name else { return }
         guard let created = viewModel[indexPath.row].created else { return }
         let fileUrl = viewModel[indexPath.row].file ?? "ljshdlgfhj"
         guard let pathItem = viewModel[indexPath.row].path else { return }
+        let path = (pathFolder ?? "") + pathItem
         let fileType = determinationOfFileType(path: pathItem)
 
         let folder = "dir"
@@ -421,7 +462,6 @@ extension PublicFilesViewController: UITableViewDelegate {
             self.presenter.fetchDataOfPublishedFolder(publicUrl: strUrl) {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
                     guard let self = self else { return }
-                    let path = (pathFolder ?? "") + pathItem
                     let vc = PublicFilesViewController(title: title, type: fileType, publicUrl: strUrl, pathFolder: path, folderIsEmpty: nil)
                     self.navigationController?.pushViewController(vc, animated: true)
                     self.activityIndicator.stopAnimating()
@@ -452,7 +492,9 @@ extension PublicFilesViewController: UITableViewDelegate {
                 }
             } errorHandler: {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-                    guard let self = self else { return }
+                    guard let self = self else { 
+                        print("error open file self")
+                        return }
                     guard self.titleOfFolder == nil else {
                         self.activityIndicator.stopAnimating()
                         self.activityIndicatorView.removeFromSuperview()

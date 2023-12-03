@@ -1,23 +1,50 @@
 //
-//  ViewController.swift
+//  OpenFolderVC.swift
 //  SkillboxDrive
 //
-//  Created by Yosha Kun on 05.10.2023.
+//  Created by Yosha Kun on 02.12.2023.
 //
 
 import UIKit
 
-final class LatestViewController: UIViewController {
-    
+final class OpenFolderVC: UIViewController {
+
     // MARK: - Private variables
-    private let latestCell = "latestCell"
-    private let presenter: LatestPresenterProtocol = LatestPresenter()
+    private let cellIdentifier = "cellIdentifier"
+    private let presenter: OpenFolderPresenterProtocol = OpenFolderPresenter()
     private let refreshControl = UIRefreshControl()
     private var activityIndicator = UIActivityIndicatorView()
     private var activityIndicatorView = UIView()
     private var tableView = UITableView(frame: CGRect.zero, style: UITableView.Style.grouped)
     private var errorView = UIView()
     private var errorLabel = UILabel()
+    private var titleOfFolder: String?
+    private var type: String?
+    private var varPublicUrl: String?
+    private var path: String?
+    private var emptyFolderFlag: Bool?
+    private var emptyFolderErrorView = UIView()
+    private let labelError = UILabel()
+    private let fileNotFound = UILabel()
+    
+    // MARK: - Initialization
+    init(title: String?,
+         type: String?,
+         publicUrl: String?,
+         pathFolder: String?,
+         folderIsEmpty: Bool?
+        ) {
+        super.init(nibName: nil, bundle: nil)
+        self.titleOfFolder = title ?? ""
+        self.type = type ?? ""
+        self.varPublicUrl = publicUrl ?? ""
+        self.path = pathFolder ?? "disk:/"
+        self.emptyFolderFlag = folderIsEmpty ?? false
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
@@ -27,18 +54,62 @@ final class LatestViewController: UIViewController {
         configureNavigationBar()
     }
     
+    // MARK: - View Will Appear
+    
     override func viewWillAppear(_ animated: Bool) {
+        
         super.viewWillAppear(animated)
+        self.title = titleOfFolder
+        
+        guard emptyFolderFlag != true else {
+            configureEmptyFolderError()
+            return
+        }
+        guard type == nil else {
+            configureActivityIndicatorView()
+            updateViewFolder()
+            return
+        }
+        
         configureActivityIndicatorView()
         updateView()
     }
-    
+
     // MARK: - Configure methods
     private func configureNavigationBar() {
     
-        navigationItem.title = Constants.Text.SecondVC.title
+        self.navigationItem.title = Constants.Text.ThirdVC.title
     }
     
+    private func configureEmptyFolderError() {
+        
+        labelError.text = Constants.Text.emptyFolder
+        labelError.textColor = .black
+        labelError.numberOfLines = 0
+        labelError.textAlignment = .center
+        
+        view.addSubview(emptyFolderErrorView)
+        emptyFolderErrorView.backgroundColor = .systemBackground
+        emptyFolderErrorView.addSubview(labelError)
+        
+        labelError.translatesAutoresizingMaskIntoConstraints = false
+        emptyFolderErrorView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            
+            emptyFolderErrorView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            emptyFolderErrorView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            emptyFolderErrorView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            emptyFolderErrorView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            labelError.centerXAnchor.constraint(equalTo: emptyFolderErrorView.centerXAnchor),
+            labelError.centerYAnchor.constraint(equalTo: emptyFolderErrorView.centerYAnchor),
+            labelError.heightAnchor.constraint(equalToConstant: 100),
+            labelError.leadingAnchor.constraint(equalTo: emptyFolderErrorView.leadingAnchor, constant: 70),
+            labelError.trailingAnchor.constraint(equalTo: emptyFolderErrorView.trailingAnchor, constant: -70),
+        ])
+    }
+
     private func configureActivityIndicatorView() {
         
         view.addSubview(activityIndicatorView)
@@ -66,7 +137,7 @@ final class LatestViewController: UIViewController {
         
         refreshControl.addTarget(self, action: #selector(didSwipeToRefresh), for: .valueChanged)
         tableView.refreshControl = self.refreshControl
-        tableView.register(LatestCell.self, forCellReuseIdentifier: latestCell)
+        tableView.register(LatestCell.self, forCellReuseIdentifier: cellIdentifier)
         tableView.dataSource = self
         tableView.delegate = self
         tableView.backgroundColor = .white
@@ -81,7 +152,7 @@ final class LatestViewController: UIViewController {
             self?.tableView.refreshControl?.endRefreshing()
         }
     }
-    
+
     private func configureConstraints() {
         
         tableView.isHidden = true
@@ -124,16 +195,24 @@ final class LatestViewController: UIViewController {
         ])
     }
     
-    // MARK: - Update Data
+    // MARK: - UpdateView
+    
     private func updateView() {
 
         configureTableView()
         updateDataOfTableView()
     }
+    
+    // MARK: - UpdateView - for files in folder
+    private func updateViewFolder() {
 
+        configureTableView()
+        updateDataOfTableViewFolder()
+    }
+    
     private func updateDataOfTableView() {
         
-        presenter.updateDataTableView {
+        presenter.updateDataTableView(path: path) {
             DispatchQueue.main.async {
                 self.errorView.removeFromSuperview()
             }
@@ -143,6 +222,15 @@ final class LatestViewController: UIViewController {
                 self.activityIndicator.stopAnimating()
                 self.activityIndicatorView.removeFromSuperview()
                 self.tableView.isHidden = false
+            }
+        } errorHandler: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                guard let self = self else { return }
+                self.activityIndicator.stopAnimating()
+                self.activityIndicatorView.removeFromSuperview()
+                self.tableView.reloadData()
+                self.tableView.isHidden = false
+                self.configureErrorView()
             }
         } noInternet: {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
@@ -156,38 +244,36 @@ final class LatestViewController: UIViewController {
         }
     }
     
-    // MARK: - Footer view
-    private func createLoadingFooterView() -> UIView {
-        
-        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 50))
-        let spinner = UIActivityIndicatorView()
-        spinner.center = footerView.center
-        footerView.addSubview(spinner)
-        spinner.startAnimating()
-        
-        return footerView
-    }
-    
-    // MARK: - DeterminationOfFileType
-    private func determinationOfFileType(path: String) -> String {
-        
-        let index = path.firstIndex(of: ".") ?? path.endIndex
-        var fileType = path[index ..< path.endIndex]
-        fileType.removeFirst()
-        let newString = String(fileType)
-        return newString
+    private func updateDataOfTableViewFolder() {
+                
+        presenter.fetchDataOfPublishedFolder(publicUrl: varPublicUrl) {
+            DispatchQueue.main.async {
+                self.errorView.removeFromSuperview()
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                guard let self = self else { return }
+                self.activityIndicator.stopAnimating()
+                self.activityIndicatorView.removeFromSuperview()
+                self.tableView.reloadData()
+                self.tableView.isHidden = false
+            }
+        } errorHandler: {
+            print("errorHandler")
+        } noInternet: {
+            print("noInternet")
+        }
     }
 }
 
-extension LatestViewController: UITableViewDataSource {
+extension OpenFolderVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return presenter.getModelData().items?.count ?? 0
+        presenter.getModelData().items?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: latestCell) as? LatestCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? LatestCell
         guard let viewModel = presenter.getModelData().items, viewModel.count > indexPath.row else {
             return UITableViewCell()
         }
@@ -198,71 +284,10 @@ extension LatestViewController: UITableViewDataSource {
     }
 }
 
-extension LatestViewController: UITableViewDelegate {
+extension OpenFolderVC: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        configureActivityIndicatorView()
-        
-        guard let viewModel = presenter.getModelData().items else { return }
-        guard let title = viewModel[indexPath.row].name else { return }
-        guard let created = viewModel[indexPath.row].created else { return }
-        guard let fileUrl = viewModel[indexPath.row].file else { return }
-        guard let pathItem = viewModel[indexPath.row].path else { return }
-        let fileType = determinationOfFileType(path: pathItem)
-        
-        presenter.getFileFromPath(path: pathItem) {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-                guard let self = self else { return }
-                let vc = ViewingScreenViewController(title: title, created: created, type: fileType, file: fileUrl, path: pathItem)
-                vc.modalPresentationStyle = .fullScreen
-                self.navigationController?.present(vc, animated: true, completion: {
-                    self.activityIndicator.stopAnimating()
-                    self.activityIndicatorView.removeFromSuperview()
-                })
-            }
-        } errorHandler: {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-                guard let self = self else { return }
-                self.updateDataOfTableView()
-                self.activityIndicator.stopAnimating()
-                self.activityIndicatorView.removeFromSuperview()
-            }
-        }
+        print("did tap on cell")
     }
 }
-
-extension LatestViewController: UIScrollViewDelegate {
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-        let currentOffset = scrollView.contentOffset.y
-        let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
-        let deltaOffset = maximumOffset - currentOffset
-        
-        if deltaOffset <= 0 {
-
-            guard !self.presenter.isPaginating() else {
-                print("We are already fetching more data")
-                return
-            }
-            self.tableView.tableFooterView = createLoadingFooterView()
-            self.presenter.additionalGetingLatestFiles { [weak self] in
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    self?.tableView.tableFooterView = nil
-                    self?.tableView.reloadData()
-                    self?.presenter.changePaginatingStateOnFalse()
-                }
-            } errorHandler: { [weak self] in
-                print("additional errorHandler")
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    self?.tableView.tableFooterView = nil
-                    self?.tableView.reloadData()
-                    self?.presenter.changePaginatingStateOnFalse()
-                }
-            }
-        }
-    }
-}
-
 

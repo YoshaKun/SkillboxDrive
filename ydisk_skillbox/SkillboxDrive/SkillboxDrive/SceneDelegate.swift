@@ -20,11 +20,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let zeroViewController = UINavigationController(rootViewController: LoginScreenViewController())
         
         // тестовый вид
-        let tabBarVC = UITabBarController()
-        let firstVC = UINavigationController(rootViewController: ProfileViewController())
-        let secondVC = UINavigationController(rootViewController: LatestViewController())
-        let thirdVC = UINavigationController(rootViewController: AllFilesViewController())
-        tabBarVC.setViewControllers([firstVC, secondVC, thirdVC], animated: false)
+//        let tabBarVC = UITabBarController()
+//        let firstVC = UINavigationController(rootViewController: ProfileViewController())
+//        let secondVC = UINavigationController(rootViewController: LatestViewController())
+//        let thirdVC = UINavigationController(rootViewController: AllFilesViewController())
+//        tabBarVC.setViewControllers([firstVC, secondVC, thirdVC], animated: false)
         
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
