@@ -16,13 +16,12 @@ final class OpenFolderVC: UIViewController {
     private var activityIndicator = UIActivityIndicatorView()
     private var activityIndicatorView = UIView()
     private var tableView = UITableView(frame: CGRect.zero, style: UITableView.Style.grouped)
+    private var backButton = UIBarButtonItem()
     private var errorView = UIView()
     private var errorLabel = UILabel()
     private var titleOfFolder: String?
     private var type: String?
-    private var varPublicUrl: String?
     private var path: String?
-    private var emptyFolderFlag: Bool?
     private var emptyFolderErrorView = UIView()
     private let labelError = UILabel()
     private let fileNotFound = UILabel()
@@ -30,16 +29,12 @@ final class OpenFolderVC: UIViewController {
     // MARK: - Initialization
     init(title: String?,
          type: String?,
-         publicUrl: String?,
-         pathFolder: String?,
-         folderIsEmpty: Bool?
+         pathFolder: String?
         ) {
         super.init(nibName: nil, bundle: nil)
-        self.titleOfFolder = title ?? ""
-        self.type = type ?? ""
-        self.varPublicUrl = publicUrl ?? ""
+        self.titleOfFolder = title
+        self.type = type
         self.path = pathFolder ?? "disk:/"
-        self.emptyFolderFlag = folderIsEmpty ?? false
     }
     
     required init?(coder: NSCoder) {
@@ -61,16 +56,6 @@ final class OpenFolderVC: UIViewController {
         super.viewWillAppear(animated)
         self.title = titleOfFolder
         
-        guard emptyFolderFlag != true else {
-            configureEmptyFolderError()
-            return
-        }
-        guard type == nil else {
-            configureActivityIndicatorView()
-            updateViewFolder()
-            return
-        }
-        
         configureActivityIndicatorView()
         updateView()
     }
@@ -78,7 +63,20 @@ final class OpenFolderVC: UIViewController {
     // MARK: - Configure methods
     private func configureNavigationBar() {
     
-        self.navigationItem.title = Constants.Text.ThirdVC.title
+        backButton = UIBarButtonItem(
+            image: Constants.Image.backArrow,
+            style: .plain,
+            target: self,
+            action: #selector(didTappedOnBackButton)
+        )
+        backButton.tintColor = Constants.Colors.gray
+        navigationItem.leftBarButtonItem = backButton
+        navigationItem.title = Constants.Text.FirstVC.publicFilesTitle
+    }
+    
+    @objc private func didTappedOnBackButton() {
+        
+        self.navigationController?.popViewController(animated: true)
     }
     
     private func configureEmptyFolderError() {
@@ -203,13 +201,6 @@ final class OpenFolderVC: UIViewController {
         updateDataOfTableView()
     }
     
-    // MARK: - UpdateView - for files in folder
-    private func updateViewFolder() {
-
-        configureTableView()
-        updateDataOfTableViewFolder()
-    }
-    
     private func updateDataOfTableView() {
         
         presenter.updateDataTableView(path: path) {
@@ -228,9 +219,7 @@ final class OpenFolderVC: UIViewController {
                 guard let self = self else { return }
                 self.activityIndicator.stopAnimating()
                 self.activityIndicatorView.removeFromSuperview()
-                self.tableView.reloadData()
-                self.tableView.isHidden = false
-                self.configureErrorView()
+                self.configureEmptyFolderError()
             }
         } noInternet: {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
@@ -244,24 +233,16 @@ final class OpenFolderVC: UIViewController {
         }
     }
     
-    private func updateDataOfTableViewFolder() {
-                
-        presenter.fetchDataOfPublishedFolder(publicUrl: varPublicUrl) {
-            DispatchQueue.main.async {
-                self.errorView.removeFromSuperview()
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-                guard let self = self else { return }
-                self.activityIndicator.stopAnimating()
-                self.activityIndicatorView.removeFromSuperview()
-                self.tableView.reloadData()
-                self.tableView.isHidden = false
-            }
-        } errorHandler: {
-            print("errorHandler")
-        } noInternet: {
-            print("noInternet")
-        }
+    // MARK: - DeterminationOfFileType
+    private func determinationOfFileType(path: String) -> String {
+        
+        guard let index = path.firstIndex(of: ".") else {
+            let str = "dir"
+            return str}
+        var fileType = path[index ..< path.endIndex]
+        fileType.removeFirst()
+        let newString = String(fileType)
+        return newString
     }
 }
 
@@ -287,7 +268,39 @@ extension OpenFolderVC: UITableViewDataSource {
 extension OpenFolderVC: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("did tap on cell")
+        
+        configureActivityIndicatorView()
+        
+        guard let viewModel = presenter.getModelData().items else {
+            print("error getModelData")
+            return
+        }
+        guard let title = viewModel[indexPath.row].name else { return }
+        guard let created = viewModel[indexPath.row].created else { return }
+        let fileUrl = viewModel[indexPath.row].file ?? "ljshdlgfhj"
+        guard let pathItem = viewModel[indexPath.row].path else { return }
+        let fileType = determinationOfFileType(path: pathItem)
+
+        let folder = "dir"
+        if fileType == folder {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                guard let self = self else { return }
+                let vc = OpenFolderVC(title: title, type: fileType, pathFolder: pathItem)
+                self.navigationController?.pushViewController(vc, animated: true)
+                self.activityIndicator.stopAnimating()
+                self.activityIndicatorView.removeFromSuperview()
+            }
+        } else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                guard let self = self else { return }
+                let vc = ViewingScreenViewController(title: title, created: created, type: fileType, file: fileUrl, path: pathItem)
+                vc.modalPresentationStyle = .fullScreen
+                self.navigationController?.present(vc, animated: true, completion: {
+                    self.activityIndicator.stopAnimating()
+                    self.activityIndicatorView.removeFromSuperview()
+                })
+            }
+        }
     }
 }
 

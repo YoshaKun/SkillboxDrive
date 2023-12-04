@@ -10,10 +10,26 @@ import Foundation
 protocol AllFilesPresenterProtocol {
     
     func getModelData() -> LatestFiles
-    func updateDataTableView (completion: @escaping () -> Void, errorHandler: @escaping () -> Void, noInternet: @escaping () -> Void)
+    
+    func updateDataTableView (
+        completion: @escaping () -> Void,
+        errorHandler: @escaping () -> Void,
+        noInternet: @escaping () -> Void
+    )
     func isPaginating() -> Bool
-    func additionalGetingAllFiles (completion: @escaping () -> Void, errorHandler: @escaping () -> Void)
+    
+    func additionalGetingAllFiles (
+        completion: @escaping () -> Void,
+        errorHandler: @escaping () -> Void
+    )
     func changePaginatingStateOnFalse()
+    
+    func getDataFolder(
+        path: String?,
+        completion: @escaping () -> Void,
+        errorHandler: @escaping () -> Void,
+        noInternet: @escaping () -> Void
+    )
 }
 
 final class AllFilesPresenter: AllFilesPresenterProtocol {
@@ -30,9 +46,14 @@ final class AllFilesPresenter: AllFilesPresenterProtocol {
         return data
     }
     
-    func updateDataTableView (completion: @escaping () -> Void, errorHandler: @escaping () -> Void, noInternet: @escaping () -> Void) {
-        
-        model.getAllFiles(completion: completion, errorHandler: errorHandler, noInternet: noInternet)
+    func updateDataTableView (completion: @escaping () -> Void, 
+                              errorHandler: @escaping () -> Void,
+                              noInternet: @escaping () -> Void
+    ) {
+        model.getAllFiles(completion: completion, 
+                          errorHandler: errorHandler,
+                          noInternet: noInternet
+        )
     }
     
     func isPaginating() -> Bool {
@@ -40,12 +61,31 @@ final class AllFilesPresenter: AllFilesPresenterProtocol {
         return model.isPaginating
     }
     
-    func additionalGetingAllFiles (completion: @escaping () -> Void, errorHandler: @escaping () -> Void) {
-        
-        model.additionalGetingAllFiles(completion: completion, errorHandler: errorHandler)
+    func additionalGetingAllFiles (completion: @escaping () -> Void, 
+                                   errorHandler: @escaping () -> Void
+    ) {
+        model.additionalGetingAllFiles(completion: completion, 
+                                       errorHandler: errorHandler
+        )
     }
     
     func changePaginatingStateOnFalse() {
+        
         model.isPaginating = false
+    }
+    
+    func getDataFolder(
+        path: String?,
+        completion: @escaping () -> Void,
+        errorHandler: @escaping () -> Void,
+        noInternet: @escaping () -> Void
+    ) {
+        
+        model.getDataFolder(
+            path: path,
+            completion: completion,
+            errorHandler: errorHandler,
+            noInternet: noInternet
+        )
     }
 }

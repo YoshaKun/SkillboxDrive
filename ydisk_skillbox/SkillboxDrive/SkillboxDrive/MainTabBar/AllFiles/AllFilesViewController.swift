@@ -170,6 +170,19 @@ final class AllFilesViewController: UIViewController {
         }
     }
     
+    // MARK: - DeterminationOfFileType
+    private func determinationOfFileType(path: String) -> String {
+        
+        guard let index = path.firstIndex(of: ".") else {
+            let str = "dir"
+            return str}
+        var fileType = path[index ..< path.endIndex]
+        fileType.removeFirst()
+        let newString = String(fileType)
+        return newString
+    }
+    
+    // MARK: - Footer View
     private func createLoadingFooterView() -> UIView {
         
         let footerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 50))
@@ -204,7 +217,39 @@ extension AllFilesViewController: UITableViewDataSource {
 extension AllFilesViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("did tap on cell")
+        
+        configureActivityIndicatorView()
+        
+        guard let viewModel = presenter.getModelData().items else {
+            print("error getModelData")
+            return
+        }
+        guard let title = viewModel[indexPath.row].name else { return }
+        guard let created = viewModel[indexPath.row].created else { return }
+        let fileUrl = viewModel[indexPath.row].file ?? "ljshdlgfhj"
+        guard let pathItem = viewModel[indexPath.row].path else { return }
+        let fileType = determinationOfFileType(path: pathItem)
+
+        let folder = "dir"
+        if fileType == folder {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                guard let self = self else { return }
+                let vc = OpenFolderVC(title: title, type: fileType, pathFolder: pathItem)
+                self.navigationController?.pushViewController(vc, animated: true)
+                self.activityIndicator.stopAnimating()
+                self.activityIndicatorView.removeFromSuperview()
+            }
+        } else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                guard let self = self else { return }
+                let vc = ViewingScreenViewController(title: title, created: created, type: fileType, file: fileUrl, path: pathItem)
+                vc.modalPresentationStyle = .fullScreen
+                self.navigationController?.present(vc, animated: true, completion: {
+                    self.activityIndicator.stopAnimating()
+                    self.activityIndicatorView.removeFromSuperview()
+                })
+            }
+        }
     }
 }
 

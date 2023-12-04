@@ -21,11 +21,12 @@ final class LoginScreenViewController: UIViewController {
         configureConstraints()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
         // MARK: - Showing the Onboarding
         // Показываем Онборд новому пользователю 1 раз
+        print("is new User? = \(Core.shared.isNewUser())")
         if Core.shared.isNewUser() {
             guard let vc = presenter.didTapOnOnboardButton() else { return }
             present(vc, animated: true)

@@ -9,7 +9,10 @@ import Foundation
 
 protocol PublicCellPresenterProtocol: AnyObject {
 
-    func getImageForLatestCell(urlStr: String, completion: @escaping (Data) -> Void)
+    func getImageForLatestCell(
+        urlStr: String,
+        completion: @escaping (Data) -> Void
+    )
 }
 
 final class PublicCellPresenter: PublicCellPresenterProtocol {

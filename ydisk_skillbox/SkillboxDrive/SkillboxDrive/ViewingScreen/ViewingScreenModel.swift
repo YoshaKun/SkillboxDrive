@@ -9,15 +9,17 @@ import Foundation
 
 final class ViewingScreenModel {
     
-    func getImageForView(urlStr: String, completion: @escaping (Data) -> Void) {
+    func getImageForView(
+        urlStr: String,
+        completion: @escaping (Data) -> Void
+    ) {
         
-        guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
-        var components = URLComponents(string: "\(urlStr)")
+        let components = URLComponents(string: "\(urlStr)")
 
         guard let url = components?.url else { return }
-        var request = URLRequest(url: url)
+        let request = URLRequest(url: url)
 
-        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data else {
                 print("Error: \(String(describing: error))")
                 return }
@@ -26,7 +28,10 @@ final class ViewingScreenModel {
         task.resume()
     }
     
-    func deleteFile(path: String?, completion: @escaping () -> Void) {
+    func deleteFile(
+        path: String?,
+        completion: @escaping () -> Void
+    ) {
         
         guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
         guard let path = path else { return }
@@ -41,7 +46,7 @@ final class ViewingScreenModel {
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
         
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard let data = data else {
+            guard data != nil else {
                 print("Error: \(String(describing: error))")
                 return }
             guard let response = response else {
@@ -54,7 +59,10 @@ final class ViewingScreenModel {
         task.resume()
     }
     
-    func getLinkFile(path: String?, completion: @escaping () -> Void) {
+    func getLinkFile(
+        path: String?,
+        completion: @escaping () -> Void
+    ) {
         
         guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
         guard let path = path else { return }
@@ -67,7 +75,7 @@ final class ViewingScreenModel {
         request.httpMethod = "PUT"
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
         
-        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data else { return }
             guard let files = try? JSONDecoder().decode(ShareLink.self, from: data) else {
                 print("Error serialization")

@@ -9,7 +9,10 @@ import Foundation
 
 final class PublicCellModel {
     
-    func getImageForCell(urlStr: String, completion: @escaping (Data) -> Void) {
+    func getImageForCell(
+        urlStr: String,
+        completion: @escaping (Data) -> Void
+    ) {
         
         guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
         var components = URLComponents(string: "\(urlStr)")

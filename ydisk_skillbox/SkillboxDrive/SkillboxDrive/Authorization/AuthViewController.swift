@@ -67,7 +67,11 @@ final class AuthViewController: UIViewController {
 
 extension AuthViewController: WKNavigationDelegate {
     
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+    func webView(
+        _ webView: WKWebView,
+        decidePolicyFor navigationAction: WKNavigationAction,
+        decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
+    ) {
         
         if let url = navigationAction.request.url, url.scheme == scheme {
             

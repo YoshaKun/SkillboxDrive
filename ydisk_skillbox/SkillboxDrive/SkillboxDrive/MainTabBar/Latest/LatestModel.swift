@@ -31,6 +31,8 @@ final class LatestModel {
             publicFilesList.path = items.path
             publicFilesList.type = items.type
             publicFilesList.size = items.size ?? 0
+            publicFilesList.preview = items.preview
+            publicFilesList.file = items.file
             savedArray.append(publicFilesList)
             realm.beginWrite()
             realm.add(publicFilesList)
@@ -70,14 +72,17 @@ final class LatestModel {
     }
     
     // MARK: - Update tableView method
-    func getLatestFiles(completion: @escaping () -> Void, noInternet: @escaping () -> Void) {
+    func getLatestFiles(
+        completion: @escaping () -> Void,
+        noInternet: @escaping () -> Void
+    ) {
         
         guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
         var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk/resources/last-uploaded")
         components?.queryItems = [
             URLQueryItem(name: "preview_size", value: "L"),
             URLQueryItem(name: "preview_crop", value: "false"),
-            URLQueryItem(name: "limit", value: "5")
+            URLQueryItem(name: "limit", value: "10")
         ]
         guard let url = components?.url else { return }
         var request = URLRequest(url: url)
@@ -105,7 +110,11 @@ final class LatestModel {
     }
     
     // MARK: - Get data for open files
-    func getFileFromPath(path: String?, completion: @escaping () -> Void, errorHandler: @escaping () -> Void) {
+    func getFileFromPath(
+        path: String?,
+        completion: @escaping () -> Void,
+        errorHandler: @escaping () -> Void
+    ) {
         
         guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
         guard let pathUrl = path else { return }
@@ -117,7 +126,7 @@ final class LatestModel {
         var request = URLRequest(url: url)
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
 
-        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data else {
                 print("Error: \(String(describing: error))")
                 return }
@@ -130,8 +139,11 @@ final class LatestModel {
         task.resume()
     }
     
-    // MARK: - Additional getting all files (Пагинация)
-    func additionalGetingLatestFiles (completion: @escaping () -> Void, errorHandler: @escaping () -> Void) {
+    // MARK: - Additional getting latest files (Пагинация)
+    func additionalGetingLatestFiles (
+        completion: @escaping () -> Void,
+        errorHandler: @escaping () -> Void
+    ) {
         
         isPaginating = true
         
@@ -171,10 +183,11 @@ final class LatestModel {
                 return
             }
             self.modelData = latestFiles
+            completion()
             DispatchQueue.main.async {
                 self.savePublicFilesUsingRealm(filesList: latestFiles)
             }
-            completion()
+            isPaginating = false
             print("isPaging = \(isPaginating)")
         }
         task.resume()

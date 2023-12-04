@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol PublicFilesPresenterProtocol {
+protocol OpenPublicFolderPresenterProtocol {
     
     func updateDataTableView(
         completion: @escaping () -> Void,
@@ -36,20 +36,11 @@ protocol PublicFilesPresenterProtocol {
         errorHandler: @escaping () -> Void,
         noInternet: @escaping () -> Void
     )
-    
-    func isPaginating() -> Bool
-    
-    func additionalGetingPublishedFiles (
-        completion: @escaping () -> Void,
-        errorHandler: @escaping () -> Void
-    )
-    
-    func changePaginatingStateOnFalse()
 }
 
-final class PublicFilesPresenter: PublicFilesPresenterProtocol {
+final class OpenPublicFolderPresenter: OpenPublicFolderPresenterProtocol {
     
-    private var model: PublicFilesModel = PublicFilesModel()
+    private var model: OpenPublicFolderModel = OpenPublicFolderModel()
     
     func updateDataTableView(
         completion: @escaping () -> Void,
@@ -67,18 +58,13 @@ final class PublicFilesPresenter: PublicFilesPresenterProtocol {
     func getModelData() -> LatestFiles {
         
         let data = model.modelData
-        if data.items!.isEmpty {
-            print("сработал метод readPublicFilesRealm")
-            return model.readPublicFilesRealm()
-        }
         return data
     }
     
     func removePublishedData(
         path: String?,
         completion: @escaping () -> Void,
-        errorHendler: @escaping () -> Void
-    ) {
+        errorHendler: @escaping () -> Void) {
         
         model.removePublishedFile(
             path: path,
@@ -116,25 +102,4 @@ final class PublicFilesPresenter: PublicFilesPresenterProtocol {
             noInternet: noInternet
         )
     }
-    
-    func isPaginating() -> Bool {
-        
-        return model.isPaginating 
-    }
-    
-    func additionalGetingPublishedFiles (
-        completion: @escaping () -> Void,
-        errorHandler: @escaping () -> Void
-    ) {
-        
-        model.additionalGetingPublishedFiles(
-            completion: completion,
-            errorHandler: errorHandler
-        )
-    }
-    
-    func changePaginatingStateOnFalse() {
-        model.isPaginating = false
-    }
-    
 }

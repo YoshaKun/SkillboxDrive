@@ -43,7 +43,10 @@ final class ProfileModel {
     
     // MARK: - Update PieChart data
     
-    func updatePieChartData(completion: @escaping (_ totalSpace: Int?, _ usedSpace: Int?) -> Void, errorHandler: @escaping () -> Void) {
+    func updatePieChartData(
+        completion: @escaping (_ totalSpace: Int?, _ usedSpace: Int?) -> Void,
+        errorHandler: @escaping () -> Void
+    ) {
         
         guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
         var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk")

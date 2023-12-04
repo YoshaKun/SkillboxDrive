@@ -31,6 +31,8 @@ final class AllFilesModel {
             publicFilesList.path = items.path
             publicFilesList.type = items.type
             publicFilesList.size = items.size ?? 0
+            publicFilesList.preview = items.preview
+            publicFilesList.file = items.file
             savedArray.append(publicFilesList)
             realm.beginWrite()
             realm.add(publicFilesList)
@@ -70,8 +72,11 @@ final class AllFilesModel {
     }
     
     // MARK: - Update tableView method
-    
-    func getAllFiles(completion: @escaping () -> Void, errorHandler: @escaping () -> Void, noInternet: @escaping () -> Void) {
+    func getAllFiles(
+        completion: @escaping () -> Void,
+        errorHandler: @escaping () -> Void,
+        noInternet: @escaping () -> Void
+    ) {
         
         guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
 
@@ -111,7 +116,10 @@ final class AllFilesModel {
     }
     
     // MARK: - Additional getting all files (Пагинация)
-    func additionalGetingAllFiles (completion: @escaping () -> Void, errorHandler: @escaping () -> Void) {
+    func additionalGetingAllFiles (
+        completion: @escaping () -> Void,
+        errorHandler: @escaping () -> Void
+    ) {
 
         isPaginating = true
         
@@ -159,6 +167,88 @@ final class AllFilesModel {
             }
             isPaginating = false
             print("isPaging = \(isPaginating)")
+        }
+        task.resume()
+    }
+    
+    // MARK: - Get data of Folder, after tap on cell
+    func getDataFolder(
+        path: String?,
+        completion: @escaping () -> Void,
+        errorHandler: @escaping () -> Void,
+        noInternet: @escaping () -> Void
+    ) {
+        guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
+        guard let path = path else {
+            print("path error")
+            return
+        }
+        print("\(path)")
+        var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk/resources")
+        components?.queryItems = [
+            URLQueryItem(name: "path", value: "\(path)"),
+            URLQueryItem(name: "preview_size", value: "L"),
+            URLQueryItem(name: "preview_crop", value: "false")
+        ]
+
+        guard let url = components?.url else { return }
+        var request = URLRequest(url: url)
+        request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
+
+        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
+            guard let data = data else {
+                print("No internet get data: \(String(describing: error))")
+                noInternet()
+                return
+            }
+            guard let allFilesFolder = try? JSONDecoder().decode(PublishedFolder.self, from: data) else {
+                print("Error serialization")
+                errorHandler()
+                return
+            }
+            guard let self = self else { return }
+            completion()
+        }
+        task.resume()
+    }
+    
+    // MARK: - Get data of File, after tap on cell
+    func getDataOfOpenFile(
+        path: String?,
+        completion: @escaping () -> Void,
+        errorHandler: @escaping () -> Void,
+        noInternet: @escaping () -> Void
+    ) {
+        guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
+        guard let path = path else {
+            print("path error")
+            return
+        }
+        print("\(path)")
+        var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk/resources")
+        components?.queryItems = [
+            URLQueryItem(name: "path", value: "\(path)"),
+            URLQueryItem(name: "preview_size", value: "L"),
+            URLQueryItem(name: "preview_crop", value: "false")
+        ]
+
+        guard let url = components?.url else { return }
+        var request = URLRequest(url: url)
+        request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
+
+        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
+            guard let data = data else {
+                print("No internet get data: \(String(describing: error))")
+                noInternet()
+                return
+            }
+            guard let allFilesFolder = try? JSONDecoder().decode(LatestItems.self, from: data) else {
+                print("Error serialization")
+                errorHandler()
+                return
+            }
+            guard let self = self else { return }
+            completion()
         }
         task.resume()
     }

@@ -11,14 +11,17 @@ import UIKit
 protocol ProfilePresenterProtocol {
     
     func didTapOnYesAlert()
-    func updateToken(newToken: String?)
-    func getConvertedBytesTotal(value: Int) -> Double
-    func getConvertedBytesUsed(value: Int) -> Double
-    func getConvertedBytesTotalToString(value: Int) -> String
-    func getConvertedBytesUsedToString(value: Int) -> String
-    func getConvertedBytesRemainsToString(total: Int, used: Int) -> String
-    func updatePieChartData(completion: @escaping (_ totalSpace: Int?, _ usedSpace: Int?) -> Void, errorHandler: @escaping () -> Void)
-    func readPieChartDataRealm(completion: @escaping (_ totalSpace: Int?, _ usedSpace: Int?) -> Void)
+    func updateToken (newToken: String?)
+    func getConvertedBytesTotal (value: Int) -> Double
+    func getConvertedBytesUsed (value: Int) -> Double
+    func getConvertedBytesTotalToString (value: Int) -> String
+    func getConvertedBytesUsedToString (value: Int) -> String
+    func getConvertedBytesRemainsToString (total: Int, used: Int) -> String
+    func updatePieChartData (
+        completion: @escaping (_ totalSpace: Int?, _ usedSpace: Int?) -> Void,
+        errorHandler: @escaping () -> Void
+    )
+    func readPieChartDataRealm (completion: @escaping (_ totalSpace: Int?, _ usedSpace: Int?) -> Void)
 }
 
 final class ProfilePresenter: ProfilePresenterProtocol {
@@ -27,15 +30,15 @@ final class ProfilePresenter: ProfilePresenterProtocol {
     
     func didTapOnYesAlert() {
         
+        UserDefaults.standard.removeObject(forKey: Keys.apiToken)
+        
+        print("Did token deleted? = \(Keys.apiToken.isEmpty)")
+        Core.shared.setNewUser()
+        print("Did user deleted? = \(Core.shared.isNewUser())")
         DispatchQueue.main.async {
             let cookiesCleaner = WebCacheCleaner()
             cookiesCleaner.clean()
         }
-        UserDefaults.standard.removeObject(forKey: Keys.apiToken)
-        guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
-        print("Did token deleted? = \(token.isEmpty)")
-        Core.shared.setNewUser()
-        print("Did user deleted? = \(Core.shared.isNewUser())")
     }
     
     func updateToken(newToken: String?) {
@@ -76,7 +79,10 @@ final class ProfilePresenter: ProfilePresenterProtocol {
         return converter.getReadableUnit()
     }
     
-    func updatePieChartData(completion: @escaping (_ totalSpace: Int?, _ usedSpace: Int?) -> Void, errorHandler: @escaping () -> Void) {
+    func updatePieChartData(
+        completion: @escaping (_ totalSpace: Int?, _ usedSpace: Int?) -> Void,
+        errorHandler: @escaping () -> Void
+    ) {
         
         model.updatePieChartData(completion: completion, errorHandler: errorHandler)
     }

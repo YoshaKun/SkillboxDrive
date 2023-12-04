@@ -8,10 +8,10 @@
 import Foundation
 import UIKit
 
-class PublicFilesViewController: UIViewController {
+class OpenPublicFolderVC: UIViewController {
     
     private let publicCell = "publicCell"
-    private let presenter: PublicFilesPresenterProtocol = PublicFilesPresenter()
+    private let presenter: OpenPublicFolderPresenterProtocol = OpenPublicFolderPresenter()
     private let refreshControl = UIRefreshControl()
     private var noFilesImageView = UIImageView()
     private var descriptionLabel = UILabel()
@@ -23,6 +23,33 @@ class PublicFilesViewController: UIViewController {
     private var tableView = UITableView(frame: CGRect.zero, style: UITableView.Style.grouped)
     private var errorView = UIView()
     private var errorLabel = UILabel()
+    private var titleOfFolder: String?
+    private var type: String?
+    private var varPublicUrl: String?
+    private var pathFolder: String?
+    private var emptyFolderFlag: Bool?
+    private var emptyFolderErrorView = UIView()
+    private let labelError = UILabel()
+    private let fileNotFound = UILabel()
+    
+    // MARK: - Initialization
+    init(title: String?,
+         type: String?,
+         publicUrl: String?,
+         pathFolder: String?,
+         folderIsEmpty: Bool?
+        ) {
+        super.init(nibName: nil, bundle: nil)
+        self.titleOfFolder = title
+        self.type = type
+        self.varPublicUrl = publicUrl
+        self.pathFolder = pathFolder
+        self.emptyFolderFlag = folderIsEmpty
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
@@ -35,6 +62,17 @@ class PublicFilesViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         
         super.viewWillAppear(animated)
+        self.title = titleOfFolder
+        
+        guard emptyFolderFlag != true else {
+            configureEmptyFolderError()
+            return
+        }
+        guard type == nil else {
+            configureActivityIndicatorView()
+            updateViewFolder()
+            return
+        }
         
         noFilesView.removeFromSuperview()
         configureActivityIndicatorView()
@@ -57,6 +95,35 @@ class PublicFilesViewController: UIViewController {
     @objc private func didTappedOnBackButton() {
         
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    private func configureEmptyFolderError() {
+        
+        labelError.text = Constants.Text.emptyFolder
+        labelError.textColor = .black
+        labelError.numberOfLines = 0
+        labelError.textAlignment = .center
+        
+        view.addSubview(emptyFolderErrorView)
+        emptyFolderErrorView.backgroundColor = .systemBackground
+        emptyFolderErrorView.addSubview(labelError)
+        
+        labelError.translatesAutoresizingMaskIntoConstraints = false
+        emptyFolderErrorView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            
+            emptyFolderErrorView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            emptyFolderErrorView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            emptyFolderErrorView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            emptyFolderErrorView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            labelError.centerXAnchor.constraint(equalTo: emptyFolderErrorView.centerXAnchor),
+            labelError.centerYAnchor.constraint(equalTo: emptyFolderErrorView.centerYAnchor),
+            labelError.heightAnchor.constraint(equalToConstant: 100),
+            labelError.leadingAnchor.constraint(equalTo: emptyFolderErrorView.leadingAnchor, constant: 70),
+            labelError.trailingAnchor.constraint(equalTo: emptyFolderErrorView.trailingAnchor, constant: -70),
+        ])
     }
     
     private func configureActivityIndicatorView() {
@@ -99,6 +166,35 @@ class PublicFilesViewController: UIViewController {
         updateButton.addTarget(self, action: #selector(didTappedOnUpdateButton), for: .touchUpInside)
         
         configureNoFilesConstraints()
+    }
+    
+    private func configureFileError() {
+        
+        fileNotFound.text = Constants.Text.fileError
+        fileNotFound.textColor = .black
+        fileNotFound.numberOfLines = 0
+        fileNotFound.textAlignment = .center
+        
+        view.addSubview(emptyFolderErrorView)
+        emptyFolderErrorView.backgroundColor = .systemBackground
+        emptyFolderErrorView.addSubview(fileNotFound)
+        
+        fileNotFound.translatesAutoresizingMaskIntoConstraints = false
+        emptyFolderErrorView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            
+            emptyFolderErrorView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            emptyFolderErrorView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            emptyFolderErrorView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            emptyFolderErrorView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            fileNotFound.centerXAnchor.constraint(equalTo: emptyFolderErrorView.centerXAnchor),
+            fileNotFound.centerYAnchor.constraint(equalTo: emptyFolderErrorView.centerYAnchor),
+            fileNotFound.heightAnchor.constraint(equalToConstant: 100),
+            fileNotFound.leadingAnchor.constraint(equalTo: emptyFolderErrorView.leadingAnchor, constant: 70),
+            fileNotFound.trailingAnchor.constraint(equalTo: emptyFolderErrorView.trailingAnchor, constant: -70),
+        ])
     }
     
     @objc private func didTappedOnUpdateButton() {
@@ -151,6 +247,13 @@ class PublicFilesViewController: UIViewController {
 
         configureTableView()
         updateDataOfTableView()
+    }
+    
+    // MARK: - UpdateView - for files in folder
+    private func updateViewFolder() {
+
+        configureTableView()
+        updateDataOfTableViewFolder()
     }
     
     private func configureTableView() {
@@ -208,6 +311,42 @@ class PublicFilesViewController: UIViewController {
         }
     }
     
+    private func updateDataOfTableViewFolder() {
+        presenter.fetchDataOfPublishedFolder(publicUrl: varPublicUrl) {
+            DispatchQueue.main.async {
+                self.errorView.removeFromSuperview()
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                guard let self = self else { return }
+                self.activityIndicator.stopAnimating()
+                self.activityIndicatorView.removeFromSuperview()
+                self.tableView.reloadData()
+                self.tableView.isHidden = false
+            }
+        } errorHandler: {
+            print("errorHandler")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                guard let self = self else { return }
+                self.activityIndicator.stopAnimating()
+                self.activityIndicatorView.removeFromSuperview()
+                self.tableView.reloadData()
+                self.tableView.isHidden = true
+                self.configureNoFilesView()
+            }
+        } noInternet: {
+            print("noInternet")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                guard let self = self else { return }
+                self.activityIndicator.stopAnimating()
+                self.activityIndicatorView.removeFromSuperview()
+                self.tableView.reloadData()
+                self.tableView.isHidden = false
+                self.noFilesView.removeFromSuperview()
+                self.configureErrorView()
+            }
+        }
+    }
+    
     // MARK: - Error View
     private func configureErrorView() {
         
@@ -252,6 +391,9 @@ class PublicFilesViewController: UIViewController {
     
     private func createActionSheet(titleCell: String, path: String?) -> UIAlertController {
         
+        let cellPath = path ?? ""
+        let folder = pathFolder ?? ""
+        let allPath = folder + cellPath
         let alert = UIAlertController(title: titleCell, message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: Constants.Text.FirstVC.cancel, style: .cancel, handler: nil))
         alert.addAction(
@@ -261,7 +403,7 @@ class PublicFilesViewController: UIViewController {
                 handler: {  [weak self] _ in
                     self?.configureActivityIndicatorView()
                     self?.tableView.isHidden = true
-                    self?.presenter.removePublishedData(path: path, completion: {
+                    self?.presenter.removePublishedData(path: allPath, completion: {
                         DispatchQueue.main.async {
                             self?.updateDataOfTableView()
                         }
@@ -276,19 +418,6 @@ class PublicFilesViewController: UIViewController {
         return alert
     }
     
-    // MARK: - Footer view
-    private func createLoadingFooterView() -> UIView {
-        
-        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 50))
-        let spinner = UIActivityIndicatorView()
-        spinner.center = footerView.center
-        footerView.addSubview(spinner)
-        spinner.startAnimating()
-        
-        return footerView
-    }
-    
-    // MARK: - DeterminationOfFileType
     private func determinationOfFileType(path: String) -> String {
         
         guard let index = path.firstIndex(of: ".") else {
@@ -301,7 +430,7 @@ class PublicFilesViewController: UIViewController {
     }
 }
 
-extension PublicFilesViewController: UITableViewDataSource {
+extension OpenPublicFolderVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
@@ -321,7 +450,7 @@ extension PublicFilesViewController: UITableViewDataSource {
     }
 }
 
-extension PublicFilesViewController: UITableViewDelegate {
+extension OpenPublicFolderVC: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
@@ -329,20 +458,20 @@ extension PublicFilesViewController: UITableViewDelegate {
         
         guard let viewModel = presenter.getModelData().items else {
             print("error getModelData")
-            return
-        }
+            return }
         guard let strUrl = viewModel[indexPath.row].public_url else {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
                 guard let self = self else { return }
                 self.activityIndicator.stopAnimating()
                 self.activityIndicatorView.removeFromSuperview()
+                self.configureFileError()
             }
-            return
-        }
+            return }
         guard let title = viewModel[indexPath.row].name else { return }
         guard let created = viewModel[indexPath.row].created else { return }
         let fileUrl = viewModel[indexPath.row].file ?? "ljshdlgfhj"
         guard let pathItem = viewModel[indexPath.row].path else { return }
+        let path = (pathFolder ?? "") + pathItem
         let fileType = determinationOfFileType(path: pathItem)
 
         let folder = "dir"
@@ -350,7 +479,7 @@ extension PublicFilesViewController: UITableViewDelegate {
             self.presenter.fetchDataOfPublishedFolder(publicUrl: strUrl) {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
                     guard let self = self else { return }
-                    let vc = OpenPublicFolderVC(title: title, type: fileType, publicUrl: strUrl, pathFolder: pathItem, folderIsEmpty: nil)
+                    let vc = OpenPublicFolderVC(title: title, type: fileType, publicUrl: strUrl, pathFolder: path, folderIsEmpty: nil)
                     self.navigationController?.pushViewController(vc, animated: true)
                     self.activityIndicator.stopAnimating()
                     self.activityIndicatorView.removeFromSuperview()
@@ -366,19 +495,12 @@ extension PublicFilesViewController: UITableViewDelegate {
                 }
             } noInternet: {
                 print("noInternet")
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-                    guard let self = self else { return }
-                    self.activityIndicator.stopAnimating()
-                    self.activityIndicatorView.removeFromSuperview()
-                    let vc = OpenPublicFolderVC(title: title, type: fileType, publicUrl: strUrl, pathFolder: nil, folderIsEmpty: nil)
-                    self.navigationController?.pushViewController(vc, animated: true)
-                }
             }
         } else {
             self.presenter.fetchDataOfPublishedFile(publicUrl: strUrl) {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
                     guard let self = self else { return }
-                    let vc = ViewingScreenViewController(title: title, created: created, type: fileType, file: fileUrl, path: pathItem)
+                    let vc = ViewingScreenViewController(title: title, created: created, type: fileType, file: fileUrl, path: path)
                     vc.modalPresentationStyle = .fullScreen
                     self.navigationController?.present(vc, animated: true, completion: {
                         self.activityIndicator.stopAnimating()
@@ -387,10 +509,15 @@ extension PublicFilesViewController: UITableViewDelegate {
                 }
             } errorHandler: {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-                    guard let self = self else { 
+                    guard let self = self else {
                         print("error open file self")
                         return }
-                    
+                    guard self.titleOfFolder == nil else {
+                        self.activityIndicator.stopAnimating()
+                        self.activityIndicatorView.removeFromSuperview()
+                        self.navigationController?.popToRootViewController(animated: true)
+                        return
+                    }
                     self.updateDataOfTableView()
                     self.activityIndicator.stopAnimating()
                     self.activityIndicatorView.removeFromSuperview()
@@ -402,43 +529,10 @@ extension PublicFilesViewController: UITableViewDelegate {
     }
 }
 
-extension PublicFilesViewController: PublicCellDelegate {
+extension OpenPublicFolderVC: PublicCellDelegate {
     
     func didTapButton(with title: String, and path: String?) {
         let alert = self.createActionSheet(titleCell: title, path: path)
         self.present(alert, animated: true, completion: nil)
-    }
-}
-
-extension PublicFilesViewController: UIScrollViewDelegate {
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-        let currentOffset = scrollView.contentOffset.y
-        let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
-        let deltaOffset = maximumOffset - currentOffset
-        
-        if deltaOffset <= 0 {
-
-            guard !self.presenter.isPaginating() else {
-                print("We are already fetching more data")
-                return
-            }
-            self.tableView.tableFooterView = createLoadingFooterView()
-            self.presenter.additionalGetingPublishedFiles { [weak self] in
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    self?.tableView.tableFooterView = nil
-                    self?.tableView.reloadData()
-                    self?.presenter.changePaginatingStateOnFalse()
-                }
-            } errorHandler: { [weak self] in
-                print("additional errorHandler")
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    self?.tableView.tableFooterView = nil
-                    self?.tableView.reloadData()
-                    self?.presenter.changePaginatingStateOnFalse()
-                }
-            }
-        }
     }
 }
