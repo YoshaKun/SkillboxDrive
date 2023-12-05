@@ -9,12 +9,6 @@ import Foundation
 
 protocol OpenPublicFolderPresenterProtocol {
     
-    func updateDataTableView(
-        completion: @escaping () -> Void,
-        errorHandler: @escaping () -> Void,
-        noInternet: @escaping () -> Void
-    )
-    
     func getModelData() -> LatestFiles
     
     func removePublishedData(
@@ -23,37 +17,28 @@ protocol OpenPublicFolderPresenterProtocol {
         errorHendler: @escaping () -> Void
     )
     
-    func fetchDataOfPublishedFile(
+    func updateDataTableView(
         publicUrl: String?,
         completion: @escaping () -> Void,
         errorHandler: @escaping () -> Void,
+        noFiles: @escaping () -> Void,
         noInternet: @escaping () -> Void
     )
     
-    func fetchDataOfPublishedFolder (
+    func isPaginating() -> Bool
+    
+    func additionalGettingDataOfPublishedFolder (
         publicUrl: String?,
         completion: @escaping () -> Void,
-        errorHandler: @escaping () -> Void,
-        noInternet: @escaping () -> Void
+        errorHandler: @escaping () -> Void
     )
+    
+    func changePaginatingStateOnFalse()
 }
 
 final class OpenPublicFolderPresenter: OpenPublicFolderPresenterProtocol {
     
     private var model: OpenPublicFolderModel = OpenPublicFolderModel()
-    
-    func updateDataTableView(
-        completion: @escaping () -> Void,
-        errorHandler: @escaping () -> Void,
-        noInternet: @escaping () -> Void
-    ) {
-        
-        model.getPublishedFiles(
-            completion: completion,
-            errorHandler: errorHandler,
-            noInternet: noInternet
-        )
-    }
     
     func getModelData() -> LatestFiles {
         
@@ -73,25 +58,11 @@ final class OpenPublicFolderPresenter: OpenPublicFolderPresenterProtocol {
         )
     }
     
-    func fetchDataOfPublishedFile(
+    func updateDataTableView(
         publicUrl: String?,
         completion: @escaping () -> Void,
         errorHandler: @escaping () -> Void,
-        noInternet: @escaping () -> Void
-    ) {
-        
-        model.getDataOfPublishedFiles(
-            publicUrl: publicUrl,
-            completion: completion,
-            errorHandler: errorHandler,
-            noInternet: noInternet
-        )
-    }
-    
-    func fetchDataOfPublishedFolder(
-        publicUrl: String?,
-        completion: @escaping () -> Void,
-        errorHandler: @escaping () -> Void,
+        noFiles: @escaping () -> Void,
         noInternet: @escaping () -> Void
     ) {
         
@@ -99,7 +70,31 @@ final class OpenPublicFolderPresenter: OpenPublicFolderPresenterProtocol {
             publicUrl: publicUrl,
             completion: completion,
             errorHandler: errorHandler,
+            noFiles: noFiles,
             noInternet: noInternet
         )
+    }
+    
+    func isPaginating() -> Bool {
+        
+        return model.isPaginating
+    }
+    
+    func additionalGettingDataOfPublishedFolder (
+        publicUrl: String?,
+        completion: @escaping () -> Void,
+        errorHandler: @escaping () -> Void
+    ) {
+        
+        model.additionalGettingDataOfPublishedFolder(
+            publicUrl: publicUrl,
+            completion: completion,
+            errorHandler: errorHandler
+        )
+    }
+    
+    func changePaginatingStateOnFalse() {
+        
+        model.isPaginating = false
     }
 }

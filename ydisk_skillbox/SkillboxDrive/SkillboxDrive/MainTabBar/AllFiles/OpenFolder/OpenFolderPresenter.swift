@@ -17,6 +17,16 @@ protocol OpenFolderPresenterProtocol {
         errorHandler: @escaping () -> Void,
         noInternet: @escaping () -> Void
     )
+    
+    func isPaginating() -> Bool
+    
+    func additionalGettingFiles(
+        path: String?,
+        completion: @escaping () -> Void,
+        errorHandler: @escaping () -> Void
+    )
+    
+    func changePaginatingStateOnFalse()
 }
 
 final class OpenFolderPresenter: OpenFolderPresenterProtocol {
@@ -40,7 +50,30 @@ final class OpenFolderPresenter: OpenFolderPresenterProtocol {
             path: path,
             completion: completion,
             errorHandler: errorHandler,
-            noInternet: noInternet)
+            noInternet: noInternet
+        )
+    }
+    
+    func isPaginating() -> Bool {
+        
+        return model.isPaginating
+    }
+    
+    func additionalGettingFiles(
+        path: String?,
+        completion: @escaping () -> Void,
+        errorHandler: @escaping () -> Void
+    ) {
+        model.additionalGettingFiles(
+            path: path,
+            completion: completion,
+            errorHandler: errorHandler
+        )
+    }
+    
+    func changePaginatingStateOnFalse() {
+        
+        model.isPaginating = false
     }
 }
 

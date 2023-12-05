@@ -34,10 +34,10 @@ final class AllFilesModel {
             publicFilesList.preview = items.preview
             publicFilesList.file = items.file
             savedArray.append(publicFilesList)
-            realm.beginWrite()
-            realm.add(publicFilesList)
-            try! realm.commitWrite()
         }
+        realm.beginWrite()
+        realm.add(savedArray)
+        try! realm.commitWrite()
     }
     
     // MARK: - Realm delete Data
@@ -133,7 +133,7 @@ final class AllFilesModel {
             URLQueryItem(name: "path", value: "disk:/"),
             URLQueryItem(name: "preview_size", value: "L"),
             URLQueryItem(name: "preview_crop", value: "false"),
-            URLQueryItem(name: "limit", value: "5"),
+            URLQueryItem(name: "limit", value: "10"),
             URLQueryItem(name: "offset", value: "\(count)"),
         ]
         guard let url = components?.url else {

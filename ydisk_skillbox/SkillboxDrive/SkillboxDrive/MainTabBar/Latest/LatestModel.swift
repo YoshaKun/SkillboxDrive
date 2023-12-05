@@ -34,10 +34,10 @@ final class LatestModel {
             publicFilesList.preview = items.preview
             publicFilesList.file = items.file
             savedArray.append(publicFilesList)
-            realm.beginWrite()
-            realm.add(publicFilesList)
-            try! realm.commitWrite()
         }
+        realm.beginWrite()
+        realm.add(savedArray)
+        try! realm.commitWrite()
     }
     
     // MARK: - Realm delete Data
@@ -146,7 +146,6 @@ final class LatestModel {
     ) {
         
         isPaginating = true
-        
         guard let model = modelData.items else { return }
         let count = model.count
         print("modelData.count = \(count)")
@@ -156,7 +155,7 @@ final class LatestModel {
         components?.queryItems = [
             URLQueryItem(name: "preview_size", value: "L"),
             URLQueryItem(name: "preview_crop", value: "false"),
-            URLQueryItem(name: "limit", value: "\(count + 5)")
+            URLQueryItem(name: "limit", value: "\(count + 10)")
         ]
         guard let url = components?.url else {
             self.isPaginating = false
@@ -178,7 +177,7 @@ final class LatestModel {
                 return
             }
             guard let self = self else { return }
-            guard let items = latestFiles.items else {
+            guard latestFiles.items != nil else {
                 isPaginating = false
                 return
             }

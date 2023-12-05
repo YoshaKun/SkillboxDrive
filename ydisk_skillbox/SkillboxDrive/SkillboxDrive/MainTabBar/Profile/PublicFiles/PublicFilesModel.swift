@@ -35,10 +35,10 @@ final class PublicFilesModel {
             publicFilesList.file = items.file
             publicFilesList.public_url = items.public_url
             savedArray.append(publicFilesList)
-            realm.beginWrite()
-            realm.add(publicFilesList)
-            try! realm.commitWrite()
         }
+        realm.beginWrite()
+        realm.add(savedArray)
+        try! realm.commitWrite()
     }
     
     // MARK: - Realm delete Data
@@ -127,10 +127,12 @@ final class PublicFilesModel {
         
         guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
         var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk/resources/public")
-        components?.queryItems = [URLQueryItem(name: "preview_size", value: "L"),
-                                  URLQueryItem(name: "preview_crop", value: "false"),
-                                  URLQueryItem(name: "limit", value: "5"),
-                                  URLQueryItem(name: "offset", value: "\(count)"),]
+        components?.queryItems = [
+            URLQueryItem(name: "preview_size", value: "L"),
+            URLQueryItem(name: "preview_crop", value: "false"),
+            URLQueryItem(name: "limit", value: "10"),
+            URLQueryItem(name: "offset", value: "\(count)")
+        ]
         guard let url = components?.url else {
             self.isPaginating = false
             return

@@ -41,11 +41,6 @@ final class ProfileViewController: UIViewController, ChartViewDelegate {
         configureViews()
         configureStackView()
         configureConstraints()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
         configureActivityIndicatorView()
         updateData()
     }

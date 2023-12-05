@@ -67,7 +67,7 @@ final class PublicFilesPresenter: PublicFilesPresenterProtocol {
     func getModelData() -> LatestFiles {
         
         let data = model.modelData
-        if data.items!.isEmpty {
+        if ((data.items?.isEmpty) != nil) {
             print("сработал метод readPublicFilesRealm")
             return model.readPublicFilesRealm()
         }

@@ -27,7 +27,6 @@ class OpenPublicFolderVC: UIViewController {
     private var type: String?
     private var varPublicUrl: String?
     private var pathFolder: String?
-    private var emptyFolderFlag: Bool?
     private var emptyFolderErrorView = UIView()
     private let labelError = UILabel()
     private let fileNotFound = UILabel()
@@ -36,15 +35,13 @@ class OpenPublicFolderVC: UIViewController {
     init(title: String?,
          type: String?,
          publicUrl: String?,
-         pathFolder: String?,
-         folderIsEmpty: Bool?
+         pathFolder: String?
         ) {
         super.init(nibName: nil, bundle: nil)
         self.titleOfFolder = title
         self.type = type
         self.varPublicUrl = publicUrl
         self.pathFolder = pathFolder
-        self.emptyFolderFlag = folderIsEmpty
     }
     
     required init?(coder: NSCoder) {
@@ -55,25 +52,9 @@ class OpenPublicFolderVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.title = titleOfFolder
         view.backgroundColor = .systemBackground
         configureNavigationBar()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        
-        super.viewWillAppear(animated)
-        self.title = titleOfFolder
-        
-        guard emptyFolderFlag != true else {
-            configureEmptyFolderError()
-            return
-        }
-        guard type == nil else {
-            configureActivityIndicatorView()
-            updateViewFolder()
-            return
-        }
-        
         noFilesView.removeFromSuperview()
         configureActivityIndicatorView()
         updateView()
@@ -89,7 +70,6 @@ class OpenPublicFolderVC: UIViewController {
         )
         backButton.tintColor = Constants.Colors.gray
         navigationItem.leftBarButtonItem = backButton
-        navigationItem.title = Constants.Text.FirstVC.publicFilesTitle
     }
     
     @objc private func didTappedOnBackButton() {
@@ -249,13 +229,6 @@ class OpenPublicFolderVC: UIViewController {
         updateDataOfTableView()
     }
     
-    // MARK: - UpdateView - for files in folder
-    private func updateViewFolder() {
-
-        configureTableView()
-        updateDataOfTableViewFolder()
-    }
-    
     private func configureTableView() {
         
         refreshControl.addTarget(self, action: #selector(didSwipeToRefresh), for: .valueChanged)
@@ -277,7 +250,7 @@ class OpenPublicFolderVC: UIViewController {
     
     private func updateDataOfTableView() {
         
-        presenter.updateDataTableView {
+        presenter.updateDataTableView(publicUrl: varPublicUrl) {
             DispatchQueue.main.async {
                 self.errorView.removeFromSuperview()
             }
@@ -298,43 +271,16 @@ class OpenPublicFolderVC: UIViewController {
                 self.tableView.isHidden = true
                 self.configureNoFilesView()
             }
-        } noInternet: {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-                guard let self = self else { return }
-                self.activityIndicator.stopAnimating()
-                self.activityIndicatorView.removeFromSuperview()
-                self.tableView.reloadData()
-                self.tableView.isHidden = false
-                self.noFilesView.removeFromSuperview()
-                self.configureErrorView()
-            }
-        }
-    }
-    
-    private func updateDataOfTableViewFolder() {
-        presenter.fetchDataOfPublishedFolder(publicUrl: varPublicUrl) {
-            DispatchQueue.main.async {
-                self.errorView.removeFromSuperview()
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-                guard let self = self else { return }
-                self.activityIndicator.stopAnimating()
-                self.activityIndicatorView.removeFromSuperview()
-                self.tableView.reloadData()
-                self.tableView.isHidden = false
-            }
-        } errorHandler: {
-            print("errorHandler")
+        } noFiles: {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
                 guard let self = self else { return }
                 self.activityIndicator.stopAnimating()
                 self.activityIndicatorView.removeFromSuperview()
                 self.tableView.reloadData()
                 self.tableView.isHidden = true
-                self.configureNoFilesView()
+                self.configureEmptyFolderError()
             }
         } noInternet: {
-            print("noInternet")
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
                 guard let self = self else { return }
                 self.activityIndicator.stopAnimating()
@@ -418,6 +364,7 @@ class OpenPublicFolderVC: UIViewController {
         return alert
     }
     
+    // MARK: - DeterminationOfFileType
     private func determinationOfFileType(path: String) -> String {
         
         guard let index = path.firstIndex(of: ".") else {
@@ -427,6 +374,18 @@ class OpenPublicFolderVC: UIViewController {
         fileType.removeFirst()
         let newString = String(fileType)
         return newString
+    }
+    
+    // MARK: - Footer view
+    private func createLoadingFooterView() -> UIView {
+        
+        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 50))
+        let spinner = UIActivityIndicatorView()
+        spinner.center = footerView.center
+        footerView.addSubview(spinner)
+        spinner.startAnimating()
+        
+        return footerView
     }
 }
 
@@ -476,54 +435,22 @@ extension OpenPublicFolderVC: UITableViewDelegate {
 
         let folder = "dir"
         if fileType == folder {
-            self.presenter.fetchDataOfPublishedFolder(publicUrl: strUrl) {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-                    guard let self = self else { return }
-                    let vc = OpenPublicFolderVC(title: title, type: fileType, publicUrl: strUrl, pathFolder: path, folderIsEmpty: nil)
-                    self.navigationController?.pushViewController(vc, animated: true)
-                    self.activityIndicator.stopAnimating()
-                    self.activityIndicatorView.removeFromSuperview()
-                }
-            } errorHandler: {
-                print("errorHandler - Папка пустая")
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-                    guard let self = self else { return }
-                    self.activityIndicator.stopAnimating()
-                    self.activityIndicatorView.removeFromSuperview()
-                    let vc = OpenPublicFolderVC(title: title, type: fileType, publicUrl: strUrl, pathFolder: nil, folderIsEmpty: true)
-                    self.navigationController?.pushViewController(vc, animated: true)
-                }
-            } noInternet: {
-                print("noInternet")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                guard let self = self else { return }
+                let vc = OpenPublicFolderVC(title: title, type: fileType, publicUrl: strUrl, pathFolder: path)
+                self.navigationController?.pushViewController(vc, animated: true)
+                self.activityIndicator.stopAnimating()
+                self.activityIndicatorView.removeFromSuperview()
             }
         } else {
-            self.presenter.fetchDataOfPublishedFile(publicUrl: strUrl) {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-                    guard let self = self else { return }
-                    let vc = ViewingScreenViewController(title: title, created: created, type: fileType, file: fileUrl, path: path)
-                    vc.modalPresentationStyle = .fullScreen
-                    self.navigationController?.present(vc, animated: true, completion: {
-                        self.activityIndicator.stopAnimating()
-                        self.activityIndicatorView.removeFromSuperview()
-                    })
-                }
-            } errorHandler: {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-                    guard let self = self else {
-                        print("error open file self")
-                        return }
-                    guard self.titleOfFolder == nil else {
-                        self.activityIndicator.stopAnimating()
-                        self.activityIndicatorView.removeFromSuperview()
-                        self.navigationController?.popToRootViewController(animated: true)
-                        return
-                    }
-                    self.updateDataOfTableView()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                guard let self = self else { return }
+                let vc = ViewingScreenViewController(title: title, created: created, type: fileType, file: fileUrl, path: path)
+                vc.modalPresentationStyle = .fullScreen
+                self.navigationController?.present(vc, animated: true, completion: {
                     self.activityIndicator.stopAnimating()
                     self.activityIndicatorView.removeFromSuperview()
-                }
-            } noInternet: {
-                print("noInternet")
+                })
             }
         }
     }
@@ -536,3 +463,37 @@ extension OpenPublicFolderVC: PublicCellDelegate {
         self.present(alert, animated: true, completion: nil)
     }
 }
+
+extension OpenPublicFolderVC: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        let currentOffset = scrollView.contentOffset.y
+        let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
+        let deltaOffset = maximumOffset - currentOffset
+        
+        if deltaOffset <= 0, currentOffset >= 50 {
+
+            guard !self.presenter.isPaginating() else {
+                print("We are already fetching more data")
+                return
+            }
+            self.tableView.tableFooterView = createLoadingFooterView()
+            self.presenter.additionalGettingDataOfPublishedFolder(publicUrl: varPublicUrl) { [weak self] in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    self?.tableView.tableFooterView = nil
+                    self?.tableView.reloadData()
+                    self?.presenter.changePaginatingStateOnFalse()
+                }
+            } errorHandler: { [weak self] in
+                print("additional errorHandler")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    self?.tableView.tableFooterView = nil
+                    self?.tableView.reloadData()
+                    self?.presenter.changePaginatingStateOnFalse()
+                }
+            }
+        }
+    }
+}
+

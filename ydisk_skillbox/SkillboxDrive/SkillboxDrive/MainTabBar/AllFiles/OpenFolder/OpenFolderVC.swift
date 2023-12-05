@@ -44,18 +44,9 @@ final class OpenFolderVC: UIViewController {
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.title = titleOfFolder
         view.backgroundColor = .systemBackground
         configureNavigationBar()
-    }
-    
-    // MARK: - View Will Appear
-    
-    override func viewWillAppear(_ animated: Bool) {
-        
-        super.viewWillAppear(animated)
-        self.title = titleOfFolder
-        
         configureActivityIndicatorView()
         updateView()
     }
@@ -71,7 +62,6 @@ final class OpenFolderVC: UIViewController {
         )
         backButton.tintColor = Constants.Colors.gray
         navigationItem.leftBarButtonItem = backButton
-        navigationItem.title = Constants.Text.FirstVC.publicFilesTitle
     }
     
     @objc private func didTappedOnBackButton() {
@@ -244,6 +234,18 @@ final class OpenFolderVC: UIViewController {
         let newString = String(fileType)
         return newString
     }
+    
+    // MARK: - Footer View
+    private func createLoadingFooterView() -> UIView {
+        
+        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 50))
+        let spinner = UIActivityIndicatorView()
+        spinner.center = footerView.center
+        footerView.addSubview(spinner)
+        spinner.startAnimating()
+        
+        return footerView
+    }
 }
 
 extension OpenFolderVC: UITableViewDataSource {
@@ -303,4 +305,38 @@ extension OpenFolderVC: UITableViewDelegate {
         }
     }
 }
+
+extension OpenFolderVC: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        let currentOffset = scrollView.contentOffset.y
+        let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
+        let deltaOffset = maximumOffset - currentOffset
+        
+        if deltaOffset <= 0, currentOffset >= 50 {
+
+            guard !self.presenter.isPaginating() else {
+                print("We are already fetching more data")
+                return
+            }
+            self.tableView.tableFooterView = createLoadingFooterView()
+            self.presenter.additionalGettingFiles(path: path) { [weak self] in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    self?.tableView.tableFooterView = nil
+                    self?.tableView.reloadData()
+                    self?.presenter.changePaginatingStateOnFalse()
+                }
+            } errorHandler: { [weak self] in
+                print("additional errorHandler")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    self?.tableView.tableFooterView = nil
+                    self?.tableView.reloadData()
+                    self?.presenter.changePaginatingStateOnFalse()
+                }
+            }
+        }
+    }
+}
+
 

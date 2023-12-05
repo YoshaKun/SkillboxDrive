@@ -25,14 +25,6 @@ final class AllFilesViewController: UIViewController {
         
         view.backgroundColor = .systemBackground
         configureNavigationBar()
-    }
-    
-    // MARK: - View Will Appear
-    
-    override func viewWillAppear(_ animated: Bool) {
-        
-        super.viewWillAppear(animated)
-        
         configureActivityIndicatorView()
         updateView()
     }
@@ -261,7 +253,7 @@ extension AllFilesViewController: UIScrollViewDelegate {
         let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
         let deltaOffset = maximumOffset - currentOffset
         
-        if deltaOffset <= 0 {
+        if deltaOffset <= 0, currentOffset >= 50 {
 
             guard !self.presenter.isPaginating() else {
                 print("We are already fetching more data")
