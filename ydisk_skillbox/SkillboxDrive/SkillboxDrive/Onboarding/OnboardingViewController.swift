@@ -10,7 +10,7 @@ import UIKit
 
 protocol OnboardingViewControllerProtocol: AnyObject {}
 
-class OnboardingViewController: UIViewController {
+final class OnboardingViewController: UIViewController {
     
     private let presenter: OnboardingPresenterProtocol = OnboardingPresenter()
     private let identifierForCell = "identifierForCell"
@@ -137,9 +137,8 @@ extension OnboardingViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifierForCell, for: indexPath) as? CustomOnboardingCell else {
             return UICollectionViewCell()
         }
-        
-        cell.imageView.image = presenter.getModelArray(index: indexPath.item).image
-        cell.descriptionOnboard.text = presenter.getModelArray(index: indexPath.item).description
+        let viewModel = presenter.getModelArray(index: indexPath.item)
+        cell.configureCell(viewModel)
         return cell
     }
 }

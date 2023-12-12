@@ -9,19 +9,14 @@ import Foundation
 import RealmSwift
 
 final class AllFilesModel {
-    
     // MARK: - Pagination FLAG
     var isPaginating = false
-    
     // MARK: - Initializing member of Realm
     let realm = try! Realm()
-    
     // MARK: - Base Model data
     var modelData = LatestFiles(items: [])
-    
     // MARK: - Realm saving Data
     private func savePublicFilesUsingRealm(filesList: LatestFiles) {
-        
         guard let array = filesList.items else { return }
         var savedArray: [AllFilesRealmModel] = []
         for items in array {
@@ -39,21 +34,16 @@ final class AllFilesModel {
         realm.add(savedArray)
         try! realm.commitWrite()
     }
-    
     // MARK: - Realm delete Data
     private func deletePublicFilesRealm() {
-    
         realm.beginWrite()
         realm.delete(realm.objects(AllFilesRealmModel.self))
         try! realm.commitWrite()
     }
-    
     // MARK: - Realm READ data
     func readPublicFilesRealm() -> LatestFiles {
-        
         let savedDataInRealm = realm.objects(AllFilesRealmModel.self)
         var latestFiles = LatestFiles(items: [])
-        
         for data in savedDataInRealm {
             let latestItem = LatestItems(
                 name: data.name!,
@@ -70,14 +60,12 @@ final class AllFilesModel {
         }
         return latestFiles
     }
-    
     // MARK: - Update tableView method
     func getAllFiles(
         completion: @escaping () -> Void,
         errorHandler: @escaping () -> Void,
         noInternet: @escaping () -> Void
     ) {
-        
         guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
 
         var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk/resources")
@@ -92,29 +80,31 @@ final class AllFilesModel {
         var request = URLRequest(url: url)
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
 
-        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, _, error) in
             guard let data = data else {
                 print("No internet get data: \(String(describing: error))")
                 noInternet()
                 return
             }
-            guard let allFilesFolder = try? JSONDecoder().decode(PublishedFolder.self, from: data) else {
-                print("Error serialization")
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            guard let allFilesFolder = try? decoder.dashDecoding().decode(PublishedFolder.self, from: data) else {
+                print("Error serialization getAllfiles")
                 errorHandler()
                 return
             }
+            print("decoder data: \(allFilesFolder)")
             guard let self = self else { return }
             DispatchQueue.main.async {
                 self.deletePublicFilesRealm()
-                self.savePublicFilesUsingRealm(filesList: allFilesFolder._embedded)
+                self.savePublicFilesUsingRealm(filesList: allFilesFolder.embedded)
             }
-            let items = allFilesFolder._embedded.items
+            let items = allFilesFolder.embedded.items
             self.modelData.items = items
             completion()
         }
         task.resume()
     }
-    
     // MARK: - Additional getting all files (Пагинация)
     func additionalGetingAllFiles (
         completion: @escaping () -> Void,
@@ -122,7 +112,6 @@ final class AllFilesModel {
     ) {
 
         isPaginating = true
-        
         guard let model = modelData.items else { return }
         let count = model.count
         print("modelData.count = \(count)")
@@ -134,7 +123,7 @@ final class AllFilesModel {
             URLQueryItem(name: "preview_size", value: "L"),
             URLQueryItem(name: "preview_crop", value: "false"),
             URLQueryItem(name: "limit", value: "10"),
-            URLQueryItem(name: "offset", value: "\(count)"),
+            URLQueryItem(name: "offset", value: "\(count)")
         ]
         guard let url = components?.url else {
             self.isPaginating = false
@@ -143,34 +132,35 @@ final class AllFilesModel {
         var request = URLRequest(url: url)
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
 
-        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, _, error) in
             guard let data = data else {
                 print("additionalGetting - No internet: \(String(describing: error))")
                 errorHandler()
                 return
             }
-            guard let allFilesFolder = try? JSONDecoder().decode(PublishedFolder.self, from: data) else {
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            guard let allFilesFolder = try? decoder.dashDecoding().decode(PublishedFolder.self, from: data) else {
                 print("Error serialization")
                 guard let self = self else { return }
                 self.isPaginating = false
                 return
             }
             guard let self = self else { return }
-            guard let items = allFilesFolder._embedded.items else {
+            guard let items = allFilesFolder.embedded.items else {
                 isPaginating = false
                 return
             }
             self.modelData.items?.append(contentsOf: items)
             completion()
             DispatchQueue.main.async {
-                self.savePublicFilesUsingRealm(filesList: allFilesFolder._embedded)
+                self.savePublicFilesUsingRealm(filesList: allFilesFolder.embedded)
             }
             isPaginating = false
             print("isPaging = \(isPaginating)")
         }
         task.resume()
     }
-    
     // MARK: - Get data of Folder, after tap on cell
     func getDataFolder(
         path: String?,
@@ -195,23 +185,24 @@ final class AllFilesModel {
         var request = URLRequest(url: url)
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
 
-        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, _, error) in
             guard let data = data else {
                 print("No internet get data: \(String(describing: error))")
                 noInternet()
                 return
             }
-            guard let allFilesFolder = try? JSONDecoder().decode(PublishedFolder.self, from: data) else {
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            guard (try? decoder.dashDecoding().decode(PublishedFolder.self, from: data)) != nil else {
                 print("Error serialization")
                 errorHandler()
                 return
             }
-            guard let self = self else { return }
+            guard self != nil else { return }
             completion()
         }
         task.resume()
     }
-    
     // MARK: - Get data of File, after tap on cell
     func getDataOfOpenFile(
         path: String?,
@@ -236,22 +227,20 @@ final class AllFilesModel {
         var request = URLRequest(url: url)
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
 
-        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, _, error) in
             guard let data = data else {
                 print("No internet get data: \(String(describing: error))")
                 noInternet()
                 return
             }
-            guard let allFilesFolder = try? JSONDecoder().decode(LatestItems.self, from: data) else {
+            guard (try? JSONDecoder().decode(LatestItems.self, from: data)) != nil else {
                 print("Error serialization")
                 errorHandler()
                 return
             }
-            guard let self = self else { return }
+            guard self != nil else { return }
             completion()
         }
         task.resume()
     }
 }
-
-    

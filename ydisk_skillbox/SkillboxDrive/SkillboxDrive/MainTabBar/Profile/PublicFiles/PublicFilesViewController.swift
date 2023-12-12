@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class PublicFilesViewController: UIViewController {
+final class PublicFilesViewController: UIViewController {
     
     private let publicCell = "publicCell"
     private let presenter: PublicFilesPresenterProtocol = PublicFilesPresenter()

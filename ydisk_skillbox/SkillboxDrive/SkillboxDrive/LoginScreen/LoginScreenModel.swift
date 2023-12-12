@@ -7,7 +7,7 @@
 
 import UIKit
 
-class LoginScreenModel {
+final class LoginScreenModel {
     
     let constant = Constants.self
     

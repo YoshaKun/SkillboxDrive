@@ -25,7 +25,6 @@ final class LatestCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        contentView.addSubview(firstStackView)
         configureViews()
         setupConstraints()
     }
@@ -75,6 +74,7 @@ final class LatestCell: UITableViewCell {
         thirdStackView.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         
+        contentView.addSubview(firstStackView)
         contentView.addSubview(thirdStackView)
         firstStackView.addArrangedSubview(sizeFile)
         firstStackView.addArrangedSubview(dateFile)
@@ -131,7 +131,7 @@ final class LatestCell: UITableViewCell {
         let converter = Units.init(bytes: Int64(viewModel.size ?? 0))
         let str = converter.getReadableUnit()
         guard let initialDate = viewModel.created else { return }
-        let date = parseDate(initialDate ?? "2023-11-13T18:56:09+00:00")
+        let date = parseDate(initialDate)
         
         let onlyDate = getOnlyDateRu(date: date)
         let time = getOnlyTime(date: date)

@@ -60,8 +60,10 @@ final class ProfileModel {
                 print("Error: \(String(describing: error))")
                 errorHandler()
                 return }
-            guard let newFiles = try? JSONDecoder().decode(DiskSpaceResponse.self, from: data) else { return }
-            guard let total = newFiles.total_space, let used = newFiles.used_space else { return }
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            guard let newFiles = try? decoder.decode(DiskSpaceResponse.self, from: data) else { return }
+            guard let total = newFiles.totalSpace, let used = newFiles.usedSpace else { return }
             DispatchQueue.main.async {
                 self.deletePieChartDataFromRealm()
                 self.savePieChartDataUsingRealm(used: used, total: total)

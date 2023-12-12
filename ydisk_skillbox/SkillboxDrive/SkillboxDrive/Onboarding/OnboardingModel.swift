@@ -13,7 +13,7 @@ struct OnboardingModel {
     let description: String?
 }
 
-class OnboardingData {
+final class OnboardingData {
     
     let onboardingArray: [OnboardingModel] = [
         OnboardingModel(image: Constants.Image.onboarding1, description: Constants.Text.onboarding1),

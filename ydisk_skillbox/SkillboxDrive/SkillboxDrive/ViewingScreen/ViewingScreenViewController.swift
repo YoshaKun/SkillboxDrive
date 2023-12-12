@@ -15,7 +15,13 @@ final class ViewingScreenViewController: UIViewController {
     // MARK: - Private constants
     private let webView: WKWebView = {
         let preferences = WKWebpagePreferences()
-        preferences.allowsContentJavaScript = true
+        if #available(iOS 14.0, *) {
+            preferences.allowsContentJavaScript = true
+        } else {
+            let configuration = WKWebViewConfiguration()
+            let webView = WKWebView(frame: .zero, configuration: configuration)
+            return webView
+        }
         let configuration = WKWebViewConfiguration()
         configuration.defaultWebpagePreferences = preferences
         let webView = WKWebView(frame: .zero, configuration: configuration)

@@ -44,13 +44,15 @@ final class OpenFolderModel {
                 noInternet()
                 return
             }
-            guard let allFilesFolder = try? JSONDecoder().decode(PublishedFolder.self, from: data) else {
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            guard let allFilesFolder = try? decoder.dashDecoding().decode(PublishedFolder.self, from: data) else {
                 print("Error serialization")
                 errorHandler()
                 return
             }
             guard let self = self else { return }
-            guard let items = allFilesFolder._embedded.items else { return }
+            guard let items = allFilesFolder.embedded.items else { return }
             guard !items.isEmpty else {
                 errorHandler()
                 return
@@ -97,7 +99,9 @@ final class OpenFolderModel {
                 errorHandler()
                 return
             }
-            guard let allFilesFolder = try? JSONDecoder().decode(PublishedFolder.self, from: data) else {
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            guard let allFilesFolder = try? decoder.dashDecoding().decode(PublishedFolder.self, from: data) else {
                 print("Error serialization")
                 guard let self = self else { return }
                 self.isPaginating = false
@@ -105,7 +109,7 @@ final class OpenFolderModel {
                 return
             }
             guard let self = self else { return }
-            guard let items = allFilesFolder._embedded.items else { return }
+            guard let items = allFilesFolder.embedded.items else { return }
             guard !items.isEmpty else {
                 isPaginating = false
                 errorHandler()

@@ -7,7 +7,7 @@
 
 import RealmSwift
 
-class PieChartModel: Object {
+final class PieChartModel: Object {
     
     @objc dynamic var busy: Int = 0
     @objc dynamic var free: Int = 0

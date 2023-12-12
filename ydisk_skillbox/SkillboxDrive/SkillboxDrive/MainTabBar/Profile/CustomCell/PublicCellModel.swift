@@ -21,7 +21,7 @@ final class PublicCellModel {
         var request = URLRequest(url: url)
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
 
-        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data else {
                 print("Error: \(String(describing: error))")
                 return }

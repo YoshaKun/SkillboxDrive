@@ -72,13 +72,15 @@ final class OpenPublicFolderModel {
                 noInternet()
                 return
             }
-            guard let publishedFolder = try? JSONDecoder().decode(PublishedFolder.self, from: data) else {
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            guard let publishedFolder = try? decoder.dashDecoding().decode(PublishedFolder.self, from: data) else {
                 print("Error published folder decode: \(String(describing: response))")
                 errorHandler()
                 return
             }
             guard let self = self else { return }
-            let filesInFolder = publishedFolder._embedded
+            let filesInFolder = publishedFolder.embedded
             guard let items = filesInFolder.items else { return }
             guard !items.isEmpty else {
                 noFiles()
@@ -124,7 +126,9 @@ final class OpenPublicFolderModel {
                 errorHandler()
                 return
             }
-            guard let publishedFolder = try? JSONDecoder().decode(PublishedFolder.self, from: data) else {
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            guard let publishedFolder = try? decoder.dashDecoding().decode(PublishedFolder.self, from: data) else {
                 print("Error published folder decode: \(String(describing: response))")
                 guard let self = self else { return }
                 self.isPaginating = false
@@ -132,7 +136,7 @@ final class OpenPublicFolderModel {
                 return
             }
             guard let self = self else { return }
-            let filesInFolder = publishedFolder._embedded
+            let filesInFolder = publishedFolder.embedded
             guard let items = filesInFolder.items else { return }
             guard items.count != 0 else {
                 isPaginating = false

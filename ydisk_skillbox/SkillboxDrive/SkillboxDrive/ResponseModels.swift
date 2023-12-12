@@ -9,13 +9,13 @@ import Foundation
 
 // MARK: - DiskSpaceResponse
 struct DiskSpaceResponse: Codable {
-    let total_space: Int?
-    let used_space: Int?
+    let totalSpace: Int?
+    let usedSpace: Int?
 }
 
 // MARK: - PublishedFolder
 struct PublishedFolder: Codable {
-    let _embedded: LatestFiles
+    let embedded: LatestFiles
 }
 
 // MARK: - LatestFiles
@@ -45,4 +45,29 @@ struct Images: Codable {
 // MARK: - ShareLink
 struct ShareLink: Codable {
     let href: String?
+}
+
+// MARK: - MyCodingKey - need for translate JSON format Snake_Case to camelCase only for JSON data begins from "_"
+struct MyCodingKey: CodingKey {
+    var stringValue: String
+    init?(stringValue: String) {
+        self.stringValue = stringValue
+    }
+    var intValue: Int?
+    init?(intValue: Int) {
+        return nil
+    }
+}
+
+// MARK: - Extension for spacial decoding JSON data, including in begining sign "_"
+extension JSONDecoder {
+    func dashDecoding() -> JSONDecoder {
+        self.keyDecodingStrategy = .custom({ keys in
+            let lastKey = keys.last!
+            let lastKeySegment = lastKey.stringValue.split(separator: "_").last
+            let updatedKey = lastKeySegment.map { String($0) } ?? ""
+            return MyCodingKey(stringValue: updatedKey) ?? lastKey
+        })
+        return self
+    }
 }

@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class OpenPublicFolderVC: UIViewController {
+final class OpenPublicFolderVC: UIViewController {
     
     private let publicCell = "publicCell"
     private let presenter: OpenPublicFolderPresenterProtocol = OpenPublicFolderPresenter()

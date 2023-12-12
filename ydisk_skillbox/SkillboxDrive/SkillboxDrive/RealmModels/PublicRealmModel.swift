@@ -7,7 +7,7 @@
 
 import RealmSwift
 
-class PublicRealmModel: Object {
+final class PublicRealmModel: Object {
     
     @objc dynamic var name: String?
     @objc dynamic var created: String?

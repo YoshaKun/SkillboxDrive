@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 
-class AllFilesRealmModel: Object {
+final class AllFilesRealmModel: Object {
     
     @objc dynamic var name: String?
     @objc dynamic var created: String?

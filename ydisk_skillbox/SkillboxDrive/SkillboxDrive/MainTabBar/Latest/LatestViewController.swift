@@ -183,6 +183,7 @@ extension LatestViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: latestCell) as? LatestCell
         guard let viewModel = presenter.getModelData().items, viewModel.count > indexPath.row else {
             return UITableViewCell()

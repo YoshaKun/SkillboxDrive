@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CustomOnboardingCell: UICollectionViewCell {
+final class CustomOnboardingCell: UICollectionViewCell {
     
     let imageView = UIImageView()
     let descriptionOnboard = UILabel()
@@ -48,5 +48,13 @@ class CustomOnboardingCell: UICollectionViewCell {
             descriptionOnboard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -offsetForDescription),
             descriptionOnboard.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0),
         ])
+    }
+    
+    // MARK: - Configure Cell
+    
+    func configureCell(_ viewModel: OnboardingModel) {
+        
+        imageView.image = viewModel.image
+        descriptionOnboard.text = viewModel.description
     }
 }
