@@ -281,20 +281,9 @@ final class PublicFilesViewController: UIViewController {
         
         return footerView
     }
-    
-    // MARK: - DeterminationOfFileType
-    private func determinationOfFileType(path: String) -> String {
-        
-        guard let index = path.firstIndex(of: ".") else {
-            let str = "dir"
-            return str}
-        var fileType = path[index ..< path.endIndex]
-        fileType.removeFirst()
-        let newString = String(fileType)
-        return newString
-    }
 }
 
+// MARK: - UITableViewDataSource
 extension PublicFilesViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -315,6 +304,7 @@ extension PublicFilesViewController: UITableViewDataSource {
     }
 }
 
+// MARK: - UITableViewDelegate
 extension PublicFilesViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -330,7 +320,7 @@ extension PublicFilesViewController: UITableViewDelegate {
             }
             return
         }
-        guard let strUrl = viewModel[indexPath.row].public_url else {
+        guard let strUrl = viewModel[indexPath.row].publicUrl else {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
                 guard let self = self else { return }
                 self.activityIndicator.stopAnimating()
@@ -342,7 +332,7 @@ extension PublicFilesViewController: UITableViewDelegate {
         guard let created = viewModel[indexPath.row].created else { return }
         let fileUrl = viewModel[indexPath.row].file ?? "ljshdlgfhj"
         guard let pathItem = viewModel[indexPath.row].path else { return }
-        let fileType = determinationOfFileType(path: pathItem)
+        let fileType = presenter.determinationOfFileType(path: pathItem)
 
         let folder = "dir"
         if fileType == folder {
@@ -367,6 +357,7 @@ extension PublicFilesViewController: UITableViewDelegate {
     }
 }
 
+// MARK: - PublicCellDelegate
 extension PublicFilesViewController: PublicCellDelegate {
     
     func didTapButton(with title: String, and path: String?) {
@@ -375,6 +366,7 @@ extension PublicFilesViewController: PublicCellDelegate {
     }
 }
 
+// MARK: - UIScrollViewDelegate
 extension PublicFilesViewController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

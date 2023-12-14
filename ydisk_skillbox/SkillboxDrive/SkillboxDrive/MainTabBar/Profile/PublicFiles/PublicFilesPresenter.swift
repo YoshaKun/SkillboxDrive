@@ -45,6 +45,7 @@ protocol PublicFilesPresenterProtocol {
     )
     
     func changePaginatingStateOnFalse()
+    func determinationOfFileType(path: String) -> String
 }
 
 final class PublicFilesPresenter: PublicFilesPresenterProtocol {
@@ -56,8 +57,7 @@ final class PublicFilesPresenter: PublicFilesPresenterProtocol {
         errorHandler: @escaping () -> Void,
         noInternet: @escaping () -> Void
     ) {
-        
-        model.getPublishedFiles(
+        NetworkService.shared.getPublishedFiles(
             completion: completion,
             errorHandler: errorHandler,
             noInternet: noInternet
@@ -66,11 +66,11 @@ final class PublicFilesPresenter: PublicFilesPresenterProtocol {
     
     func getModelData() -> LatestFiles {
         
-        let data = model.modelData
-        if ((data.items?.isEmpty) != nil) {
-            print("сработал метод readPublicFilesRealm")
-            return model.readPublicFilesRealm()
-        }
+        let data = NetworkService.shared.modelDataPublic
+//        if ((data.items?.isEmpty) != nil) {
+//            print("сработал метод readPublicFilesRealm")
+//            return model.readPublicFilesRealm()
+//        }
         return data
     }
     
@@ -79,8 +79,7 @@ final class PublicFilesPresenter: PublicFilesPresenterProtocol {
         completion: @escaping () -> Void,
         errorHendler: @escaping () -> Void
     ) {
-        
-        model.removePublishedFile(
+        NetworkService.shared.removePublishedFile(
             path: path,
             completion: completion,
             errorHendler: errorHendler
@@ -93,8 +92,7 @@ final class PublicFilesPresenter: PublicFilesPresenterProtocol {
         errorHandler: @escaping () -> Void,
         noInternet: @escaping () -> Void
     ) {
-        
-        model.getDataOfPublishedFiles(
+        NetworkService.shared.getDataOfPublishedFiles(
             publicUrl: publicUrl,
             completion: completion,
             errorHandler: errorHandler,
@@ -108,8 +106,7 @@ final class PublicFilesPresenter: PublicFilesPresenterProtocol {
         errorHandler: @escaping () -> Void,
         noInternet: @escaping () -> Void
     ) {
-        
-        model.getDataOfPublishedFolder(
+        NetworkService.shared.getDataOfPublishedFolder(
             publicUrl: publicUrl,
             completion: completion,
             errorHandler: errorHandler,
@@ -118,23 +115,24 @@ final class PublicFilesPresenter: PublicFilesPresenterProtocol {
     }
     
     func isPaginating() -> Bool {
-        
-        return model.isPaginating 
+        return NetworkService.shared.isPaginatingPublic
     }
     
     func additionalGetingPublishedFiles (
         completion: @escaping () -> Void,
         errorHandler: @escaping () -> Void
     ) {
-        
-        model.additionalGetingPublishedFiles(
+        NetworkService.shared.additionalGetingPublishedFiles(
             completion: completion,
             errorHandler: errorHandler
         )
     }
     
     func changePaginatingStateOnFalse() {
-        model.isPaginating = false
+        NetworkService.shared.isPaginatingPublic = false
     }
     
+    func determinationOfFileType(path: String) -> String {
+        model.determinationOfFileType(path: path)
+    }
 }

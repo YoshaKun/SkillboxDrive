@@ -6,71 +6,25 @@
 //
 
 import Foundation
-import RealmSwift
 
 final class ProfileModel {
 
-    // MARK: - Initializing member of Realm
-    let realm = try! Realm()
-    
-    // MARK: - Realm saving Data
-    private func savePieChartDataUsingRealm(used: Int, total: Int) {
-        
-        let chartData = PieChartModel()
-        chartData.busy = used
-        chartData.free = total
-        realm.beginWrite()
-        realm.add(chartData)
-        try! realm.commitWrite()
+    // MARK: - Update token
+    func updateToken(newToken: String?) {
+        guard let newToken = newToken else { return }
+        UserDefaults.standard.set(newToken, forKey: Keys.apiToken)
     }
     
-    // MARK: - Realm delete Data
-    private func deletePieChartDataFromRealm() {
-    
-        realm.beginWrite()
-        realm.delete(realm.objects(PieChartModel.self))
-        try! realm.commitWrite()
-    }
-    
-    // MARK: - Realm READ data
-    func readPieChartDataRealm(completion: @escaping (_ totalSpace: Int?, _ usedSpace: Int?) -> Void) {
-        
-        let someDate = self.realm.objects(PieChartModel.self)
-        let usedData = someDate[0].busy
-        let totalData = someDate[0].free
-        completion(totalData, usedData)
-    }
-    
-    // MARK: - Update PieChart data
-    
-    func updatePieChartData(
-        completion: @escaping (_ totalSpace: Int?, _ usedSpace: Int?) -> Void,
-        errorHandler: @escaping () -> Void
-    ) {
-        
-        guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
-        var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk")
-        
-        guard let url = components?.url else { return }
-        var request = URLRequest(url: url)
-        request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data else {
-                print("Error: \(String(describing: error))")
-                errorHandler()
-                return }
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
-            guard let newFiles = try? decoder.decode(DiskSpaceResponse.self, from: data) else { return }
-            guard let total = newFiles.totalSpace, let used = newFiles.usedSpace else { return }
-            DispatchQueue.main.async {
-                self.deletePieChartDataFromRealm()
-                self.savePieChartDataUsingRealm(used: used, total: total)
-            }
-            completion(total, used)
+    // MARK: - Did tap on YES Alert button
+    func didTapOnYesAlert() {
+        UserDefaults.standard.removeObject(forKey: Keys.apiToken)
+        print("Did token deleted? = \(Keys.apiToken.isEmpty)")
+        Core.shared.setNewUser()
+        print("Did user deleted? = \(Core.shared.isNewUser())")
+        DispatchQueue.main.async {
+            let cookiesCleaner = WebCacheCleaner()
+            cookiesCleaner.clean()
         }
-        task.resume()
     }
 }
 

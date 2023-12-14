@@ -121,7 +121,7 @@ final class ProfileViewController: UIViewController, ChartViewDelegate {
         allMemorySpaceDataEntry = [usedDataEntry, totalDataEntry]
         let set = PieChartDataSet(entries: allMemorySpaceDataEntry)
         let colors = [Constants.Colors.pink, Constants.Colors.gray]
-        set.colors = colors as! [NSUIColor]
+        set.colors = colors as? [NSUIColor] ?? [UIColor()]
         let data = PieChartData(dataSet: set)
         pieChart.data = data
         pieChart.data?.setDrawValues(false)
@@ -147,8 +147,8 @@ final class ProfileViewController: UIViewController, ChartViewDelegate {
         self.tabBarController?.tabBar.tintColor = Constants.Colors.blueSpecial
         guard let items = tabBarController?.tabBar.items else { return }
         let images = [Constants.Image.tabBar1, Constants.Image.tabBar2, Constants.Image.tabBar3]
-        for x in 0..<items.count {
-            items[x].image = images[x]
+        for xxx in 0..<items.count {
+            items[xxx].image = images[xxx]
         }
     }
     
@@ -320,21 +320,12 @@ final class ProfileViewController: UIViewController, ChartViewDelegate {
         } errorHandler: {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
                 guard let self = self else { return }
-                self.updateDataIfNotInternetConnection()
                 self.activityIndicator.stopAnimating()
                 self.activityIndicatorView.removeFromSuperview()
                 self.configureErrorView()
                 self.updatePieChart()
                 self.mainView.isHidden = false
             }
-        }
-    }
-    
-    private func updateDataIfNotInternetConnection() {
-        
-        presenter.readPieChartDataRealm { totalSpace, usedSpace in
-            self.totalSpaceGb = totalSpace ?? 0
-            self.usedSpaceGb = usedSpace ?? 0
         }
     }
 }

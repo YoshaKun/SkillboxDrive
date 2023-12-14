@@ -9,24 +9,28 @@ import Foundation
 
 final class LatestCellModel {
     
-    func getImageForCell(
-        urlStr: String,
-        completion: @escaping (Data) -> Void
-    ) {
-        
-        guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
-        let components = URLComponents(string: "\(urlStr)")
+    // MARK: - ParseDate
+    func parseDate(_ str: String) -> Date {
+        let dateFormat = DateFormatter()
+        dateFormat.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        let date = dateFormat.date(from: str) ?? Date()
 
-        guard let url = components?.url else { return }
-        var request = URLRequest(url: url)
-        request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
-
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard let data = data else {
-                print("Error: \(String(describing: error))")
-                return }
-            completion(data)
-        }
-        task.resume()
+        return date
+    }
+    
+    func getOnlyDateRu(date: Date) -> String {
+        let dateFormat = DateFormatter()
+        dateFormat.locale = Locale(identifier: "ru_RU")
+        dateFormat.dateStyle = .short
+        dateFormat.timeStyle = .none
+        return dateFormat.string(from: date)
+    }
+    
+    func getOnlyTime(date: Date) -> String {
+        let dateFormat = DateFormatter()
+        dateFormat.locale = Locale(identifier: "ru_RU")
+        dateFormat.dateStyle = .none
+        dateFormat.timeStyle = .short
+        return dateFormat.string(from: date)
     }
 }

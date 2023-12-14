@@ -25,6 +25,7 @@ protocol LatestPresenterProtocol {
     )
     func isPaginating() -> Bool
     func changePaginatingStateOnFalse()
+    func determinationOfFileType(path: String) -> String
 }
 
 final class LatestPresenter: LatestPresenterProtocol {
@@ -35,39 +36,48 @@ final class LatestPresenter: LatestPresenterProtocol {
         completion: @escaping () -> Void,
         noInternet: @escaping () -> Void
     ) {
-        
-        model.getLatestFiles(
+        NetworkService.shared.getLatestFiles(
             completion: completion,
             noInternet: noInternet
         )
     }
     
     func getModelData() -> LatestFiles {
-        
-        let data = model.modelData
-        if data.items!.isEmpty {
-            print("сработал метод readPublicFilesRealm")
-            return model.readPublicFilesRealm()
-        }
+        let data = NetworkService.shared.modelDataLatest
         return data
     }
     
-    func getFileFromPath(path: String?, completion: @escaping () -> Void, errorHandler: @escaping () -> Void) {
-        
-        model.getFileFromPath(path: path, completion: completion, errorHandler: errorHandler)
+    func getFileFromPath(
+        path: String?,
+        completion: @escaping () -> Void,
+        errorHandler: @escaping () -> Void
+    ) {
+        NetworkService.shared.getFileFromPath(
+            path: path,
+            completion: completion,
+            errorHandler: errorHandler
+        )
     }
     
-    func additionalGetingLatestFiles(completion: @escaping () -> Void, errorHandler: @escaping () -> Void) {
-        
-        model.additionalGetingLatestFiles(completion: completion, errorHandler: errorHandler)
+    func additionalGetingLatestFiles(
+        completion: @escaping () -> Void,
+        errorHandler: @escaping () -> Void
+    ) {
+        NetworkService.shared.additionalGetingLatestFiles(
+            completion: completion,
+            errorHandler: errorHandler
+        )
     }
     
     func isPaginating() -> Bool {
-        
-        return model.isPaginating
+        return NetworkService.shared.isPaginatingLatest
     }
     
     func changePaginatingStateOnFalse() {
-        model.isPaginating = false
+        NetworkService.shared.isPaginatingLatest = false
+    }
+    
+    func determinationOfFileType(path: String) -> String {
+        model.determinationOfFileType(path: path)
     }
 }

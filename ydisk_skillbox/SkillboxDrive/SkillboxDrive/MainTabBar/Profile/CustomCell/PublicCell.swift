@@ -18,6 +18,7 @@ final class PublicCell: UITableViewCell {
     // MARK: - Delegate
     weak var delegate: PublicCellDelegate?
     
+    // MARK: - Presenter initializing
     private let presenter: PublicCellPresenterProtocol = PublicCellPresenter()
     
     // MARK: - Private variables
@@ -85,7 +86,6 @@ final class PublicCell: UITableViewCell {
         // MARK: - Добавить метод presentAlert
         guard let nameOfCell = nameFile.text, let pathOfCell = pathOfFileOrFolder.text else { return }
         delegate?.didTapButton(with: nameOfCell, and: pathOfCell)
-        print("Сработал метод didTappedOnMenuButton ячейки \(nameOfCell)")
     }
     
     private func setupConstraints() {
@@ -128,31 +128,6 @@ final class PublicCell: UITableViewCell {
         ])
     }
     
-    // MARK: - ParseDate
-    private func parseDate(_ str: String) -> Date {
-        let dateFormat = DateFormatter()
-        dateFormat.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        let date = dateFormat.date(from: str) ?? Date()
-
-        return date
-    }
-    
-    private func getOnlyDateRu(date: Date) -> String {
-        let dateFormat = DateFormatter()
-        dateFormat.locale = Locale(identifier: "ru_RU")
-        dateFormat.dateStyle = .short
-        dateFormat.timeStyle = .none
-        return dateFormat.string(from: date)
-    }
-    
-    private func getOnlyTime(date: Date) -> String {
-        let dateFormat = DateFormatter()
-        dateFormat.locale = Locale(identifier: "ru_RU")
-        dateFormat.dateStyle = .none
-        dateFormat.timeStyle = .short
-        return dateFormat.string(from: date)
-    }
-    
     // MARK: - ConfigureCell
     
     func configureCell(_ viewModel: LatestItems) {
@@ -165,9 +140,9 @@ final class PublicCell: UITableViewCell {
         
         let converter = Units.init(bytes: Int64(fileSize))
         let str = converter.getReadableUnit()
-        let date = parseDate(initialDate)
-        let onlyDate = getOnlyDateRu(date: date)
-        let time = getOnlyTime(date: date)
+        let date = presenter.parseDate(initialDate)
+        let onlyDate = presenter.getOnlyDateRu(date: date)
+        let time = presenter.getOnlyTime(date: date)
         
         nameFile.text = name
         sizeFile.text = str

@@ -22,8 +22,6 @@ final class AllFilesViewController: UIViewController {
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = .systemBackground
         configureNavigationBar()
         configureActivityIndicatorView()
         updateView()
@@ -33,6 +31,7 @@ final class AllFilesViewController: UIViewController {
     private func configureNavigationBar() {
     
         self.navigationItem.title = Constants.Text.ThirdVC.title
+        view.backgroundColor = .systemBackground
     }
 
     private func configureActivityIndicatorView() {
@@ -161,19 +160,6 @@ final class AllFilesViewController: UIViewController {
             }
         }
     }
-    
-    // MARK: - DeterminationOfFileType
-    private func determinationOfFileType(path: String) -> String {
-        
-        guard let index = path.firstIndex(of: ".") else {
-            let str = "dir"
-            return str}
-        var fileType = path[index ..< path.endIndex]
-        fileType.removeFirst()
-        let newString = String(fileType)
-        return newString
-    }
-    
     // MARK: - Footer View
     private func createLoadingFooterView() -> UIView {
         
@@ -220,7 +206,7 @@ extension AllFilesViewController: UITableViewDelegate {
         guard let created = viewModel[indexPath.row].created else { return }
         let fileUrl = viewModel[indexPath.row].file ?? "ljshdlgfhj"
         guard let pathItem = viewModel[indexPath.row].path else { return }
-        let fileType = determinationOfFileType(path: pathItem)
+        let fileType = presenter.determinationOfFileType(path: pathItem)
 
         let folder = "dir"
         if fileType == folder {

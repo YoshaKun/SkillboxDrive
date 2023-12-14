@@ -1,2 +1,5 @@
 excluded:
 - Pods
+type_body_length:
+- 600 # warning
+- 900 # error

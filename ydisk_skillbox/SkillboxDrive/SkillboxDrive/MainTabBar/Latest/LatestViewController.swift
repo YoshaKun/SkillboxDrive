@@ -163,16 +163,6 @@ final class LatestViewController: UIViewController {
         
         return footerView
     }
-    
-    // MARK: - DeterminationOfFileType
-    private func determinationOfFileType(path: String) -> String {
-        
-        let index = path.firstIndex(of: ".") ?? path.endIndex
-        var fileType = path[index ..< path.endIndex]
-        fileType.removeFirst()
-        let newString = String(fileType)
-        return newString
-    }
 }
 
 extension LatestViewController: UITableViewDataSource {
@@ -206,7 +196,7 @@ extension LatestViewController: UITableViewDelegate {
         guard let created = viewModel[indexPath.row].created else { return }
         guard let fileUrl = viewModel[indexPath.row].file else { return }
         guard let pathItem = viewModel[indexPath.row].path else { return }
-        let fileType = determinationOfFileType(path: pathItem)
+        let fileType = presenter.determinationOfFileType(path: pathItem)
         
         presenter.getFileFromPath(path: pathItem) {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in

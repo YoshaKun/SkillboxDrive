@@ -51,9 +51,6 @@ final class OpenPublicFolderVC: UIViewController {
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.title = titleOfFolder
-        view.backgroundColor = .systemBackground
         configureNavigationBar()
         noFilesView.removeFromSuperview()
         configureActivityIndicatorView()
@@ -61,7 +58,6 @@ final class OpenPublicFolderVC: UIViewController {
     }
     
     private func configureNavigationBar() {
-    
         backButton = UIBarButtonItem(
             image: Constants.Image.backArrow,
             style: .plain,
@@ -70,10 +66,11 @@ final class OpenPublicFolderVC: UIViewController {
         )
         backButton.tintColor = Constants.Colors.gray
         navigationItem.leftBarButtonItem = backButton
+        view.backgroundColor = .systemBackground
+        self.title = titleOfFolder
     }
     
     @objc private func didTappedOnBackButton() {
-        
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -92,7 +89,6 @@ final class OpenPublicFolderVC: UIViewController {
         emptyFolderErrorView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            
             emptyFolderErrorView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             emptyFolderErrorView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             emptyFolderErrorView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -130,7 +126,6 @@ final class OpenPublicFolderVC: UIViewController {
     }
     
     private func configureNoFilesView() {
-        
         noFilesImageView.image = Constants.Image.noFiles
         noFilesImageView.contentMode = .scaleAspectFit
         
@@ -149,7 +144,6 @@ final class OpenPublicFolderVC: UIViewController {
     }
     
     private func configureFileError() {
-        
         fileNotFound.text = Constants.Text.fileError
         fileNotFound.textColor = .black
         fileNotFound.numberOfLines = 0
@@ -163,7 +157,6 @@ final class OpenPublicFolderVC: UIViewController {
         emptyFolderErrorView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            
             emptyFolderErrorView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             emptyFolderErrorView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             emptyFolderErrorView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -178,14 +171,12 @@ final class OpenPublicFolderVC: UIViewController {
     }
     
     @objc private func didTappedOnUpdateButton() {
-        
         self.noFilesView.removeFromSuperview()
         configureActivityIndicatorView()
         updateView()
     }
     
     private func configureNoFilesConstraints() {
-        
         let offsetForImage = view.frame.size.width / 2
         let offsetForDescription = view.frame.size.width / 4
         
@@ -224,13 +215,11 @@ final class OpenPublicFolderVC: UIViewController {
     
     // MARK: - UpdateView - default
     private func updateView() {
-
         configureTableView()
         updateDataOfTableView()
     }
     
     private func configureTableView() {
-        
         refreshControl.addTarget(self, action: #selector(didSwipeToRefresh), for: .valueChanged)
         tableView.refreshControl = self.refreshControl
         tableView.register(PublicCell.self, forCellReuseIdentifier: publicCell)
@@ -249,7 +238,6 @@ final class OpenPublicFolderVC: UIViewController {
     }
     
     private func updateDataOfTableView() {
-        
         presenter.updateDataTableView(publicUrl: varPublicUrl) {
             DispatchQueue.main.async {
                 self.errorView.removeFromSuperview()
@@ -295,7 +283,6 @@ final class OpenPublicFolderVC: UIViewController {
     
     // MARK: - Error View
     private func configureErrorView() {
-        
         errorLabel.text = Constants.Text.errorInternet
         errorLabel.font = .systemFont(ofSize: 15, weight: .regular)
         errorLabel.textColor = .white
@@ -322,7 +309,6 @@ final class OpenPublicFolderVC: UIViewController {
     }
     
     private func configureConstraints() {
-        
         tableView.isHidden = true
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
@@ -336,7 +322,6 @@ final class OpenPublicFolderVC: UIViewController {
     }
     
     private func createActionSheet(titleCell: String, path: String?) -> UIAlertController {
-        
         let cellPath = path ?? ""
         let folder = pathFolder ?? ""
         let allPath = folder + cellPath
@@ -364,21 +349,8 @@ final class OpenPublicFolderVC: UIViewController {
         return alert
     }
     
-    // MARK: - DeterminationOfFileType
-    private func determinationOfFileType(path: String) -> String {
-        
-        guard let index = path.firstIndex(of: ".") else {
-            let str = "dir"
-            return str}
-        var fileType = path[index ..< path.endIndex]
-        fileType.removeFirst()
-        let newString = String(fileType)
-        return newString
-    }
-    
     // MARK: - Footer view
     private func createLoadingFooterView() -> UIView {
-        
         let footerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 50))
         let spinner = UIActivityIndicatorView()
         spinner.center = footerView.center
@@ -389,13 +361,13 @@ final class OpenPublicFolderVC: UIViewController {
     }
 }
 
+// MARK: - UITableViewDataSource
 extension OpenPublicFolderVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return presenter.getModelData().items?.count ?? 0
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: publicCell) as? PublicCell
         guard let viewModel = presenter.getModelData().items, viewModel.count > indexPath.row else {
@@ -409,45 +381,56 @@ extension OpenPublicFolderVC: UITableViewDataSource {
     }
 }
 
+// MARK: - UITableViewDelegate
 extension OpenPublicFolderVC: UITableViewDelegate {
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         configureActivityIndicatorView()
-        
         guard let viewModel = presenter.getModelData().items else {
             print("error getModelData")
-            return }
-        guard let strUrl = viewModel[indexPath.row].public_url else {
+            return
+        }
+        guard let strUrl = viewModel[indexPath.row].publicUrl else {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
                 guard let self = self else { return }
                 self.activityIndicator.stopAnimating()
                 self.activityIndicatorView.removeFromSuperview()
                 self.configureFileError()
             }
-            return }
+            return
+        }
         guard let title = viewModel[indexPath.row].name else { return }
         guard let created = viewModel[indexPath.row].created else { return }
         let fileUrl = viewModel[indexPath.row].file ?? "ljshdlgfhj"
         guard let pathItem = viewModel[indexPath.row].path else { return }
         let path = (pathFolder ?? "") + pathItem
-        let fileType = determinationOfFileType(path: pathItem)
+        let fileType = presenter.determinationOfFileType(path: pathItem)
 
         let folder = "dir"
         if fileType == folder {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
                 guard let self = self else { return }
-                let vc = OpenPublicFolderVC(title: title, type: fileType, publicUrl: strUrl, pathFolder: path)
-                self.navigationController?.pushViewController(vc, animated: true)
+                let someVC = OpenPublicFolderVC(
+                    title: title,
+                    type: fileType,
+                    publicUrl: strUrl,
+                    pathFolder: path
+                )
+                self.navigationController?.pushViewController(someVC, animated: true)
                 self.activityIndicator.stopAnimating()
                 self.activityIndicatorView.removeFromSuperview()
             }
         } else {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
                 guard let self = self else { return }
-                let vc = ViewingScreenViewController(title: title, created: created, type: fileType, file: fileUrl, path: path)
-                vc.modalPresentationStyle = .fullScreen
-                self.navigationController?.present(vc, animated: true, completion: {
+                let someVc = ViewingScreenViewController(
+                    title: title,
+                    created: created,
+                    type: fileType,
+                    file: fileUrl,
+                    path: path
+                )
+                someVc.modalPresentationStyle = .fullScreen
+                self.navigationController?.present(someVc, animated: true, completion: {
                     self.activityIndicator.stopAnimating()
                     self.activityIndicatorView.removeFromSuperview()
                 })
@@ -456,24 +439,22 @@ extension OpenPublicFolderVC: UITableViewDelegate {
     }
 }
 
+// MARK: - PublicCellDelegate
 extension OpenPublicFolderVC: PublicCellDelegate {
-    
     func didTapButton(with title: String, and path: String?) {
         let alert = self.createActionSheet(titleCell: title, path: path)
         self.present(alert, animated: true, completion: nil)
     }
 }
 
+// MARK: - UIScrollViewDelegate
 extension OpenPublicFolderVC: UIScrollViewDelegate {
-    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
         let currentOffset = scrollView.contentOffset.y
         let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
         let deltaOffset = maximumOffset - currentOffset
         
         if deltaOffset <= 0, currentOffset >= 50 {
-
             guard !self.presenter.isPaginating() else {
                 print("We are already fetching more data")
                 return

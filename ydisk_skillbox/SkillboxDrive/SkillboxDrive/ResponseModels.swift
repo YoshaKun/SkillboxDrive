@@ -33,7 +33,7 @@ struct LatestItems: Codable {
     let type: String?
     let size: Int?
     let preview: String?
-    let public_url: String?
+    let publicUrl: String?
 }
 
 // MARK: - Images

@@ -24,7 +24,6 @@ final class LatestCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
         configureViews()
         setupConstraints()
     }
@@ -34,7 +33,6 @@ final class LatestCell: UITableViewCell {
     }
     
     private func configureViews() {
-        
         nameFile.font = .systemFont(ofSize: 15, weight: .regular)
         nameFile.textColor = .black
         
@@ -85,7 +83,6 @@ final class LatestCell: UITableViewCell {
         thirdStackView.addArrangedSubview(secondStackView)
         
         NSLayoutConstraint.activate([
-            
             imageViewFile.widthAnchor.constraint(equalToConstant: 30),
             imageViewFile.heightAnchor.constraint(equalToConstant: 30),
             
@@ -99,42 +96,14 @@ final class LatestCell: UITableViewCell {
         ])
     }
     
-    // MARK: - ParseDate
-    private func parseDate(_ str: String) -> Date {
-        let dateFormat = DateFormatter()
-        dateFormat.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        let date = dateFormat.date(from: str) ?? Date()
-
-        return date
-    }
-    
-    private func getOnlyDateRu(date: Date) -> String {
-        let dateFormat = DateFormatter()
-        dateFormat.locale = Locale(identifier: "ru_RU")
-        dateFormat.dateStyle = .short
-        dateFormat.timeStyle = .none
-        return dateFormat.string(from: date)
-    }
-    
-    private func getOnlyTime(date: Date) -> String {
-        let dateFormat = DateFormatter()
-        dateFormat.locale = Locale(identifier: "ru_RU")
-        dateFormat.dateStyle = .none
-        dateFormat.timeStyle = .short
-        return dateFormat.string(from: date)
-    }
-    
     // MARK: - ConfigureCell
-    
     func configureCell(_ viewModel: LatestItems) {
-        
         let converter = Units.init(bytes: Int64(viewModel.size ?? 0))
         let str = converter.getReadableUnit()
         guard let initialDate = viewModel.created else { return }
-        let date = parseDate(initialDate)
-        
-        let onlyDate = getOnlyDateRu(date: date)
-        let time = getOnlyTime(date: date)
+        let date = presenter.parseDate(initialDate)
+        let onlyDate = presenter.getOnlyDateRu(date: date)
+        let time = presenter.getOnlyTime(date: date)
         
         nameFile.text = viewModel.name
         sizeFile.text = str

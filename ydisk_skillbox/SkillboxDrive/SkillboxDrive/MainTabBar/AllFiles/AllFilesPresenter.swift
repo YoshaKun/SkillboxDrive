@@ -23,13 +23,7 @@ protocol AllFilesPresenterProtocol {
         errorHandler: @escaping () -> Void
     )
     func changePaginatingStateOnFalse()
-    
-    func getDataFolder(
-        path: String?,
-        completion: @escaping () -> Void,
-        errorHandler: @escaping () -> Void,
-        noInternet: @escaping () -> Void
-    )
+    func determinationOfFileType(path: String) -> String
 }
 
 final class AllFilesPresenter: AllFilesPresenterProtocol {
@@ -37,12 +31,7 @@ final class AllFilesPresenter: AllFilesPresenterProtocol {
     private var model: AllFilesModel = AllFilesModel()
     
     func getModelData() -> LatestFiles {
-        
-        let data = model.modelData
-        if data.items!.isEmpty {
-            print("сработал метод readPublicFilesRealm")
-            return model.readPublicFilesRealm()
-        }
+        let data = NetworkService.shared.modelDataAllFiles
         return data
     }
     
@@ -50,42 +39,32 @@ final class AllFilesPresenter: AllFilesPresenterProtocol {
                               errorHandler: @escaping () -> Void,
                               noInternet: @escaping () -> Void
     ) {
-        model.getAllFiles(completion: completion, 
-                          errorHandler: errorHandler,
-                          noInternet: noInternet
+        NetworkService.shared.getAllFiles(
+            completion: completion,
+            errorHandler: errorHandler,
+            noInternet: noInternet
         )
     }
     
     func isPaginating() -> Bool {
         
-        return model.isPaginating
+        return NetworkService.shared.isPaginatingAllFiles
     }
     
     func additionalGetingAllFiles (completion: @escaping () -> Void, 
                                    errorHandler: @escaping () -> Void
     ) {
-        model.additionalGetingAllFiles(completion: completion, 
-                                       errorHandler: errorHandler
+        NetworkService.shared.additionalGetingAllFiles(
+            completion: completion,
+            errorHandler: errorHandler
         )
     }
     
     func changePaginatingStateOnFalse() {
-        
-        model.isPaginating = false
+        NetworkService.shared.isPaginatingAllFiles = false
     }
     
-    func getDataFolder(
-        path: String?,
-        completion: @escaping () -> Void,
-        errorHandler: @escaping () -> Void,
-        noInternet: @escaping () -> Void
-    ) {
-        
-        model.getDataFolder(
-            path: path,
-            completion: completion,
-            errorHandler: errorHandler,
-            noInternet: noInternet
-        )
+    func determinationOfFileType(path: String) -> String {
+        model.determinationOfFileType(path: path)
     }
 }

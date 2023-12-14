@@ -8,6 +8,6 @@ target 'SkillboxDrive' do
   # Pods for SkillboxDrive
 
 pod 'DGCharts'
-pod 'RealmSwift'
+pod 'SwiftLint'
 
 end

@@ -223,18 +223,6 @@ final class OpenFolderVC: UIViewController {
         }
     }
     
-    // MARK: - DeterminationOfFileType
-    private func determinationOfFileType(path: String) -> String {
-        
-        guard let index = path.firstIndex(of: ".") else {
-            let str = "dir"
-            return str}
-        var fileType = path[index ..< path.endIndex]
-        fileType.removeFirst()
-        let newString = String(fileType)
-        return newString
-    }
-    
     // MARK: - Footer View
     private func createLoadingFooterView() -> UIView {
         
@@ -281,7 +269,7 @@ extension OpenFolderVC: UITableViewDelegate {
         guard let created = viewModel[indexPath.row].created else { return }
         let fileUrl = viewModel[indexPath.row].file ?? "ljshdlgfhj"
         guard let pathItem = viewModel[indexPath.row].path else { return }
-        let fileType = determinationOfFileType(path: pathItem)
+        let fileType = presenter.determinationOfFileType(path: pathItem)
 
         let folder = "dir"
         if fileType == folder {
@@ -309,7 +297,6 @@ extension OpenFolderVC: UITableViewDelegate {
 extension OpenFolderVC: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
         let currentOffset = scrollView.contentOffset.y
         let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
         let deltaOffset = maximumOffset - currentOffset

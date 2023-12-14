@@ -27,6 +27,7 @@ protocol OpenFolderPresenterProtocol {
     )
     
     func changePaginatingStateOnFalse()
+    func determinationOfFileType(path: String) -> String
 }
 
 final class OpenFolderPresenter: OpenFolderPresenterProtocol {
@@ -34,8 +35,7 @@ final class OpenFolderPresenter: OpenFolderPresenterProtocol {
     private var model: OpenFolderModel = OpenFolderModel()
     
     func getModelData() -> LatestFiles {
-        
-        let data = model.modelData
+        let data = NetworkService.shared.modelDataAllOpenFolder
         return data
     }
     
@@ -45,8 +45,7 @@ final class OpenFolderPresenter: OpenFolderPresenterProtocol {
         errorHandler: @escaping () -> Void,
         noInternet: @escaping () -> Void
     ) {
-        
-        model.getAllFiles(
+        NetworkService.shared.getAllFilesOpenFolder(
             path: path,
             completion: completion,
             errorHandler: errorHandler,
@@ -56,7 +55,7 @@ final class OpenFolderPresenter: OpenFolderPresenterProtocol {
     
     func isPaginating() -> Bool {
         
-        return model.isPaginating
+        return NetworkService.shared.isPaginatingAllOpenFolder
     }
     
     func additionalGettingFiles(
@@ -64,7 +63,7 @@ final class OpenFolderPresenter: OpenFolderPresenterProtocol {
         completion: @escaping () -> Void,
         errorHandler: @escaping () -> Void
     ) {
-        model.additionalGettingFiles(
+        NetworkService.shared.additionalGettingAllFilesOpenFolder(
             path: path,
             completion: completion,
             errorHandler: errorHandler
@@ -72,8 +71,11 @@ final class OpenFolderPresenter: OpenFolderPresenterProtocol {
     }
     
     func changePaginatingStateOnFalse() {
-        
-        model.isPaginating = false
+        NetworkService.shared.isPaginatingAllOpenFolder = false
+    }
+    
+    func determinationOfFileType(path: String) -> String {
+        model.determinationOfFileType(path: path)
     }
 }
 

@@ -238,35 +238,27 @@ final class ViewingScreenViewController: UIViewController {
         fileView.addGestureRecognizer(tapRecognizer)
         fileView.isUserInteractionEnabled = true
     }
-    
     @objc private func handlePanGest(recognizer: UIPanGestureRecognizer) {
-        
         let translation = recognizer.translation(in: fileView)
         if let view = recognizer.view {
             view.center = CGPoint(x: view.center.x + translation.x, y: view.center.y + translation.y)
         }
         recognizer.setTranslation(CGPoint.zero, in: self.view)
     }
-    
     @objc private func handleDoubleTapGest(recognizer: UITapGestureRecognizer) {
-        
         print("double tap")
-        let x = CGFloat(2)
-        let y = CGFloat(2)
-        fileView.transform = CGAffineTransform(scaleX: x, y: y)
+        let xCharacter = CGFloat(2)
+        let yCharacter = CGFloat(2)
+        fileView.transform = CGAffineTransform(scaleX: xCharacter, y: yCharacter)
     }
-    
     @objc private func handleTapGest(recognizer: UITapGestureRecognizer) {
-        
         print("one tap")
         guard let targetView = recognizer.view else { return }
         targetView.transform = CGAffineTransform.identity
         targetView.center = self.view.center
     }
-    
     // MARK: - Configure Views
     private func configureViews() {
-    
         backButton.setImage(Constants.Image.backArrow, for: .normal)
         backButton.addTarget(self, action: #selector(didTapOnBackButton), for: .touchUpInside)
         
