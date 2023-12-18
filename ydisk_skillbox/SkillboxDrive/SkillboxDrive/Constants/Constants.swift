@@ -18,7 +18,7 @@ enum Constants {
         static let tabBar2 = UIImage(named: "LatestPicture")
         static let tabBar3 = UIImage(named: "AllFilesPicture")
         static let menu = UIImage(named: "Menu")
-        static let arrow = UIImage(named: "Arrow")
+        static let arrow = UIImage(named: "arrow")
         static let noFiles = UIImage(named: "NoFiles")
         static let backArrow = UIImage(named: "BackArrow")
         static let folder = UIImage(named: "Folder")
