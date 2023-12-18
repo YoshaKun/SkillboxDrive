@@ -50,7 +50,7 @@ final class LoginScreenPresenter: LoginScreenPresenterProtocol {
         
         let tabBarVC = UITabBarController()
         let firstVC = UINavigationController(rootViewController: ProfileViewController())
-        let secondVC = UINavigationController(rootViewController: LatestViewController())
+        let secondVC = UINavigationController(rootViewController: LatestBuilder.build())
         let thirdVC = UINavigationController(rootViewController: AllFilesViewController())
         tabBarVC.setViewControllers([firstVC, secondVC, thirdVC], animated: false)
         tabBarVC.modalPresentationStyle = .fullScreen

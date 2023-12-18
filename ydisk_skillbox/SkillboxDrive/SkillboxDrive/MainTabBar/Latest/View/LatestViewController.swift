@@ -11,13 +11,24 @@ final class LatestViewController: UIViewController {
     
     // MARK: - Private variables
     private let latestCell = "latestCell"
-    private let presenter: LatestPresenterProtocol = LatestPresenter()
+    private let presenter: LatestPresenterInput
     private let refreshControl = UIRefreshControl()
     private var activityIndicator = UIActivityIndicatorView()
     private var activityIndicatorView = UIView()
     private var tableView = UITableView(frame: CGRect.zero, style: UITableView.Style.grouped)
     private var errorView = UIView()
     private var errorLabel = UILabel()
+    
+    // MARK: - Initialization
+    
+    init(presenter: LatestPresenterInput) {
+        self.presenter = presenter
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
@@ -129,27 +140,16 @@ final class LatestViewController: UIViewController {
 
     private func updateDataOfTableView() {
         
-        presenter.updateDataTableView {
-            DispatchQueue.main.async {
-                self.errorView.removeFromSuperview()
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-                guard let self = self else { return }
-                self.tableView.reloadData()
-                self.activityIndicator.stopAnimating()
-                self.activityIndicatorView.removeFromSuperview()
-                self.tableView.isHidden = false
-            }
-        } noInternet: {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-                guard let self = self else { return }
-                self.activityIndicator.stopAnimating()
-                self.activityIndicatorView.removeFromSuperview()
-                self.tableView.reloadData()
-                self.tableView.isHidden = false
-                self.configureErrorView()
-            }
-        }
+        presenter.updateDataTableView()
+    }
+    
+    // MARK: - DeterminationOfFileType
+    func determinationOfFileType(path: String) -> String {
+        let index = path.firstIndex(of: ".") ?? path.endIndex
+        var fileType = path[index ..< path.endIndex]
+        fileType.removeFirst()
+        let newString = String(fileType)
+        return newString
     }
     
     // MARK: - Footer view
@@ -162,6 +162,78 @@ final class LatestViewController: UIViewController {
         spinner.startAnimating()
         
         return footerView
+    }
+}
+
+extension LatestViewController: LatestPresenterOutput {
+    
+    func didSuccessUpdateTableView() {
+        DispatchQueue.main.async {
+            self.errorView.removeFromSuperview()
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            guard let self = self else { return }
+            self.tableView.reloadData()
+            self.activityIndicator.stopAnimating()
+            self.activityIndicatorView.removeFromSuperview()
+            self.tableView.isHidden = false
+        }
+    }
+    
+    func noInternetUpdateTableView() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            guard let self = self else { return }
+            self.activityIndicator.stopAnimating()
+            self.activityIndicatorView.removeFromSuperview()
+            self.tableView.reloadData()
+            self.tableView.isHidden = false
+            self.configureErrorView()
+        }
+    }
+    
+    func didSuccessGetFileFromPath(
+        title: String?,
+        created: String?,
+        type: String?,
+        file: String?,
+        path: String?
+    ) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            guard let self = self else { return }
+            let vc = ViewingScreenViewController(title: title, created: created, type: type, file: file, path: path)
+            vc.modalPresentationStyle = .fullScreen
+            self.navigationController?.present(vc, animated: true, completion: {
+                self.activityIndicator.stopAnimating()
+                self.activityIndicatorView.removeFromSuperview()
+            })
+        }
+    }
+    
+    func didFailureGetFileFromPath() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            guard let self = self else { return }
+            self.updateDataOfTableView()
+            self.activityIndicator.stopAnimating()
+            self.activityIndicatorView.removeFromSuperview()
+        }
+    }
+    
+    func didSuccessAdditionalGettingFiles() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            guard let self = self else { return }
+            self.tableView.tableFooterView = nil
+            self.tableView.reloadData()
+            self.presenter.changePaginatingStateOnFalse()
+        }
+    }
+    
+    func didFailureAdditionalGettingFiles() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            guard let self = self else { return }
+            self.tableView.tableFooterView = nil
+            self.tableView.reloadData()
+            self.presenter.changePaginatingStateOnFalse()
+        }
     }
 }
 
@@ -196,26 +268,15 @@ extension LatestViewController: UITableViewDelegate {
         guard let created = viewModel[indexPath.row].created else { return }
         guard let fileUrl = viewModel[indexPath.row].file else { return }
         guard let pathItem = viewModel[indexPath.row].path else { return }
-        let fileType = presenter.determinationOfFileType(path: pathItem)
+        let fileType = determinationOfFileType(path: pathItem)
         
-        presenter.getFileFromPath(path: pathItem) {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-                guard let self = self else { return }
-                let vc = ViewingScreenViewController(title: title, created: created, type: fileType, file: fileUrl, path: pathItem)
-                vc.modalPresentationStyle = .fullScreen
-                self.navigationController?.present(vc, animated: true, completion: {
-                    self.activityIndicator.stopAnimating()
-                    self.activityIndicatorView.removeFromSuperview()
-                })
-            }
-        } errorHandler: {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-                guard let self = self else { return }
-                self.updateDataOfTableView()
-                self.activityIndicator.stopAnimating()
-                self.activityIndicatorView.removeFromSuperview()
-            }
-        }
+        presenter.getFileFromPath(
+            title: title,
+            created: created,
+            type: fileType,
+            file: fileUrl,
+            path: pathItem
+        )
     }
 }
 
@@ -234,20 +295,7 @@ extension LatestViewController: UIScrollViewDelegate {
                 return
             }
             self.tableView.tableFooterView = createLoadingFooterView()
-            self.presenter.additionalGetingLatestFiles { [weak self] in
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    self?.tableView.tableFooterView = nil
-                    self?.tableView.reloadData()
-                    self?.presenter.changePaginatingStateOnFalse()
-                }
-            } errorHandler: { [weak self] in
-                print("additional errorHandler")
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    self?.tableView.tableFooterView = nil
-                    self?.tableView.reloadData()
-                    self?.presenter.changePaginatingStateOnFalse()
-                }
-            }
+            self.presenter.additionalGetingLatestFiles()
         }
     }
 }

@@ -390,7 +390,7 @@ class NetworkService {
         task.resume()
     }
     // Get data for open files in Latest screen
-    func getFileFromPath(
+    func getFileFromPathOnLatestScreen(
         path: String?,
         completion: @escaping () -> Void,
         errorHandler: @escaping () -> Void
@@ -417,7 +417,7 @@ class NetworkService {
         task.resume()
     }
     // Additional getting latest files (Пагинация)
-    func additionalGetingLatestFiles (
+    func additionalGetingLatestFilesOnLatestScreen (
         completion: @escaping () -> Void,
         errorHandler: @escaping () -> Void
     ) {

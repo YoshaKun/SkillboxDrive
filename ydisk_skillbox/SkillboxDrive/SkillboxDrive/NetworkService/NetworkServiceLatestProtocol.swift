@@ -1,14 +1,15 @@
 //
-//  LatestPresenter.swift
+//  NetworkServiceLatestProtocol.swift
 //  SkillboxDrive
 //
-//  Created by Yosha Kun on 16.11.2023.
+//  Created by Yosha Kun on 18.12.2023.
 //
 
 import Foundation
 
-protocol LatestPresenterProtocol {
-    
+// MARK: - NetworkServiceLatestProtocol
+
+protocol NetworkServiceLatestProtocol: AnyObject {
     func updateDataTableView(
         completion: @escaping () -> Void,
         noInternet: @escaping () -> Void
@@ -19,32 +20,24 @@ protocol LatestPresenterProtocol {
         completion: @escaping () -> Void,
         errorHandler: @escaping () -> Void
     )
-    func additionalGetingLatestFiles (
+    func additionalGetingLatestFiles(
         completion: @escaping () -> Void,
         errorHandler: @escaping () -> Void
     )
     func isPaginating() -> Bool
     func changePaginatingStateOnFalse()
-    func determinationOfFileType(path: String) -> String
 }
 
-final class LatestPresenter: LatestPresenterProtocol {
+// MARK: - extension NetworkService
+
+extension NetworkService: NetworkServiceLatestProtocol {
     
-    private var model: LatestModel = LatestModel()
-    
-    func updateDataTableView(
-        completion: @escaping () -> Void,
-        noInternet: @escaping () -> Void
-    ) {
-        NetworkService.shared.getLatestFiles(
-            completion: completion,
-            noInternet: noInternet
-        )
+    func updateDataTableView(completion: @escaping () -> Void, noInternet: @escaping () -> Void) {
+        getLatestFiles(completion: completion, noInternet: noInternet)
     }
     
     func getModelData() -> LatestFiles {
-        let data = NetworkService.shared.modelDataLatest
-        return data
+        return modelDataLatest
     }
     
     func getFileFromPath(
@@ -52,7 +45,7 @@ final class LatestPresenter: LatestPresenterProtocol {
         completion: @escaping () -> Void,
         errorHandler: @escaping () -> Void
     ) {
-        NetworkService.shared.getFileFromPath(
+        getFileFromPathOnLatestScreen(
             path: path,
             completion: completion,
             errorHandler: errorHandler
@@ -63,21 +56,17 @@ final class LatestPresenter: LatestPresenterProtocol {
         completion: @escaping () -> Void,
         errorHandler: @escaping () -> Void
     ) {
-        NetworkService.shared.additionalGetingLatestFiles(
+        additionalGetingLatestFilesOnLatestScreen(
             completion: completion,
             errorHandler: errorHandler
         )
     }
     
     func isPaginating() -> Bool {
-        return NetworkService.shared.isPaginatingLatest
+        return isPaginatingLatest
     }
     
     func changePaginatingStateOnFalse() {
-        NetworkService.shared.isPaginatingLatest = false
-    }
-    
-    func determinationOfFileType(path: String) -> String {
-        model.determinationOfFileType(path: path)
+        isPaginatingLatest = false
     }
 }

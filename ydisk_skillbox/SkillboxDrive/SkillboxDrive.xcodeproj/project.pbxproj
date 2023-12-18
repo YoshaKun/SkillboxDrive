@@ -18,6 +18,10 @@
 		6B3DC6282B3081C100C9FC83 /* MVPExample in Resources */ = {isa = PBXBuildFile; fileRef = 6B3DC6272B3081C100C9FC83 /* MVPExample */; };
 		6B3DC62D2B3085C600C9FC83 /* OnboardingPresenterInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3DC62C2B3085C600C9FC83 /* OnboardingPresenterInput.swift */; };
 		6B3DC62F2B3087DE00C9FC83 /* OnboardingBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3DC62E2B3087DE00C9FC83 /* OnboardingBuilder.swift */; };
+		6B3DC6362B3090C000C9FC83 /* LatestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3DC6352B3090C000C9FC83 /* LatestBuilder.swift */; };
+		6B3DC6382B3090DD00C9FC83 /* LatestPresenterInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3DC6372B3090DD00C9FC83 /* LatestPresenterInput.swift */; };
+		6B3DC63A2B3090F200C9FC83 /* LatestPresenterOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3DC6392B3090F200C9FC83 /* LatestPresenterOutput.swift */; };
+		6B3DC63C2B30944C00C9FC83 /* NetworkServiceLatestProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3DC63B2B30944C00C9FC83 /* NetworkServiceLatestProtocol.swift */; };
 		6B4C4B812AFCF7B30048D1B3 /* WebCacheCleaner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B4C4B802AFCF7B30048D1B3 /* WebCacheCleaner.swift */; };
 		6B5FFAAF2B03AC9700300019 /* PublicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5FFAAE2B03AC9700300019 /* PublicCell.swift */; };
 		6B68E7BC2B1D10BD003D5DE4 /* OpenPublicFolderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B68E7BB2B1D10BD003D5DE4 /* OpenPublicFolderModel.swift */; };
@@ -42,7 +46,6 @@
 		6BA0F76F2AE95D3D007EE8FC /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA0F76E2AE95D3D007EE8FC /* ProfileModel.swift */; };
 		6BA0F7712AE95D56007EE8FC /* ProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA0F7702AE95D56007EE8FC /* ProfilePresenter.swift */; };
 		6BC3FC382AD71EB800A86FF6 /* LoginScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC3FC372AD71EB800A86FF6 /* LoginScreenViewController.swift */; };
-		6BD139A92B0664EE00BE5B42 /* LatestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD139A82B0664EE00BE5B42 /* LatestModel.swift */; };
 		6BD139AB2B06654800BE5B42 /* LatestPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD139AA2B06654800BE5B42 /* LatestPresenter.swift */; };
 		6BD139AE2B068B0C00BE5B42 /* LatestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD139AD2B068B0C00BE5B42 /* LatestCell.swift */; };
 		6BD831512B121B5E00A59441 /* RenameFileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD831502B121B5E00A59441 /* RenameFileModel.swift */; };
@@ -77,6 +80,10 @@
 		6B3DC6272B3081C100C9FC83 /* MVPExample */ = {isa = PBXFileReference; lastKnownFileType = folder; path = MVPExample; sourceTree = "<group>"; };
 		6B3DC62C2B3085C600C9FC83 /* OnboardingPresenterInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPresenterInput.swift; sourceTree = "<group>"; };
 		6B3DC62E2B3087DE00C9FC83 /* OnboardingBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingBuilder.swift; sourceTree = "<group>"; };
+		6B3DC6352B3090C000C9FC83 /* LatestBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestBuilder.swift; sourceTree = "<group>"; };
+		6B3DC6372B3090DD00C9FC83 /* LatestPresenterInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestPresenterInput.swift; sourceTree = "<group>"; };
+		6B3DC6392B3090F200C9FC83 /* LatestPresenterOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestPresenterOutput.swift; sourceTree = "<group>"; };
+		6B3DC63B2B30944C00C9FC83 /* NetworkServiceLatestProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkServiceLatestProtocol.swift; sourceTree = "<group>"; };
 		6B4C4B802AFCF7B30048D1B3 /* WebCacheCleaner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebCacheCleaner.swift; sourceTree = "<group>"; };
 		6B5FFAAE2B03AC9700300019 /* PublicCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCell.swift; sourceTree = "<group>"; };
 		6B68E7BB2B1D10BD003D5DE4 /* OpenPublicFolderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenPublicFolderModel.swift; sourceTree = "<group>"; };
@@ -101,7 +108,6 @@
 		6BA0F76E2AE95D3D007EE8FC /* ProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
 		6BA0F7702AE95D56007EE8FC /* ProfilePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePresenter.swift; sourceTree = "<group>"; };
 		6BC3FC372AD71EB800A86FF6 /* LoginScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreenViewController.swift; sourceTree = "<group>"; };
-		6BD139A82B0664EE00BE5B42 /* LatestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestModel.swift; sourceTree = "<group>"; };
 		6BD139AA2B06654800BE5B42 /* LatestPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestPresenter.swift; sourceTree = "<group>"; };
 		6BD139AD2B068B0C00BE5B42 /* LatestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestCell.swift; sourceTree = "<group>"; };
 		6BD831502B121B5E00A59441 /* RenameFileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenameFileModel.swift; sourceTree = "<group>"; };
@@ -208,6 +214,32 @@
 			path = OnboardingCell;
 			sourceTree = "<group>";
 		};
+		6B3DC6322B30908D00C9FC83 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				6BEEF1002ACED85700BBE68D /* LatestViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		6B3DC6332B30909300C9FC83 /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				6BD139AA2B06654800BE5B42 /* LatestPresenter.swift */,
+				6B3DC6372B3090DD00C9FC83 /* LatestPresenterInput.swift */,
+				6B3DC6392B3090F200C9FC83 /* LatestPresenterOutput.swift */,
+			);
+			path = Presenter;
+			sourceTree = "<group>";
+		};
+		6B3DC6342B3090A400C9FC83 /* Builder */ = {
+			isa = PBXGroup;
+			children = (
+				6B3DC6352B3090C000C9FC83 /* LatestBuilder.swift */,
+			);
+			path = Builder;
+			sourceTree = "<group>";
+		};
 		6B5FFAAD2B03AC1400300019 /* CustomCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -242,6 +274,7 @@
 			isa = PBXGroup;
 			children = (
 				6B9BA6282B28DDD600D69EBC /* NetworkService.swift */,
+				6B3DC63B2B30944C00C9FC83 /* NetworkServiceLatestProtocol.swift */,
 			);
 			path = NetworkService;
 			sourceTree = "<group>";
@@ -365,9 +398,9 @@
 		6BEEF0FE2ACED7E300BBE68D /* Latest */ = {
 			isa = PBXGroup;
 			children = (
-				6BD139A82B0664EE00BE5B42 /* LatestModel.swift */,
-				6BEEF1002ACED85700BBE68D /* LatestViewController.swift */,
-				6BD139AA2B06654800BE5B42 /* LatestPresenter.swift */,
+				6B3DC6342B3090A400C9FC83 /* Builder */,
+				6B3DC6332B30909300C9FC83 /* Presenter */,
+				6B3DC6322B30908D00C9FC83 /* View */,
 				6BD139AC2B068AF000BE5B42 /* CustomCell */,
 			);
 			path = Latest;
@@ -562,9 +595,11 @@
 				6BD831552B121B7500A59441 /* RenameFilePresenter.swift in Sources */,
 				6B5FFAAF2B03AC9700300019 /* PublicCell.swift in Sources */,
 				6BA0F76F2AE95D3D007EE8FC /* ProfileModel.swift in Sources */,
+				6B3DC6382B3090DD00C9FC83 /* LatestPresenterInput.swift in Sources */,
 				6B3DC62D2B3085C600C9FC83 /* OnboardingPresenterInput.swift in Sources */,
 				6B177E832AF973ED00F43811 /* ResponseModels.swift in Sources */,
 				6BD831512B121B5E00A59441 /* RenameFileModel.swift in Sources */,
+				6B3DC63A2B3090F200C9FC83 /* LatestPresenterOutput.swift in Sources */,
 				6B68E7BE2B1D10C6003D5DE4 /* OpenPublicFolderVC.swift in Sources */,
 				6BEEF0F02ACEC47000BBE68D /* SkillboxDrive.xcdatamodeld in Sources */,
 				6B9BA6292B28DDD600D69EBC /* NetworkService.swift in Sources */,
@@ -578,8 +613,8 @@
 				6B295E8A2AD81DC4003FD56C /* LoginScreenModel.swift in Sources */,
 				6BEEF0E62ACEC47000BBE68D /* AppDelegate.swift in Sources */,
 				6B205F342AD587ED001BB4CD /* CustomOnboardingCell.swift in Sources */,
-				6BD139A92B0664EE00BE5B42 /* LatestModel.swift in Sources */,
 				6B99242B2B07E68500002F8A /* LatestCellPresenter.swift in Sources */,
+				6B3DC63C2B30944C00C9FC83 /* NetworkServiceLatestProtocol.swift in Sources */,
 				6B8AFFF32B1B6F7A009A988C /* OpenFolderModel.swift in Sources */,
 				6BEEF10A2ACED9FE00BBE68D /* OnboardingPresenter.swift in Sources */,
 				6B8AFFF72B1B6F93009A988C /* OpenFolderPresenter.swift in Sources */,
@@ -590,6 +625,7 @@
 				6B99242D2B07E91200002F8A /* PublicCellModel.swift in Sources */,
 				6B8AFFF52B1B6F85009A988C /* OpenFolderVC.swift in Sources */,
 				6BEEF0E82ACEC47000BBE68D /* SceneDelegate.swift in Sources */,
+				6B3DC6362B3090C000C9FC83 /* LatestBuilder.swift in Sources */,
 				6BEAF40D2B0276E900A80A4E /* PublicFilesModel.swift in Sources */,
 				6B7FC6632B1672350002573E /* PublicRealmModel.swift in Sources */,
 				6B68E7C02B1D10CE003D5DE4 /* OpenPublicFolderPresenter.swift in Sources */,
