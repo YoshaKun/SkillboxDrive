@@ -10,7 +10,7 @@ import UIKit
 
 final class LatestCell: UITableViewCell {
     
-    private let presenter: LatestCellPresenterProtocol = LatestCellPresenter()
+    private let presenter: LatestCellPresenterInput = LatestCellPresenter()
     private var nameFile = UILabel()
     private var sizeFile = UILabel()
     private var dateFile = UILabel()
@@ -142,12 +142,15 @@ final class LatestCell: UITableViewCell {
             return
         }
         
-        presenter.getImageForLatestCell(urlStr: url) { data in
-            DispatchQueue.main.async() { [weak self] in
-                self?.activityIndicator.stopAnimating()
-                self?.activityIndicator.removeFromSuperview()
-                self?.imageViewFile.image = UIImage(data: data)
+        presenter.getImageForLatestCell(
+            urlStr: url,
+            completion: { data in
+                DispatchQueue.main.async() { [weak self] in
+                    self?.activityIndicator.stopAnimating()
+                    self?.activityIndicator.removeFromSuperview()
+                    self?.imageViewFile.image = UIImage(data: data)
+                }
             }
-        }
+        )
     }
 }

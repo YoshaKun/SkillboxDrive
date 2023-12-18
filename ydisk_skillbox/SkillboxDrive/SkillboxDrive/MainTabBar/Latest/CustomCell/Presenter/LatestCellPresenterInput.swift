@@ -6,3 +6,10 @@
 //
 
 import Foundation
+
+protocol LatestCellPresenterInput: AnyObject {
+    func getImageForLatestCell(
+        urlStr: String,
+        completion: @escaping (Data) -> Void
+    )
+}

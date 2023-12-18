@@ -165,6 +165,8 @@ final class LatestViewController: UIViewController {
     }
 }
 
+// MARK: - LatestPresenterOutput
+
 extension LatestViewController: LatestPresenterOutput {
     
     func didSuccessUpdateTableView() {

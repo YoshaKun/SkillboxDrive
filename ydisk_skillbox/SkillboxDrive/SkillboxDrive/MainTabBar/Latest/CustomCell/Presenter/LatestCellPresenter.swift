@@ -7,21 +7,20 @@
 
 import Foundation
 
-protocol LatestCellPresenterProtocol {
+final class LatestCellPresenter {
     
-    func getImageForLatestCell(
-        urlStr: String,
-        completion: @escaping (Data) -> Void
-    )
+    // MARK: - Private properties
+    
+    private let networkService: NetworkServiceLatestCellProtocol = NetworkService.shared
 }
 
-final class LatestCellPresenter: LatestCellPresenterProtocol {
+extension LatestCellPresenter: LatestCellPresenterInput {
     
     func getImageForLatestCell(
         urlStr: String,
         completion: @escaping (Data) -> Void
     ) {
-        NetworkService.shared.getImageForCell(
+        networkService.getImageForLatestCell(
             urlStr: urlStr,
             completion: completion
         )

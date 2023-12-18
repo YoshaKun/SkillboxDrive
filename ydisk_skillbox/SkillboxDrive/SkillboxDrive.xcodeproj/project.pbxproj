@@ -22,6 +22,8 @@
 		6B3DC6382B3090DD00C9FC83 /* LatestPresenterInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3DC6372B3090DD00C9FC83 /* LatestPresenterInput.swift */; };
 		6B3DC63A2B3090F200C9FC83 /* LatestPresenterOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3DC6392B3090F200C9FC83 /* LatestPresenterOutput.swift */; };
 		6B3DC63C2B30944C00C9FC83 /* NetworkServiceLatestProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3DC63B2B30944C00C9FC83 /* NetworkServiceLatestProtocol.swift */; };
+		6B3DC6432B30BCE100C9FC83 /* LatestCellPresenterInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3DC6422B30BCE100C9FC83 /* LatestCellPresenterInput.swift */; };
+		6B3DC6472B30BF2F00C9FC83 /* NetworkServiceLatestCellProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3DC6462B30BF2F00C9FC83 /* NetworkServiceLatestCellProtocol.swift */; };
 		6B4C4B812AFCF7B30048D1B3 /* WebCacheCleaner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B4C4B802AFCF7B30048D1B3 /* WebCacheCleaner.swift */; };
 		6B5FFAAF2B03AC9700300019 /* PublicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5FFAAE2B03AC9700300019 /* PublicCell.swift */; };
 		6B68E7BC2B1D10BD003D5DE4 /* OpenPublicFolderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B68E7BB2B1D10BD003D5DE4 /* OpenPublicFolderModel.swift */; };
@@ -38,7 +40,6 @@
 		6B8AFFF32B1B6F7A009A988C /* OpenFolderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8AFFF22B1B6F7A009A988C /* OpenFolderModel.swift */; };
 		6B8AFFF52B1B6F85009A988C /* OpenFolderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8AFFF42B1B6F85009A988C /* OpenFolderVC.swift */; };
 		6B8AFFF72B1B6F93009A988C /* OpenFolderPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8AFFF62B1B6F93009A988C /* OpenFolderPresenter.swift */; };
-		6B9924292B07E67400002F8A /* LatestCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9924282B07E67400002F8A /* LatestCellModel.swift */; };
 		6B99242B2B07E68500002F8A /* LatestCellPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B99242A2B07E68500002F8A /* LatestCellPresenter.swift */; };
 		6B99242D2B07E91200002F8A /* PublicCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B99242C2B07E91100002F8A /* PublicCellModel.swift */; };
 		6B99242F2B07E92200002F8A /* PublicCellPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B99242E2B07E92200002F8A /* PublicCellPresenter.swift */; };
@@ -84,6 +85,8 @@
 		6B3DC6372B3090DD00C9FC83 /* LatestPresenterInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestPresenterInput.swift; sourceTree = "<group>"; };
 		6B3DC6392B3090F200C9FC83 /* LatestPresenterOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestPresenterOutput.swift; sourceTree = "<group>"; };
 		6B3DC63B2B30944C00C9FC83 /* NetworkServiceLatestProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkServiceLatestProtocol.swift; sourceTree = "<group>"; };
+		6B3DC6422B30BCE100C9FC83 /* LatestCellPresenterInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestCellPresenterInput.swift; sourceTree = "<group>"; };
+		6B3DC6462B30BF2F00C9FC83 /* NetworkServiceLatestCellProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkServiceLatestCellProtocol.swift; sourceTree = "<group>"; };
 		6B4C4B802AFCF7B30048D1B3 /* WebCacheCleaner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebCacheCleaner.swift; sourceTree = "<group>"; };
 		6B5FFAAE2B03AC9700300019 /* PublicCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCell.swift; sourceTree = "<group>"; };
 		6B68E7BB2B1D10BD003D5DE4 /* OpenPublicFolderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenPublicFolderModel.swift; sourceTree = "<group>"; };
@@ -100,7 +103,6 @@
 		6B8AFFF22B1B6F7A009A988C /* OpenFolderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenFolderModel.swift; sourceTree = "<group>"; };
 		6B8AFFF42B1B6F85009A988C /* OpenFolderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenFolderVC.swift; sourceTree = "<group>"; };
 		6B8AFFF62B1B6F93009A988C /* OpenFolderPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenFolderPresenter.swift; sourceTree = "<group>"; };
-		6B9924282B07E67400002F8A /* LatestCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestCellModel.swift; sourceTree = "<group>"; };
 		6B99242A2B07E68500002F8A /* LatestCellPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestCellPresenter.swift; sourceTree = "<group>"; };
 		6B99242C2B07E91100002F8A /* PublicCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCellModel.swift; sourceTree = "<group>"; };
 		6B99242E2B07E92200002F8A /* PublicCellPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCellPresenter.swift; sourceTree = "<group>"; };
@@ -240,6 +242,23 @@
 			path = Builder;
 			sourceTree = "<group>";
 		};
+		6B3DC63D2B30BC8100C9FC83 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				6BD139AD2B068B0C00BE5B42 /* LatestCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		6B3DC63E2B30BC8B00C9FC83 /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				6B99242A2B07E68500002F8A /* LatestCellPresenter.swift */,
+				6B3DC6422B30BCE100C9FC83 /* LatestCellPresenterInput.swift */,
+			);
+			path = Presenter;
+			sourceTree = "<group>";
+		};
 		6B5FFAAD2B03AC1400300019 /* CustomCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -275,6 +294,7 @@
 			children = (
 				6B9BA6282B28DDD600D69EBC /* NetworkService.swift */,
 				6B3DC63B2B30944C00C9FC83 /* NetworkServiceLatestProtocol.swift */,
+				6B3DC6462B30BF2F00C9FC83 /* NetworkServiceLatestCellProtocol.swift */,
 			);
 			path = NetworkService;
 			sourceTree = "<group>";
@@ -292,9 +312,8 @@
 		6BD139AC2B068AF000BE5B42 /* CustomCell */ = {
 			isa = PBXGroup;
 			children = (
-				6B9924282B07E67400002F8A /* LatestCellModel.swift */,
-				6BD139AD2B068B0C00BE5B42 /* LatestCell.swift */,
-				6B99242A2B07E68500002F8A /* LatestCellPresenter.swift */,
+				6B3DC63E2B30BC8B00C9FC83 /* Presenter */,
+				6B3DC63D2B30BC8100C9FC83 /* View */,
 			);
 			path = CustomCell;
 			sourceTree = "<group>";
@@ -603,11 +622,11 @@
 				6B68E7BE2B1D10C6003D5DE4 /* OpenPublicFolderVC.swift in Sources */,
 				6BEEF0F02ACEC47000BBE68D /* SkillboxDrive.xcdatamodeld in Sources */,
 				6B9BA6292B28DDD600D69EBC /* NetworkService.swift in Sources */,
-				6B9924292B07E67400002F8A /* LatestCellModel.swift in Sources */,
 				6BD139AE2B068B0C00BE5B42 /* LatestCell.swift in Sources */,
 				6B76FB6A2B0BC5E200B66E93 /* ViewingScreenViewController.swift in Sources */,
 				6BEEF0EA2ACEC47000BBE68D /* ProfileViewController.swift in Sources */,
 				6B76FB6C2B0BC60900B66E93 /* ViewingScreenPresenter.swift in Sources */,
+				6B3DC6472B30BF2F00C9FC83 /* NetworkServiceLatestCellProtocol.swift in Sources */,
 				6BC3FC382AD71EB800A86FF6 /* LoginScreenViewController.swift in Sources */,
 				6BEAF4112B02770500A80A4E /* PublicFilesPresenter.swift in Sources */,
 				6B295E8A2AD81DC4003FD56C /* LoginScreenModel.swift in Sources */,
@@ -615,6 +634,7 @@
 				6B205F342AD587ED001BB4CD /* CustomOnboardingCell.swift in Sources */,
 				6B99242B2B07E68500002F8A /* LatestCellPresenter.swift in Sources */,
 				6B3DC63C2B30944C00C9FC83 /* NetworkServiceLatestProtocol.swift in Sources */,
+				6B3DC6432B30BCE100C9FC83 /* LatestCellPresenterInput.swift in Sources */,
 				6B8AFFF32B1B6F7A009A988C /* OpenFolderModel.swift in Sources */,
 				6BEEF10A2ACED9FE00BBE68D /* OnboardingPresenter.swift in Sources */,
 				6B8AFFF72B1B6F93009A988C /* OpenFolderPresenter.swift in Sources */,
