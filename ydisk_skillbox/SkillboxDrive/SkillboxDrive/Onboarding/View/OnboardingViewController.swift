@@ -12,11 +12,26 @@ protocol OnboardingViewControllerProtocol: AnyObject {}
 
 final class OnboardingViewController: UIViewController {
     
-    private let presenter: OnboardingPresenterProtocol = OnboardingPresenter()
+    // MARK: - Private properties
+    
+    private let presenter: OnboardingPresenterInput
     private let identifierForCell = "identifierForCell"
     private var collectionView: UICollectionView!
     private var pageControl = UIPageControl()
     private var nextButton = UIButton()
+    
+    // MARK: - Initialization
+    
+    init(presenter: OnboardingPresenterInput) {
+        self.presenter = presenter
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Override methods
     
     override func viewDidLoad() {
         

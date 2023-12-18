@@ -59,7 +59,7 @@ final class LoginScreenPresenter: LoginScreenPresenterProtocol {
     
     func didTapOnOnboardButton() -> UIViewController? {
         
-        let onboardVC = OnboardingViewController()
+        let onboardVC = OnboardingBuilder.build()
         onboardVC.modalPresentationStyle = .fullScreen
         
         return onboardVC
