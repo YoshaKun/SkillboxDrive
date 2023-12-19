@@ -11,7 +11,7 @@ final class OpenFolderVC: UIViewController {
 
     // MARK: - Private variables
     private let cellIdentifier = "cellIdentifier"
-    private let presenter: OpenFolderPresenterProtocol = OpenFolderPresenter()
+    private let presenter: OpenFolderPresenterInput
     private let refreshControl = UIRefreshControl()
     private var activityIndicator = UIActivityIndicatorView()
     private var activityIndicatorView = UIView()
@@ -29,8 +29,10 @@ final class OpenFolderVC: UIViewController {
     // MARK: - Initialization
     init(title: String?,
          type: String?,
-         pathFolder: String?
+         pathFolder: String?,
+         presenter: OpenFolderPresenterInput
         ) {
+        self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
         self.titleOfFolder = title
         self.type = type
@@ -192,38 +194,23 @@ final class OpenFolderVC: UIViewController {
     }
     
     private func updateDataOfTableView() {
-        
-        presenter.updateDataTableView(path: path) {
-            DispatchQueue.main.async {
-                self.errorView.removeFromSuperview()
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-                guard let self = self else { return }
-                self.tableView.reloadData()
-                self.activityIndicator.stopAnimating()
-                self.activityIndicatorView.removeFromSuperview()
-                self.tableView.isHidden = false
-            }
-        } errorHandler: {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-                guard let self = self else { return }
-                self.activityIndicator.stopAnimating()
-                self.activityIndicatorView.removeFromSuperview()
-                self.configureEmptyFolderError()
-            }
-        } noInternet: {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-                guard let self = self else { return }
-                self.activityIndicator.stopAnimating()
-                self.activityIndicatorView.removeFromSuperview()
-                self.tableView.reloadData()
-                self.tableView.isHidden = false
-                self.configureErrorView()
-            }
-        }
+        presenter.updateDataTableView(path: path)
     }
     
+    // MARK: - Determination file type
+    
+    func determinationOfFileType(path: String) -> String {
+        guard let index = path.firstIndex(of: ".") else {
+            let str = "dir"
+            return str}
+        var fileType = path[index ..< path.endIndex]
+        fileType.removeFirst()
+        let newString = String(fileType)
+        return newString
+    }
+
     // MARK: - Footer View
+    
     private func createLoadingFooterView() -> UIView {
         
         let footerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 50))
@@ -233,6 +220,58 @@ final class OpenFolderVC: UIViewController {
         spinner.startAnimating()
         
         return footerView
+    }
+}
+
+extension OpenFolderVC: OpenFolderPresenterOutput {
+    
+    func didSuccessUpdateTableView() {
+        DispatchQueue.main.async { [weak self] in
+            self?.errorView.removeFromSuperview()
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            guard let self = self else { return }
+            self.tableView.reloadData()
+            self.activityIndicator.stopAnimating()
+            self.activityIndicatorView.removeFromSuperview()
+            self.tableView.isHidden = false
+        }
+    }
+    
+    func didFailureUpdateTableView() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            guard let self = self else { return }
+            self.activityIndicator.stopAnimating()
+            self.activityIndicatorView.removeFromSuperview()
+            self.configureEmptyFolderError()
+        }
+    }
+    
+    func noInternetUpdateTableView() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            guard let self = self else { return }
+            self.activityIndicator.stopAnimating()
+            self.activityIndicatorView.removeFromSuperview()
+            self.tableView.reloadData()
+            self.tableView.isHidden = false
+            self.configureErrorView()
+        }
+    }
+    
+    func didSuccessAdditionalGetting() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            self?.tableView.tableFooterView = nil
+            self?.tableView.reloadData()
+            self?.presenter.changePaginatingStateOnFalse()
+        }
+    }
+    
+    func didFailureAdditionalGetting() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            self?.tableView.tableFooterView = nil
+            self?.tableView.reloadData()
+            self?.presenter.changePaginatingStateOnFalse()
+        }
     }
 }
 
@@ -269,13 +308,17 @@ extension OpenFolderVC: UITableViewDelegate {
         guard let created = viewModel[indexPath.row].created else { return }
         let fileUrl = viewModel[indexPath.row].file ?? "ljshdlgfhj"
         guard let pathItem = viewModel[indexPath.row].path else { return }
-        let fileType = presenter.determinationOfFileType(path: pathItem)
+        let fileType = determinationOfFileType(path: pathItem)
 
         let folder = "dir"
         if fileType == folder {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
                 guard let self = self else { return }
-                let vc = OpenFolderVC(title: title, type: fileType, pathFolder: pathItem)
+                let vc = OpenFolderInAllFilesBuilder.build(
+                    title: title,
+                    type: fileType,
+                    pathFolder: pathItem
+                )
                 self.navigationController?.pushViewController(vc, animated: true)
                 self.activityIndicator.stopAnimating()
                 self.activityIndicatorView.removeFromSuperview()
@@ -303,27 +346,12 @@ extension OpenFolderVC: UIScrollViewDelegate {
         
         if deltaOffset <= 0, currentOffset >= 50 {
 
-            guard !self.presenter.isPaginating() else {
+            guard !self.presenter.isPaginatingOpenFolder() else {
                 print("We are already fetching more data")
                 return
             }
             self.tableView.tableFooterView = createLoadingFooterView()
-            self.presenter.additionalGettingFiles(path: path) { [weak self] in
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    self?.tableView.tableFooterView = nil
-                    self?.tableView.reloadData()
-                    self?.presenter.changePaginatingStateOnFalse()
-                }
-            } errorHandler: { [weak self] in
-                print("additional errorHandler")
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    self?.tableView.tableFooterView = nil
-                    self?.tableView.reloadData()
-                    self?.presenter.changePaginatingStateOnFalse()
-                }
-            }
+            self.presenter.additionalGettingFiles(path: path)
         }
     }
 }
-
-

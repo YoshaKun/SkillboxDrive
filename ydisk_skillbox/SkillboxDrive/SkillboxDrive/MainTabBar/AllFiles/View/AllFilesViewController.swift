@@ -264,7 +264,11 @@ extension AllFilesViewController: UITableViewDelegate {
         if fileType == folder {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
                 guard let self = self else { return }
-                let vc = OpenFolderVC(title: title, type: fileType, pathFolder: pathItem)
+                let vc = OpenFolderInAllFilesBuilder.build(
+                    title: title,
+                    type: fileType,
+                    pathFolder: pathItem
+                )
                 self.navigationController?.pushViewController(vc, animated: true)
                 self.activityIndicator.stopAnimating()
                 self.activityIndicatorView.removeFromSuperview()
