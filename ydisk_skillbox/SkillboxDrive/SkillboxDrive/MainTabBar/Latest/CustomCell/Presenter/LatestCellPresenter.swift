@@ -20,7 +20,7 @@ extension LatestCellPresenter: LatestCellPresenterInput {
         urlStr: String,
         completion: @escaping (Data) -> Void
     ) {
-        networkService.getImageForLatestCell(
+        networkService.getImageForCell(
             urlStr: urlStr,
             completion: completion
         )

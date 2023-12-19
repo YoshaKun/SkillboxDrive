@@ -27,12 +27,11 @@ final class LatestPresenter {
 extension LatestPresenter: LatestPresenterInput {
     
     func updateDataTableView() {
-        networkService.updateDataTableView { [weak self] in
+        networkService.getLatestFiles { [weak self] in
             self?.output?.didSuccessUpdateTableView()
         } noInternet: { [weak self] in
             self?.output?.noInternetUpdateTableView()
         }
-
     }
     
     func getModelData() -> LatestFiles {
@@ -47,7 +46,7 @@ extension LatestPresenter: LatestPresenterInput {
         file: String?,
         path: String?
     ) {
-        networkService.getFileFromPath(
+        networkService.getFileFromPathOnLatestScreen(
             path: path) { [weak self] in
                 self?.output?.didSuccessGetFileFromPath(
                     title: title,
@@ -62,7 +61,7 @@ extension LatestPresenter: LatestPresenterInput {
     }
     
     func additionalGetingLatestFiles() {
-        networkService.additionalGetingLatestFiles { [weak self] in
+        networkService.additionalGetingLatestFilesOnLatestScreen { [weak self] in
             self?.output?.didSuccessAdditionalGettingFiles()
         } errorHandler: { [weak self] in
             self?.output?.didFailureAdditionalGettingFiles()
@@ -71,7 +70,7 @@ extension LatestPresenter: LatestPresenterInput {
     }
     
     func isPaginating() -> Bool {
-        return networkService.isPaginating()
+        return networkService.isPaginatingLatestFiles()
     }
     
     func changePaginatingStateOnFalse() {

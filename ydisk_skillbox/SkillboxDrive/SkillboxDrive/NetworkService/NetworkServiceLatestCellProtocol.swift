@@ -8,7 +8,7 @@
 import Foundation
 
 protocol NetworkServiceLatestCellProtocol: AnyObject {
-    func getImageForLatestCell(
+    func getImageForCell(
         urlStr: String,
         completion: @escaping (Data) -> Void
     )
@@ -16,13 +16,23 @@ protocol NetworkServiceLatestCellProtocol: AnyObject {
 
 extension NetworkService: NetworkServiceLatestCellProtocol {
     
-    func getImageForLatestCell(
+    // MARK: - CELL
+    // Public cell - getting image for cell
+    func getImageForCell(
         urlStr: String,
         completion: @escaping (Data) -> Void
     ) {
-        getImageForCell(
-            urlStr: urlStr,
-            completion: completion
-        )
+        guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
+        let components = URLComponents(string: "\(urlStr)")
+        guard let url = components?.url else { return }
+        var request = URLRequest(url: url)
+        request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let data = data else {
+                print("Error: \(String(describing: error))")
+                return }
+            completion(data)
+        }
+        task.resume()
     }
 }
