@@ -314,21 +314,27 @@ extension OpenFolderVC: UITableViewDelegate {
         if fileType == folder {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
                 guard let self = self else { return }
-                let vc = OpenFolderInAllFilesBuilder.build(
+                let vcOpenFolder = OpenFolderInAllFilesBuilder.build(
                     title: title,
                     type: fileType,
                     pathFolder: pathItem
                 )
-                self.navigationController?.pushViewController(vc, animated: true)
+                self.navigationController?.pushViewController(vcOpenFolder, animated: true)
                 self.activityIndicator.stopAnimating()
                 self.activityIndicatorView.removeFromSuperview()
             }
         } else {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
                 guard let self = self else { return }
-                let vc = ViewingScreenViewController(title: title, created: created, type: fileType, file: fileUrl, path: pathItem)
-                vc.modalPresentationStyle = .fullScreen
-                self.navigationController?.present(vc, animated: true, completion: {
+                let vcViewingScreen = ViewingScreenViewController(
+                    title: title,
+                    created: created,
+                    type: fileType,
+                    file: fileUrl,
+                    path: pathItem
+                )
+                vcViewingScreen.modalPresentationStyle = .fullScreen
+                self.navigationController?.present(vcViewingScreen, animated: true, completion: {
                     self.activityIndicator.stopAnimating()
                     self.activityIndicatorView.removeFromSuperview()
                 })
@@ -338,12 +344,12 @@ extension OpenFolderVC: UITableViewDelegate {
 }
 
 extension OpenFolderVC: UIScrollViewDelegate {
-    
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentOffset = scrollView.contentOffset.y
         let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
         let deltaOffset = maximumOffset - currentOffset
-        
+
         if deltaOffset <= 0, currentOffset >= 50 {
 
             guard !self.presenter.isPaginatingOpenFolder() else {

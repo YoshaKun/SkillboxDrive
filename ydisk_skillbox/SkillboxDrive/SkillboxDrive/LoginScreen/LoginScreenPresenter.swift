@@ -49,7 +49,7 @@ final class LoginScreenPresenter: LoginScreenPresenterProtocol {
     func didTapOnButton() -> UITabBarController? {
         
         let tabBarVC = UITabBarController()
-        let firstVC = UINavigationController(rootViewController: ProfileViewController())
+        let firstVC = UINavigationController(rootViewController: ProfileBuilder.build())
         let secondVC = UINavigationController(rootViewController: LatestBuilder.build())
         let thirdVC = UINavigationController(rootViewController: AllFilesBuilder.build())
         tabBarVC.setViewControllers([firstVC, secondVC, thirdVC], animated: false)

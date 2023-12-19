@@ -1,32 +1,11 @@
 //
-//  ProfileModel.swift
+//  Units.swift
 //  SkillboxDrive
 //
-//  Created by Yosha Kun on 25.10.2023.
+//  Created by Yosha Kun on 19.12.2023.
 //
 
 import Foundation
-
-final class ProfileModel {
-
-    // MARK: - Update token
-    func updateToken(newToken: String?) {
-        guard let newToken = newToken else { return }
-        UserDefaults.standard.set(newToken, forKey: Keys.apiToken)
-    }
-    
-    // MARK: - Did tap on YES Alert button
-    func didTapOnYesAlert() {
-        UserDefaults.standard.removeObject(forKey: Keys.apiToken)
-        print("Did token deleted? = \(Keys.apiToken.isEmpty)")
-        Core.shared.setNewUser()
-        print("Did user deleted? = \(Core.shared.isNewUser())")
-        DispatchQueue.main.async {
-            let cookiesCleaner = WebCacheCleaner()
-            cookiesCleaner.clean()
-        }
-    }
-}
 
 public struct Units {
   

@@ -10,7 +10,7 @@ import UIKit
 
 final class ProfileViewController: UIViewController, ChartViewDelegate {
     
-    private let presenter: ProfilePresenterProtocol = ProfilePresenter()
+    private let presenter: ProfilePresenterInput
     private var pieChart = PieChartView()
     private var menuButton = UIBarButtonItem()
     private var publicFilesButton = UIButton()
@@ -32,6 +32,16 @@ final class ProfileViewController: UIViewController, ChartViewDelegate {
     private var activityIndicatorView = UIView()
     private var errorView = UIView()
     private var errorLabel = UILabel()
+    
+    // MARK: - Initialization
+    init(presenter: ProfilePresenterInput) {
+        self.presenter = presenter
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -303,29 +313,35 @@ final class ProfileViewController: UIViewController, ChartViewDelegate {
 
     // MARK: - Update PieChart Data
     private func updateData() {
-        
-        presenter.updatePieChartData { totalSpace, usedSpace in
-            DispatchQueue.main.async {
-                self.errorView.removeFromSuperview()
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-                guard let self = self else { return }
-                self.activityIndicator.stopAnimating()
-                self.activityIndicatorView.removeFromSuperview()
-                self.totalSpaceGb = totalSpace ?? 0
-                self.usedSpaceGb = usedSpace ?? 0
-                self.updatePieChart()
-                self.mainView.isHidden = false
-            }
-        } errorHandler: {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-                guard let self = self else { return }
-                self.activityIndicator.stopAnimating()
-                self.activityIndicatorView.removeFromSuperview()
-                self.configureErrorView()
-                self.updatePieChart()
-                self.mainView.isHidden = false
-            }
+        presenter.updatePieChartData()
+    }
+}
+
+extension ProfileViewController: ProfilePresenterOutput {
+    
+    func didSuccessUpdatePieChart(total: Int?, used: Int?) {
+        DispatchQueue.main.async {
+            self.errorView.removeFromSuperview()
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            guard let self = self else { return }
+            self.activityIndicator.stopAnimating()
+            self.activityIndicatorView.removeFromSuperview()
+            self.totalSpaceGb = total ?? 0
+            self.usedSpaceGb = used ?? 0
+            self.updatePieChart()
+            self.mainView.isHidden = false
+        }
+    }
+    
+    func didFailureUpdatePieChart() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            guard let self = self else { return }
+            self.activityIndicator.stopAnimating()
+            self.activityIndicatorView.removeFromSuperview()
+            self.configureErrorView()
+            self.updatePieChart()
+            self.mainView.isHidden = false
         }
     }
 }
