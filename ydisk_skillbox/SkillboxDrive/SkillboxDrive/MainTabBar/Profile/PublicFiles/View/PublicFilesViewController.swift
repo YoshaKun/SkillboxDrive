@@ -392,8 +392,13 @@ extension PublicFilesViewController: UITableViewDelegate {
         if fileType == folder {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
                 guard let self = self else { return }
-                let vc = OpenPublicFolderVC(title: title, type: fileType, publicUrl: strUrl, pathFolder: pathItem)
-                self.navigationController?.pushViewController(vc, animated: true)
+                let someVC = OpenPublicFolderBuilder.build(
+                    title: title,
+                    type: fileType,
+                    publicUrl: strUrl,
+                    pathFolder: pathItem
+                )
+                self.navigationController?.pushViewController(someVC, animated: true)
                 self.activityIndicator.stopAnimating()
                 self.activityIndicatorView.removeFromSuperview()
             }
