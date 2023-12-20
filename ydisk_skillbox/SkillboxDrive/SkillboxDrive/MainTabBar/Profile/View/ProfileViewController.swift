@@ -115,7 +115,7 @@ final class ProfileViewController: UIViewController, ChartViewDelegate {
     
     @objc private func didTappedOnPublicFiles() {
         
-        let vc = PublicFilesViewController()
+        let vc = PublicFilesBuilder.build()
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

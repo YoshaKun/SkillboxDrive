@@ -12,6 +12,11 @@
 		6B177E832AF973ED00F43811 /* ResponseModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B177E822AF973ED00F43811 /* ResponseModels.swift */; };
 		6B205F322AD5736A001BB4CD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B205F312AD5736A001BB4CD /* Constants.swift */; };
 		6B205F342AD587ED001BB4CD /* CustomOnboardingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B205F332AD587ED001BB4CD /* CustomOnboardingCell.swift */; };
+		6B226C0B2B33201100A653B9 /* PublicCellPresenterInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B226C0A2B33201100A653B9 /* PublicCellPresenterInput.swift */; };
+		6B226C122B33247A00A653B9 /* PublicFilesBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B226C112B33247A00A653B9 /* PublicFilesBuilder.swift */; };
+		6B226C142B33250500A653B9 /* PublicFilesPresenterInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B226C132B33250500A653B9 /* PublicFilesPresenterInput.swift */; };
+		6B226C162B33250E00A653B9 /* PublicFilesPresenterOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B226C152B33250E00A653B9 /* PublicFilesPresenterOutput.swift */; };
+		6B226C182B33259A00A653B9 /* NetworkServicePublicFilesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B226C172B33259A00A653B9 /* NetworkServicePublicFilesProtocol.swift */; };
 		6B295E8A2AD81DC4003FD56C /* LoginScreenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B295E892AD81DC4003FD56C /* LoginScreenModel.swift */; };
 		6B295E8C2AD81DF7003FD56C /* LoginScreenPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B295E8B2AD81DF7003FD56C /* LoginScreenPresenter.swift */; };
 		6B295E902AD84CAF003FD56C /* Localize.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6B295E922AD84CAF003FD56C /* Localize.strings */; };
@@ -52,7 +57,6 @@
 		6B8AFFF52B1B6F85009A988C /* OpenFolderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8AFFF42B1B6F85009A988C /* OpenFolderVC.swift */; };
 		6B8AFFF72B1B6F93009A988C /* OpenFolderPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8AFFF62B1B6F93009A988C /* OpenFolderPresenter.swift */; };
 		6B99242B2B07E68500002F8A /* LatestCellPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B99242A2B07E68500002F8A /* LatestCellPresenter.swift */; };
-		6B99242D2B07E91200002F8A /* PublicCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B99242C2B07E91100002F8A /* PublicCellModel.swift */; };
 		6B99242F2B07E92200002F8A /* PublicCellPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B99242E2B07E92200002F8A /* PublicCellPresenter.swift */; };
 		6B9BA6292B28DDD600D69EBC /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9BA6282B28DDD600D69EBC /* NetworkService.swift */; };
 		6BA0F7712AE95D56007EE8FC /* ProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA0F7702AE95D56007EE8FC /* ProfilePresenter.swift */; };
@@ -62,7 +66,6 @@
 		6BD831512B121B5E00A59441 /* RenameFileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD831502B121B5E00A59441 /* RenameFileModel.swift */; };
 		6BD831532B121B6800A59441 /* RenameFileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD831522B121B6800A59441 /* RenameFileVC.swift */; };
 		6BD831552B121B7500A59441 /* RenameFilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD831542B121B7500A59441 /* RenameFilePresenter.swift */; };
-		6BEAF40D2B0276E900A80A4E /* PublicFilesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BEAF40C2B0276E900A80A4E /* PublicFilesModel.swift */; };
 		6BEAF40F2B0276F800A80A4E /* PublicFilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BEAF40E2B0276F800A80A4E /* PublicFilesViewController.swift */; };
 		6BEAF4112B02770500A80A4E /* PublicFilesPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BEAF4102B02770500A80A4E /* PublicFilesPresenter.swift */; };
 		6BEEF0E62ACEC47000BBE68D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BEEF0E52ACEC47000BBE68D /* AppDelegate.swift */; };
@@ -83,6 +86,11 @@
 		6B177E822AF973ED00F43811 /* ResponseModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseModels.swift; sourceTree = "<group>"; };
 		6B205F312AD5736A001BB4CD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		6B205F332AD587ED001BB4CD /* CustomOnboardingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomOnboardingCell.swift; sourceTree = "<group>"; };
+		6B226C0A2B33201100A653B9 /* PublicCellPresenterInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCellPresenterInput.swift; sourceTree = "<group>"; };
+		6B226C112B33247A00A653B9 /* PublicFilesBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicFilesBuilder.swift; sourceTree = "<group>"; };
+		6B226C132B33250500A653B9 /* PublicFilesPresenterInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicFilesPresenterInput.swift; sourceTree = "<group>"; };
+		6B226C152B33250E00A653B9 /* PublicFilesPresenterOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicFilesPresenterOutput.swift; sourceTree = "<group>"; };
+		6B226C172B33259A00A653B9 /* NetworkServicePublicFilesProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkServicePublicFilesProtocol.swift; sourceTree = "<group>"; };
 		6B295E892AD81DC4003FD56C /* LoginScreenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreenModel.swift; sourceTree = "<group>"; };
 		6B295E8B2AD81DF7003FD56C /* LoginScreenPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreenPresenter.swift; sourceTree = "<group>"; };
 		6B295E8D2AD84C3E003FD56C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
@@ -125,7 +133,6 @@
 		6B8AFFF42B1B6F85009A988C /* OpenFolderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenFolderVC.swift; sourceTree = "<group>"; };
 		6B8AFFF62B1B6F93009A988C /* OpenFolderPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenFolderPresenter.swift; sourceTree = "<group>"; };
 		6B99242A2B07E68500002F8A /* LatestCellPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestCellPresenter.swift; sourceTree = "<group>"; };
-		6B99242C2B07E91100002F8A /* PublicCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCellModel.swift; sourceTree = "<group>"; };
 		6B99242E2B07E92200002F8A /* PublicCellPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCellPresenter.swift; sourceTree = "<group>"; };
 		6B9BA6282B28DDD600D69EBC /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		6BA0F7702AE95D56007EE8FC /* ProfilePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePresenter.swift; sourceTree = "<group>"; };
@@ -135,7 +142,6 @@
 		6BD831502B121B5E00A59441 /* RenameFileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenameFileModel.swift; sourceTree = "<group>"; };
 		6BD831522B121B6800A59441 /* RenameFileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenameFileVC.swift; sourceTree = "<group>"; };
 		6BD831542B121B7500A59441 /* RenameFilePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenameFilePresenter.swift; sourceTree = "<group>"; };
-		6BEAF40C2B0276E900A80A4E /* PublicFilesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicFilesModel.swift; sourceTree = "<group>"; };
 		6BEAF40E2B0276F800A80A4E /* PublicFilesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicFilesViewController.swift; sourceTree = "<group>"; };
 		6BEAF4102B02770500A80A4E /* PublicFilesPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicFilesPresenter.swift; sourceTree = "<group>"; };
 		6BEEF0E22ACEC47000BBE68D /* SkillboxDrive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SkillboxDrive.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -184,6 +190,49 @@
 				6B4843172B31EC58005AD807 /* Units.swift */,
 			);
 			path = Constants;
+			sourceTree = "<group>";
+		};
+		6B226C082B331F6D00A653B9 /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				6B99242E2B07E92200002F8A /* PublicCellPresenter.swift */,
+				6B226C0A2B33201100A653B9 /* PublicCellPresenterInput.swift */,
+			);
+			path = Presenter;
+			sourceTree = "<group>";
+		};
+		6B226C092B331F7800A653B9 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				6B5FFAAE2B03AC9700300019 /* PublicCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		6B226C0E2B3322FD00A653B9 /* Builder */ = {
+			isa = PBXGroup;
+			children = (
+				6B226C112B33247A00A653B9 /* PublicFilesBuilder.swift */,
+			);
+			path = Builder;
+			sourceTree = "<group>";
+		};
+		6B226C0F2B33230900A653B9 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				6BEAF40E2B0276F800A80A4E /* PublicFilesViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		6B226C102B33230F00A653B9 /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				6BEAF4102B02770500A80A4E /* PublicFilesPresenter.swift */,
+				6B226C132B33250500A653B9 /* PublicFilesPresenterInput.swift */,
+				6B226C152B33250E00A653B9 /* PublicFilesPresenterOutput.swift */,
+			);
+			path = Presenter;
 			sourceTree = "<group>";
 		};
 		6B358D5F2B14F3B300AE4454 /* RealmModels */ = {
@@ -361,9 +410,8 @@
 		6B5FFAAD2B03AC1400300019 /* CustomCell */ = {
 			isa = PBXGroup;
 			children = (
-				6B99242C2B07E91100002F8A /* PublicCellModel.swift */,
-				6B5FFAAE2B03AC9700300019 /* PublicCell.swift */,
-				6B99242E2B07E92200002F8A /* PublicCellPresenter.swift */,
+				6B226C082B331F6D00A653B9 /* Presenter */,
+				6B226C092B331F7800A653B9 /* View */,
 			);
 			path = CustomCell;
 			sourceTree = "<group>";
@@ -393,6 +441,7 @@
 			children = (
 				6B9BA6282B28DDD600D69EBC /* NetworkService.swift */,
 				6B48430F2B31E95C005AD807 /* NetworkServiceProfileProtocol.swift */,
+				6B226C172B33259A00A653B9 /* NetworkServicePublicFilesProtocol.swift */,
 				6B3DC63B2B30944C00C9FC83 /* NetworkServiceLatestProtocol.swift */,
 				6B3DC6462B30BF2F00C9FC83 /* NetworkServiceLatestCellProtocol.swift */,
 				6B4842FF2B31B86F005AD807 /* NetworkServiceAllFilesProtocol.swift */,
@@ -444,9 +493,9 @@
 		6BEAF40B2B0276BC00A80A4E /* PublicFiles */ = {
 			isa = PBXGroup;
 			children = (
-				6BEAF40C2B0276E900A80A4E /* PublicFilesModel.swift */,
-				6BEAF40E2B0276F800A80A4E /* PublicFilesViewController.swift */,
-				6BEAF4102B02770500A80A4E /* PublicFilesPresenter.swift */,
+				6B226C0E2B3322FD00A653B9 /* Builder */,
+				6B226C102B33230F00A653B9 /* Presenter */,
+				6B226C0F2B33230900A653B9 /* View */,
 				6B68E7BA2B1D10A3003D5DE4 /* OpenPublicFolder */,
 			);
 			path = PublicFiles;
@@ -742,19 +791,21 @@
 				6B99242B2B07E68500002F8A /* LatestCellPresenter.swift in Sources */,
 				6B3DC63C2B30944C00C9FC83 /* NetworkServiceLatestProtocol.swift in Sources */,
 				6B3DC6432B30BCE100C9FC83 /* LatestCellPresenterInput.swift in Sources */,
+				6B226C0B2B33201100A653B9 /* PublicCellPresenterInput.swift in Sources */,
+				6B226C122B33247A00A653B9 /* PublicFilesBuilder.swift in Sources */,
 				6BEEF10A2ACED9FE00BBE68D /* OnboardingPresenter.swift in Sources */,
 				6B8AFFF72B1B6F93009A988C /* OpenFolderPresenter.swift in Sources */,
 				6B205F322AD5736A001BB4CD /* Constants.swift in Sources */,
+				6B226C182B33259A00A653B9 /* NetworkServicePublicFilesProtocol.swift in Sources */,
 				6B76FB6E2B0BC61A00B66E93 /* ViewingScreenModel.swift in Sources */,
 				6B177E812AF942B900F43811 /* AuthViewController.swift in Sources */,
 				6B99242F2B07E92200002F8A /* PublicCellPresenter.swift in Sources */,
-				6B99242D2B07E91200002F8A /* PublicCellModel.swift in Sources */,
 				6B4843142B31E9F6005AD807 /* ProfilePresenterInput.swift in Sources */,
 				6B8AFFF52B1B6F85009A988C /* OpenFolderVC.swift in Sources */,
+				6B226C142B33250500A653B9 /* PublicFilesPresenterInput.swift in Sources */,
 				6BEEF0E82ACEC47000BBE68D /* SceneDelegate.swift in Sources */,
 				6B3DC6362B3090C000C9FC83 /* LatestBuilder.swift in Sources */,
 				6B4842FE2B31B602005AD807 /* AllFilesPresenterOutput.swift in Sources */,
-				6BEAF40D2B0276E900A80A4E /* PublicFilesModel.swift in Sources */,
 				6B7FC6632B1672350002573E /* PublicRealmModel.swift in Sources */,
 				6B68E7C02B1D10CE003D5DE4 /* OpenPublicFolderPresenter.swift in Sources */,
 				6BD139AB2B06654800BE5B42 /* LatestPresenter.swift in Sources */,
@@ -768,6 +819,7 @@
 				6B8AFFF02B1B5E6E009A988C /* AllFilesRealmModel.swift in Sources */,
 				6BEEF1082ACED9EE00BBE68D /* OnboardingModel.swift in Sources */,
 				6B295E8C2AD81DF7003FD56C /* LoginScreenPresenter.swift in Sources */,
+				6B226C162B33250E00A653B9 /* PublicFilesPresenterOutput.swift in Sources */,
 				6BD831532B121B6800A59441 /* RenameFileVC.swift in Sources */,
 				6B4843072B31CB45005AD807 /* OpenFolderPresenterInput.swift in Sources */,
 				6BEEF1062ACED97D00BBE68D /* OnboardingViewController.swift in Sources */,
