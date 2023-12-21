@@ -18,7 +18,7 @@ protocol NetworkServiceProfileProtocol: AnyObject {
 }
 
 extension NetworkService: NetworkServiceProfileProtocol {
-    
+
     // Update PieChart data
     func updatePieChartData(
         completion: @escaping (_ totalSpace: Int?, _ usedSpace: Int?) -> Void,

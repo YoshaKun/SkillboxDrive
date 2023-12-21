@@ -8,14 +8,15 @@
 import Foundation
 
 final class PublicFilesPresenter {
-    
+
     // MARK: - Public properties
-    
+
     weak var output: PublicFilesPresenterOutput?
-    
+
     // MARK: - Private
-    
+
     private let networkService: NetworkServicePublicFilesProtocol
+//    private let coreDataService:
     
     // MARK: - Initialization
     
@@ -35,9 +36,9 @@ extension PublicFilesPresenter: PublicFilesPresenterInput {
             self?.output?.noInternetGettingPublishedFiles()
         }
     }
-    
+
     func getModelData() -> LatestFilesModel {
-        
+
         let data = networkService.getModalDataPublic()
 //        if ((data.items?.isEmpty) != nil) {
 //            print("сработал метод readPublicFilesRealm")
@@ -45,7 +46,7 @@ extension PublicFilesPresenter: PublicFilesPresenterInput {
 //        }
         return data
     }
-    
+
     func removePublishedData(path: String?) {
         networkService.removePublishedFile(
             path: path) { [weak self] in
@@ -54,11 +55,11 @@ extension PublicFilesPresenter: PublicFilesPresenterInput {
                 self?.output?.didFailureRemovePublishedFile()
             }
     }
-    
+
     func isPaginating() -> Bool {
         return networkService.getStateOfPaginatingPublic()
     }
-    
+
     func additionalGetingPublishedFiles () {
         networkService.additionalGetingPublishedFiles { [weak self] in
             self?.output?.didSuccessAdditionalPublishedFiles()
@@ -66,7 +67,7 @@ extension PublicFilesPresenter: PublicFilesPresenterInput {
             self?.output?.didFailureAdditionalPublishedFiles()
         }
     }
-    
+
     func changePaginatingStateOnFalse() {
         networkService.changePaginatingPublicStateToFalse()
     }

@@ -28,7 +28,7 @@ protocol NetworkServicePublicFilesProtocol: AnyObject {
 }
 
 extension NetworkService: NetworkServicePublicFilesProtocol {
-    
+
     // Get published files
     func getPublishedFiles (
         completion: @escaping () -> Void,
@@ -44,7 +44,7 @@ extension NetworkService: NetworkServicePublicFilesProtocol {
         guard let url = components?.url else { return }
         var request = URLRequest(url: url)
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
-        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, _, error) in
             guard let data = data else {
                 print("No internrt: \(String(describing: error))")
                 noInternet()
@@ -64,11 +64,11 @@ extension NetworkService: NetworkServicePublicFilesProtocol {
         }
         task.resume()
     }
-    
+
     func getModalDataPublic() -> LatestFilesModel {
         return modelDataPublic
     }
-    
+
     // Remove Published File/Folder
     func removePublishedFile (
         path: String?,
@@ -82,7 +82,7 @@ extension NetworkService: NetworkServicePublicFilesProtocol {
         var request = URLRequest(url: url)
         request.httpMethod = "PUT"
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        let task = URLSession.shared.dataTask(with: request) { _, response, _ in
             if let response = response  as? HTTPURLResponse {
                 switch response.statusCode {
                 case 200..<300:
@@ -96,11 +96,11 @@ extension NetworkService: NetworkServicePublicFilesProtocol {
         }
         task.resume()
     }
-    
+
     func getStateOfPaginatingPublic() -> Bool {
         return isPaginatingPublic
     }
-    
+
     // Additional getting published files (Пагинация)
     func additionalGetingPublishedFiles (
         completion: @escaping () -> Void,
@@ -110,7 +110,7 @@ extension NetworkService: NetworkServicePublicFilesProtocol {
         guard let model = modelDataPublic.items else { return }
         let count = model.count
         print("modelData.count = \(count)")
-        
+
         guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
         var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk/resources/public")
         components?.queryItems = [
@@ -126,7 +126,7 @@ extension NetworkService: NetworkServicePublicFilesProtocol {
         var request = URLRequest(url: url)
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
 
-        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, _, _) in
             guard let data = data else {
                 print("additionalGetting - No internet")
                 errorHandler()
