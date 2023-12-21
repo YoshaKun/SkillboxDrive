@@ -20,9 +20,12 @@ protocol AuthViewControllerDelegate: AnyObject {
 
 final class AuthViewController: UIViewController {
     
+    // MARK: - Public properties
+    
     weak var delegate: AuthViewControllerDelegate?
     
-    private let model: LoginScreenModel = LoginScreenModel()
+    // MARK: - Private properties
+    
     private let scheme = "https"
     private let webView = WKWebView()
     private let clientId = "1e126bd76e7e4406bf4d15babd07e8d8"
@@ -39,7 +42,6 @@ final class AuthViewController: UIViewController {
     private func configureViews() {
         
         view.backgroundColor = .white
-        
         webView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(webView)
         

@@ -21,7 +21,6 @@
 		6B226C1F2B334D0C00A653B9 /* OpenPublicFolderPresenterInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B226C1E2B334D0C00A653B9 /* OpenPublicFolderPresenterInput.swift */; };
 		6B226C212B334D1900A653B9 /* OpenPublicFolderPresenterOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B226C202B334D1900A653B9 /* OpenPublicFolderPresenterOutput.swift */; };
 		6B226C232B33554400A653B9 /* NetworkServiceOpenPublicProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B226C222B33554400A653B9 /* NetworkServiceOpenPublicProtocol.swift */; };
-		6B295E8A2AD81DC4003FD56C /* LoginScreenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B295E892AD81DC4003FD56C /* LoginScreenModel.swift */; };
 		6B295E8C2AD81DF7003FD56C /* LoginScreenPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B295E8B2AD81DF7003FD56C /* LoginScreenPresenter.swift */; };
 		6B295E902AD84CAF003FD56C /* Localize.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6B295E922AD84CAF003FD56C /* Localize.strings */; };
 		6B3DC6282B3081C100C9FC83 /* MVPExample in Resources */ = {isa = PBXBuildFile; fileRef = 6B3DC6272B3081C100C9FC83 /* MVPExample */; };
@@ -47,6 +46,8 @@
 		6B4843162B31EA00005AD807 /* ProfilePresenterOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B4843152B31EA00005AD807 /* ProfilePresenterOutput.swift */; };
 		6B4843182B31EC58005AD807 /* Units.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B4843172B31EC58005AD807 /* Units.swift */; };
 		6B4C4B812AFCF7B30048D1B3 /* WebCacheCleaner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B4C4B802AFCF7B30048D1B3 /* WebCacheCleaner.swift */; };
+		6B5C0C042B3452900044EB2C /* LoginScreenBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5C0C032B3452900044EB2C /* LoginScreenBuilder.swift */; };
+		6B5C0C062B3453D60044EB2C /* LoginScreenPresenterInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5C0C052B3453D60044EB2C /* LoginScreenPresenterInput.swift */; };
 		6B5FFAAF2B03AC9700300019 /* PublicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5FFAAE2B03AC9700300019 /* PublicCell.swift */; };
 		6B68E7BE2B1D10C6003D5DE4 /* OpenPublicFolderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B68E7BD2B1D10C6003D5DE4 /* OpenPublicFolderVC.swift */; };
 		6B68E7C02B1D10CE003D5DE4 /* OpenPublicFolderPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B68E7BF2B1D10CE003D5DE4 /* OpenPublicFolderPresenter.swift */; };
@@ -98,7 +99,6 @@
 		6B226C1E2B334D0C00A653B9 /* OpenPublicFolderPresenterInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenPublicFolderPresenterInput.swift; sourceTree = "<group>"; };
 		6B226C202B334D1900A653B9 /* OpenPublicFolderPresenterOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenPublicFolderPresenterOutput.swift; sourceTree = "<group>"; };
 		6B226C222B33554400A653B9 /* NetworkServiceOpenPublicProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkServiceOpenPublicProtocol.swift; sourceTree = "<group>"; };
-		6B295E892AD81DC4003FD56C /* LoginScreenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreenModel.swift; sourceTree = "<group>"; };
 		6B295E8B2AD81DF7003FD56C /* LoginScreenPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreenPresenter.swift; sourceTree = "<group>"; };
 		6B295E8D2AD84C3E003FD56C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		6B295E912AD84CAF003FD56C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localize.strings; sourceTree = "<group>"; };
@@ -126,6 +126,8 @@
 		6B4843152B31EA00005AD807 /* ProfilePresenterOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePresenterOutput.swift; sourceTree = "<group>"; };
 		6B4843172B31EC58005AD807 /* Units.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Units.swift; sourceTree = "<group>"; };
 		6B4C4B802AFCF7B30048D1B3 /* WebCacheCleaner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebCacheCleaner.swift; sourceTree = "<group>"; };
+		6B5C0C032B3452900044EB2C /* LoginScreenBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreenBuilder.swift; sourceTree = "<group>"; };
+		6B5C0C052B3453D60044EB2C /* LoginScreenPresenterInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreenPresenterInput.swift; sourceTree = "<group>"; };
 		6B5FFAAE2B03AC9700300019 /* PublicCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCell.swift; sourceTree = "<group>"; };
 		6B68E7BD2B1D10C6003D5DE4 /* OpenPublicFolderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenPublicFolderVC.swift; sourceTree = "<group>"; };
 		6B68E7BF2B1D10CE003D5DE4 /* OpenPublicFolderPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenPublicFolderPresenter.swift; sourceTree = "<group>"; };
@@ -439,6 +441,31 @@
 			path = Builder;
 			sourceTree = "<group>";
 		};
+		6B5C0C002B34525F0044EB2C /* View */ = {
+			isa = PBXGroup;
+			children = (
+				6BC3FC372AD71EB800A86FF6 /* LoginScreenViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		6B5C0C012B3452680044EB2C /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				6B295E8B2AD81DF7003FD56C /* LoginScreenPresenter.swift */,
+				6B5C0C052B3453D60044EB2C /* LoginScreenPresenterInput.swift */,
+			);
+			path = Presenter;
+			sourceTree = "<group>";
+		};
+		6B5C0C022B3452730044EB2C /* Builder */ = {
+			isa = PBXGroup;
+			children = (
+				6B5C0C032B3452900044EB2C /* LoginScreenBuilder.swift */,
+			);
+			path = Builder;
+			sourceTree = "<group>";
+		};
 		6B5FFAAD2B03AC1400300019 /* CustomCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -486,9 +513,9 @@
 		6BC3FC392AD71EBF00A86FF6 /* LoginScreen */ = {
 			isa = PBXGroup;
 			children = (
-				6B295E892AD81DC4003FD56C /* LoginScreenModel.swift */,
-				6BC3FC372AD71EB800A86FF6 /* LoginScreenViewController.swift */,
-				6B295E8B2AD81DF7003FD56C /* LoginScreenPresenter.swift */,
+				6B5C0C022B3452730044EB2C /* Builder */,
+				6B5C0C012B3452680044EB2C /* Presenter */,
+				6B5C0C002B34525F0044EB2C /* View */,
 			);
 			path = LoginScreen;
 			sourceTree = "<group>";
@@ -811,6 +838,7 @@
 				6BEEF0F02ACEC47000BBE68D /* SkillboxDrive.xcdatamodeld in Sources */,
 				6B9BA6292B28DDD600D69EBC /* NetworkService.swift in Sources */,
 				6B4843162B31EA00005AD807 /* ProfilePresenterOutput.swift in Sources */,
+				6B5C0C062B3453D60044EB2C /* LoginScreenPresenterInput.swift in Sources */,
 				6BD139AE2B068B0C00BE5B42 /* LatestCell.swift in Sources */,
 				6B76FB6A2B0BC5E200B66E93 /* ViewingScreenViewController.swift in Sources */,
 				6BEEF0EA2ACEC47000BBE68D /* ProfileViewController.swift in Sources */,
@@ -819,7 +847,6 @@
 				6B4842FC2B31B5F6005AD807 /* AllFilesPresenterInput.swift in Sources */,
 				6BC3FC382AD71EB800A86FF6 /* LoginScreenViewController.swift in Sources */,
 				6BEAF4112B02770500A80A4E /* PublicFilesPresenter.swift in Sources */,
-				6B295E8A2AD81DC4003FD56C /* LoginScreenModel.swift in Sources */,
 				6BEEF0E62ACEC47000BBE68D /* AppDelegate.swift in Sources */,
 				6B4842FA2B31B58F005AD807 /* AllFilesBuilder.swift in Sources */,
 				6B205F342AD587ED001BB4CD /* CustomOnboardingCell.swift in Sources */,
@@ -854,6 +881,7 @@
 				6B4C4B812AFCF7B30048D1B3 /* WebCacheCleaner.swift in Sources */,
 				6B8AFFF02B1B5E6E009A988C /* AllFilesRealmModel.swift in Sources */,
 				6BEEF1082ACED9EE00BBE68D /* OnboardingModel.swift in Sources */,
+				6B5C0C042B3452900044EB2C /* LoginScreenBuilder.swift in Sources */,
 				6B295E8C2AD81DF7003FD56C /* LoginScreenPresenter.swift in Sources */,
 				6B226C162B33250E00A653B9 /* PublicFilesPresenterOutput.swift in Sources */,
 				6BD831532B121B6800A59441 /* RenameFileVC.swift in Sources */,

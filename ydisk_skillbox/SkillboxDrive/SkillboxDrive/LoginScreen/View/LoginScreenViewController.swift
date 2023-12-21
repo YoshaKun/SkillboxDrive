@@ -9,10 +9,22 @@ import UIKit
 
 final class LoginScreenViewController: UIViewController {
     
-    private let presenter: LoginScreenPresenterProtocol = LoginScreenPresenter()
+    private let presenter: LoginScreenPresenterInput
     private let logoImage = UIImageView()
     private let enterButton = UIButton()
     private let showOnbordButton = UIButton()
+    
+    // MARK: - Initialization
+    init(presenter: LoginScreenPresenterInput) {
+        self.presenter = presenter
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Override methods
     
     override func viewDidLoad() {
         
@@ -28,25 +40,33 @@ final class LoginScreenViewController: UIViewController {
         // Показываем Онборд новому пользователю 1 раз
         print("is new User? = \(Core.shared.isNewUser())")
         if Core.shared.isNewUser() {
-            guard let vc = presenter.didTapOnOnboardButton() else { return }
+            guard let vc = didTapOnOnboardButton() else { return }
             present(vc, animated: true)
         }
     }
 
+    private func didTapOnOnboardButton() -> UIViewController? {
+        
+        let onboardVC = OnboardingBuilder.build()
+        onboardVC.modalPresentationStyle = .fullScreen
+        
+        return onboardVC
+    }
+    
     private func configureViews() {
         
         view.backgroundColor = .systemBackground
-        logoImage.image = presenter.getImage()
+        logoImage.image = Constants.Image.logo1
         logoImage.contentMode = .center
         
-        enterButton.backgroundColor = presenter.getColor()
-        enterButton.setTitle(presenter.getTextEnterBtn(), for: .normal)
+        enterButton.backgroundColor = Constants.Colors.blueSpecial
+        enterButton.setTitle(Constants.Text.loginButton, for: .normal)
         enterButton.setTitleColor(.white, for: .normal)
         enterButton.layer.cornerRadius = 7
         enterButton.addTarget(self, action: #selector(didTapOnEnterButton), for: .touchUpInside)
         
-        showOnbordButton.backgroundColor = presenter.getColor()
-        showOnbordButton.setTitle(presenter.getTextOnbordBtn(), for: .normal)
+        showOnbordButton.backgroundColor = Constants.Colors.blueSpecial
+        showOnbordButton.setTitle(Constants.Text.OnboardButton, for: .normal)
         showOnbordButton.setTitleColor(.white, for: .normal)
         showOnbordButton.layer.cornerRadius = 7
         showOnbordButton.addTarget(self, action: #selector(didTappedOnOnboardButton), for: .touchUpInside)
@@ -55,17 +75,28 @@ final class LoginScreenViewController: UIViewController {
     @objc private func didTapOnEnterButton() {
         
         if Core.shared.isNewUser() {
-            guard let vc = presenter.didTapOnOnboardButton() else { return }
+            guard let vc = didTapOnOnboardButton() else { return }
             present(vc, animated: true)
         }
         updateData()
-        guard let tabBarController = presenter.didTapOnButton() else { return }
+        guard let tabBarController = didTapOnButton() else { return }
         present(tabBarController, animated: true, completion: nil)
+    }
+    
+    private func didTapOnButton() -> UITabBarController? {
+        
+        let tabBarVC = UITabBarController()
+        let firstVC = UINavigationController(rootViewController: ProfileBuilder.build())
+        let secondVC = UINavigationController(rootViewController: LatestBuilder.build())
+        let thirdVC = UINavigationController(rootViewController: AllFilesBuilder.build())
+        tabBarVC.setViewControllers([firstVC, secondVC, thirdVC], animated: false)
+        tabBarVC.modalPresentationStyle = .fullScreen
+        return tabBarVC
     }
 
     @objc private func didTappedOnOnboardButton() {
         
-        guard let vc = presenter.didTapOnOnboardButton() else { return }
+        guard let vc = didTapOnOnboardButton() else { return }
         present(vc, animated: true, completion: nil)
     }
     

@@ -43,6 +43,8 @@ final class ProfileViewController: UIViewController, ChartViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Override methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

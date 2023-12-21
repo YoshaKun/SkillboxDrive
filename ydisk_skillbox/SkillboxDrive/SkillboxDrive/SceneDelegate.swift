@@ -12,20 +12,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
+    func scene(
+        _ scene: UIScene,
+        willConnectTo session: UISceneSession,
+        options connectionOptions: UIScene.ConnectionOptions
+    ) {
 
-    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        
-        let zeroViewController = UINavigationController(rootViewController: LoginScreenViewController())
-        
-        // тестовый вид
-//        let tabBarVC = UITabBarController()
-//        let firstVC = UINavigationController(rootViewController: ProfileViewController())
-//        let secondVC = UINavigationController(rootViewController: LatestViewController())
-//        let thirdVC = UINavigationController(rootViewController: AllFilesViewController())
-//        tabBarVC.setViewControllers([firstVC, secondVC, thirdVC], animated: false)
-        
+
+        let zeroViewController = UINavigationController(rootViewController: LoginScreenBuilder.build())
+
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
         window?.rootViewController = zeroViewController
@@ -62,7 +58,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Save changes in the application's managed object context when the application transitions to the background.
         (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
     }
-
-
 }
 
