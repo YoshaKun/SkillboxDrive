@@ -28,7 +28,7 @@ final class AllFilesPresenter {
 
 extension AllFilesPresenter: AllFilesPresenterInput {
     
-    func getModelData() -> LatestFiles {
+    func getModelData() -> LatestFilesModel {
         return networkService.getModelDataAllFiles()
     }
     

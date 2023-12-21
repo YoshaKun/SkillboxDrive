@@ -6,7 +6,7 @@
 //
 
 protocol OpenPublicFolderPresenterInput: AnyObject {
-    func getModelData() -> LatestFiles
+    func getModelData() -> LatestFilesModel
     func removePublishedData(path: String?)
     func updateDataTableView(publicUrl: String?)
     func isPaginating() -> Bool

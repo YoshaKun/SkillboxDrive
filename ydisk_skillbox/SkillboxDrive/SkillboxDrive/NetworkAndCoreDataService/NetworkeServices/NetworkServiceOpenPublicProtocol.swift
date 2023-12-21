@@ -8,7 +8,7 @@
 import Foundation
 
 protocol NetworkServiceOpenPublicProtocol: AnyObject {
-    func gettingModelDataPublicOpen() -> LatestFiles
+    func gettingModelDataPublicOpen() -> LatestFilesModel
     func removePublishedData(
         path: String?,
         completion: @escaping () -> Void,
@@ -32,7 +32,7 @@ protocol NetworkServiceOpenPublicProtocol: AnyObject {
 
 extension NetworkService: NetworkServiceOpenPublicProtocol {
     
-    func gettingModelDataPublicOpen() -> LatestFiles {
+    func gettingModelDataPublicOpen() -> LatestFilesModel {
         return modelDataPublicOpen
     }
     

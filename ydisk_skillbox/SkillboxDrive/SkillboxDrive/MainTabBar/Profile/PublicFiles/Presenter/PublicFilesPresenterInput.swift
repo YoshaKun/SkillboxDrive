@@ -7,7 +7,7 @@
 
 protocol PublicFilesPresenterInput: AnyObject {
     func updateDataTableView()
-    func getModelData() -> LatestFiles
+    func getModelData() -> LatestFilesModel
     func removePublishedData(path: String?)
     func isPaginating() -> Bool
     func additionalGetingPublishedFiles()

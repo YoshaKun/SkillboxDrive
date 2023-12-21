@@ -8,7 +8,7 @@
 import Foundation
 
 protocol NetworkServiceAllFilesProtocol: AnyObject {
-    func getModelDataAllFiles() -> LatestFiles
+    func getModelDataAllFiles() -> LatestFilesModel
     func getAllFiles(
         completion: @escaping () -> Void,
         errorHandler: @escaping () -> Void,
@@ -26,7 +26,7 @@ extension NetworkService: NetworkServiceAllFilesProtocol {
     
     // MARK: - All Files Screen - 1
     
-    func getModelDataAllFiles() -> LatestFiles {
+    func getModelDataAllFiles() -> LatestFilesModel {
         let data = modelDataAllFiles
         return data
     }

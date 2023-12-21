@@ -8,7 +8,7 @@
 import Foundation
 
 protocol NetworkServiceAllOpenFolderProtocol: AnyObject {
-    func getModelDataAllFilesOpenFolder() -> LatestFiles
+    func getModelDataAllFilesOpenFolder() -> LatestFilesModel
     func getAllFilesOpenFolder(
         path: String?,
         completion: @escaping () -> Void,
@@ -26,7 +26,7 @@ protocol NetworkServiceAllOpenFolderProtocol: AnyObject {
 
 extension NetworkService: NetworkServiceAllOpenFolderProtocol {
     
-    func getModelDataAllFilesOpenFolder() -> LatestFiles {
+    func getModelDataAllFilesOpenFolder() -> LatestFilesModel {
         return modelDataAllOpenFolder
     }
     

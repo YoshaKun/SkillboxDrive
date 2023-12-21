@@ -34,7 +34,7 @@ extension LatestPresenter: LatestPresenterInput {
         }
     }
     
-    func getModelData() -> LatestFiles {
+    func getModelData() -> LatestFilesModel {
         let data = networkService.getModelData()
         return data
     }

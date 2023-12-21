@@ -15,11 +15,11 @@ struct DiskSpaceResponse: Codable {
 
 // MARK: - PublishedFolder
 struct PublishedFolder: Codable {
-    let embedded: LatestFiles
+    let embedded: LatestFilesModel
 }
 
-// MARK: - LatestFiles
-struct LatestFiles: Codable {
+// MARK: - LatestFilesModel
+struct LatestFilesModel: Codable {
     var items: [LatestItems]?
 }
 

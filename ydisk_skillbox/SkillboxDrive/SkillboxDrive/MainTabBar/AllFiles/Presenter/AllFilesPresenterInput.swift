@@ -6,7 +6,7 @@
 //
 
 protocol AllFilesPresenterInput: AnyObject {
-    func getModelData() -> LatestFiles
+    func getModelData() -> LatestFilesModel
     func updateDataTableView ()
     func isPaginating() -> Bool
     func additionalGetingAllFiles ()

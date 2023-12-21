@@ -28,7 +28,7 @@ final class OpenFolderPresenter {
 
 extension OpenFolderPresenter: OpenFolderPresenterInput {
     
-    func getModelData() -> LatestFiles {
+    func getModelData() -> LatestFilesModel {
         return networkService.getModelDataAllFilesOpenFolder()
     }
     

@@ -47,6 +47,12 @@
 		6B4C4B812AFCF7B30048D1B3 /* WebCacheCleaner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B4C4B802AFCF7B30048D1B3 /* WebCacheCleaner.swift */; };
 		6B5C0C042B3452900044EB2C /* LoginScreenBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5C0C032B3452900044EB2C /* LoginScreenBuilder.swift */; };
 		6B5C0C062B3453D60044EB2C /* LoginScreenPresenterInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5C0C052B3453D60044EB2C /* LoginScreenPresenterInput.swift */; };
+		6B5C0C0F2B3477A20044EB2C /* AllFiles+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5C0C092B3477A20044EB2C /* AllFiles+CoreDataClass.swift */; };
+		6B5C0C102B3477A20044EB2C /* AllFiles+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5C0C0A2B3477A20044EB2C /* AllFiles+CoreDataProperties.swift */; };
+		6B5C0C112B3477A20044EB2C /* LatestFiles+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5C0C0B2B3477A20044EB2C /* LatestFiles+CoreDataClass.swift */; };
+		6B5C0C122B3477A20044EB2C /* LatestFiles+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5C0C0C2B3477A20044EB2C /* LatestFiles+CoreDataProperties.swift */; };
+		6B5C0C132B3477A20044EB2C /* PublicFiles+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5C0C0D2B3477A20044EB2C /* PublicFiles+CoreDataClass.swift */; };
+		6B5C0C142B3477A20044EB2C /* PublicFiles+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5C0C0E2B3477A20044EB2C /* PublicFiles+CoreDataProperties.swift */; };
 		6B5FFAAF2B03AC9700300019 /* PublicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5FFAAE2B03AC9700300019 /* PublicCell.swift */; };
 		6B68E7BE2B1D10C6003D5DE4 /* OpenPublicFolderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B68E7BD2B1D10C6003D5DE4 /* OpenPublicFolderVC.swift */; };
 		6B68E7C02B1D10CE003D5DE4 /* OpenPublicFolderPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B68E7BF2B1D10CE003D5DE4 /* OpenPublicFolderPresenter.swift */; };
@@ -126,6 +132,12 @@
 		6B4C4B802AFCF7B30048D1B3 /* WebCacheCleaner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebCacheCleaner.swift; sourceTree = "<group>"; };
 		6B5C0C032B3452900044EB2C /* LoginScreenBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreenBuilder.swift; sourceTree = "<group>"; };
 		6B5C0C052B3453D60044EB2C /* LoginScreenPresenterInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreenPresenterInput.swift; sourceTree = "<group>"; };
+		6B5C0C092B3477A20044EB2C /* AllFiles+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AllFiles+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
+		6B5C0C0A2B3477A20044EB2C /* AllFiles+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AllFiles+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
+		6B5C0C0B2B3477A20044EB2C /* LatestFiles+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LatestFiles+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
+		6B5C0C0C2B3477A20044EB2C /* LatestFiles+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LatestFiles+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
+		6B5C0C0D2B3477A20044EB2C /* PublicFiles+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PublicFiles+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
+		6B5C0C0E2B3477A20044EB2C /* PublicFiles+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PublicFiles+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		6B5FFAAE2B03AC9700300019 /* PublicCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCell.swift; sourceTree = "<group>"; };
 		6B68E7BD2B1D10C6003D5DE4 /* OpenPublicFolderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenPublicFolderVC.swift; sourceTree = "<group>"; };
 		6B68E7BF2B1D10CE003D5DE4 /* OpenPublicFolderPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenPublicFolderPresenter.swift; sourceTree = "<group>"; };
@@ -482,6 +494,12 @@
 		6B5C0C082B345E100044EB2C /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
+				6B5C0C092B3477A20044EB2C /* AllFiles+CoreDataClass.swift */,
+				6B5C0C0A2B3477A20044EB2C /* AllFiles+CoreDataProperties.swift */,
+				6B5C0C0B2B3477A20044EB2C /* LatestFiles+CoreDataClass.swift */,
+				6B5C0C0C2B3477A20044EB2C /* LatestFiles+CoreDataProperties.swift */,
+				6B5C0C0D2B3477A20044EB2C /* PublicFiles+CoreDataClass.swift */,
+				6B5C0C0E2B3477A20044EB2C /* PublicFiles+CoreDataProperties.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -831,6 +849,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B5C0C112B3477A20044EB2C /* LatestFiles+CoreDataClass.swift in Sources */,
 				6B226C1D2B334CC200A653B9 /* OpenPublicFolderBuilder.swift in Sources */,
 				6B7FC6612B16101D0002573E /* LatestRealmModel.swift in Sources */,
 				6B4843002B31B86F005AD807 /* NetworkServiceAllFilesProtocol.swift in Sources */,
@@ -841,6 +860,7 @@
 				6B3DC62D2B3085C600C9FC83 /* OnboardingPresenterInput.swift in Sources */,
 				6B4843052B31CAC3005AD807 /* OpenFolderInAllFilesBuilder.swift in Sources */,
 				6B226C212B334D1900A653B9 /* OpenPublicFolderPresenterOutput.swift in Sources */,
+				6B5C0C122B3477A20044EB2C /* LatestFiles+CoreDataProperties.swift in Sources */,
 				6B177E832AF973ED00F43811 /* ResponseModels.swift in Sources */,
 				6BD831512B121B5E00A59441 /* RenameFileModel.swift in Sources */,
 				6B48430B2B31D3F5005AD807 /* NetworkServiceAllOpenFolderProtocol.swift in Sources */,
@@ -855,6 +875,7 @@
 				6B76FB6A2B0BC5E200B66E93 /* ViewingScreenViewController.swift in Sources */,
 				6BEEF0EA2ACEC47000BBE68D /* ProfileViewController.swift in Sources */,
 				6B76FB6C2B0BC60900B66E93 /* ViewingScreenPresenter.swift in Sources */,
+				6B5C0C102B3477A20044EB2C /* AllFiles+CoreDataProperties.swift in Sources */,
 				6B3DC6472B30BF2F00C9FC83 /* NetworkServiceLatestCellProtocol.swift in Sources */,
 				6B4842FC2B31B5F6005AD807 /* AllFilesPresenterInput.swift in Sources */,
 				6BC3FC382AD71EB800A86FF6 /* LoginScreenViewController.swift in Sources */,
@@ -880,12 +901,15 @@
 				6B226C142B33250500A653B9 /* PublicFilesPresenterInput.swift in Sources */,
 				6BEEF0E82ACEC47000BBE68D /* SceneDelegate.swift in Sources */,
 				6B3DC6362B3090C000C9FC83 /* LatestBuilder.swift in Sources */,
+				6B5C0C132B3477A20044EB2C /* PublicFiles+CoreDataClass.swift in Sources */,
 				6B4842FE2B31B602005AD807 /* AllFilesPresenterOutput.swift in Sources */,
 				6B7FC6632B1672350002573E /* PublicRealmModel.swift in Sources */,
 				6B68E7C02B1D10CE003D5DE4 /* OpenPublicFolderPresenter.swift in Sources */,
 				6BD139AB2B06654800BE5B42 /* LatestPresenter.swift in Sources */,
 				6B4843122B31E973005AD807 /* ProfileBuilder.swift in Sources */,
+				6B5C0C142B3477A20044EB2C /* PublicFiles+CoreDataProperties.swift in Sources */,
 				6B3DC62F2B3087DE00C9FC83 /* OnboardingBuilder.swift in Sources */,
+				6B5C0C0F2B3477A20044EB2C /* AllFiles+CoreDataClass.swift in Sources */,
 				6BEAF40F2B0276F800A80A4E /* PublicFilesViewController.swift in Sources */,
 				6B8AFFEE2B1B511B009A988C /* AllFilesPresenter.swift in Sources */,
 				6B4843182B31EC58005AD807 /* Units.swift in Sources */,

@@ -14,7 +14,7 @@ protocol NetworkServiceLatestProtocol: AnyObject {
         completion: @escaping () -> Void,
         noInternet: @escaping () -> Void
     )
-    func getModelData() -> LatestFiles
+    func getModelData() -> LatestFilesModel
     func getFileFromPathOnLatestScreen(
         path: String?,
         completion: @escaping () -> Void,
@@ -54,7 +54,7 @@ extension NetworkService: NetworkServiceLatestProtocol {
             }
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
-            guard let latestFiles = try? decoder.decode(LatestFiles.self, from: data) else {
+            guard let latestFiles = try? decoder.decode(LatestFilesModel.self, from: data) else {
                 print("Error serialization")
                 return
             }
@@ -65,7 +65,7 @@ extension NetworkService: NetworkServiceLatestProtocol {
         task.resume()
     }
     
-    func getModelData() -> LatestFiles {
+    func getModelData() -> LatestFilesModel {
         return modelDataLatest
     }
     
@@ -127,7 +127,7 @@ extension NetworkService: NetworkServiceLatestProtocol {
             }
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
-            guard let latestFiles = try? decoder.decode(LatestFiles.self, from: data) else {
+            guard let latestFiles = try? decoder.decode(LatestFilesModel.self, from: data) else {
                 print("Error serialization")
                 guard let self = self else { return }
                 self.isPaginatingLatest = false

@@ -8,7 +8,7 @@
 protocol LatestPresenterInput {
     
     func updateDataTableView()
-    func getModelData() -> LatestFiles
+    func getModelData() -> LatestFilesModel
     func getFileFromPath(
         title: String?,
         created: String?,

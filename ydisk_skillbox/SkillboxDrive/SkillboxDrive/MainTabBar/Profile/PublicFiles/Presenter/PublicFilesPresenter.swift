@@ -36,7 +36,7 @@ extension PublicFilesPresenter: PublicFilesPresenterInput {
         }
     }
     
-    func getModelData() -> LatestFiles {
+    func getModelData() -> LatestFilesModel {
         
         let data = networkService.getModalDataPublic()
 //        if ((data.items?.isEmpty) != nil) {

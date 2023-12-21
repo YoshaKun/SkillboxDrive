@@ -6,7 +6,7 @@
 //
 
 protocol OpenFolderPresenterInput {
-    func getModelData() -> LatestFiles
+    func getModelData() -> LatestFilesModel
     func updateDataTableView(path: String?)
     func isPaginatingOpenFolder() -> Bool
     func additionalGettingFiles(path: String?)

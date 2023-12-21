@@ -15,5 +15,5 @@ import Foundation
 //    @objc dynamic var type: String?
 //    @objc dynamic var size: Int = 0
 //    @objc dynamic var preview: String?
-//    @objc dynamic var public_url: String?
+//    @objc dynamic var publicUrl: String?
 //}

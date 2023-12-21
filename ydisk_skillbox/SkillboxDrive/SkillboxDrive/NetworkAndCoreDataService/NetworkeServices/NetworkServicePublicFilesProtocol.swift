@@ -13,7 +13,7 @@ protocol NetworkServicePublicFilesProtocol: AnyObject {
         errorHandler: @escaping () -> Void,
         noInternet: @escaping () -> Void
     )
-    func getModalDataPublic() -> LatestFiles
+    func getModalDataPublic() -> LatestFilesModel
     func removePublishedFile (
         path: String?,
         completion: @escaping () -> Void,
@@ -51,7 +51,7 @@ extension NetworkService: NetworkServicePublicFilesProtocol {
                 return }
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
-            guard let latestFiles = try? decoder.decode(LatestFiles.self, from: data) else {
+            guard let latestFiles = try? decoder.decode(LatestFilesModel.self, from: data) else {
                 print("Error serialization")
                 return }
             guard let self = self else { return }
@@ -65,7 +65,7 @@ extension NetworkService: NetworkServicePublicFilesProtocol {
         task.resume()
     }
     
-    func getModalDataPublic() -> LatestFiles {
+    func getModalDataPublic() -> LatestFilesModel {
         return modelDataPublic
     }
     
@@ -134,7 +134,7 @@ extension NetworkService: NetworkServicePublicFilesProtocol {
             }
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
-            guard let latestFiles = try? decoder.decode(LatestFiles.self, from: data) else {
+            guard let latestFiles = try? decoder.decode(LatestFilesModel.self, from: data) else {
                 print("Error serialization")
                 guard let self = self else { return }
                 self.isPaginatingPublic = false

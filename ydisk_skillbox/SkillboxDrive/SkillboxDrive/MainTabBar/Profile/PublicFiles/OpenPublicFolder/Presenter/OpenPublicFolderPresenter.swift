@@ -26,7 +26,7 @@ final class OpenPublicFolderPresenter {
 
 extension OpenPublicFolderPresenter: OpenPublicFolderPresenterInput {
     
-    func getModelData() -> LatestFiles {
+    func getModelData() -> LatestFilesModel {
         let data = networkService.gettingModelDataPublicOpen()
         return data
     }
