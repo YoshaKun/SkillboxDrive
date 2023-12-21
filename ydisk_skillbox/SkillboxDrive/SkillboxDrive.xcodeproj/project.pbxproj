@@ -23,7 +23,6 @@
 		6B226C232B33554400A653B9 /* NetworkServiceOpenPublicProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B226C222B33554400A653B9 /* NetworkServiceOpenPublicProtocol.swift */; };
 		6B295E8C2AD81DF7003FD56C /* LoginScreenPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B295E8B2AD81DF7003FD56C /* LoginScreenPresenter.swift */; };
 		6B295E902AD84CAF003FD56C /* Localize.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6B295E922AD84CAF003FD56C /* Localize.strings */; };
-		6B3DC6282B3081C100C9FC83 /* MVPExample in Resources */ = {isa = PBXBuildFile; fileRef = 6B3DC6272B3081C100C9FC83 /* MVPExample */; };
 		6B3DC62D2B3085C600C9FC83 /* OnboardingPresenterInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3DC62C2B3085C600C9FC83 /* OnboardingPresenterInput.swift */; };
 		6B3DC62F2B3087DE00C9FC83 /* OnboardingBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3DC62E2B3087DE00C9FC83 /* OnboardingBuilder.swift */; };
 		6B3DC6362B3090C000C9FC83 /* LatestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3DC6352B3090C000C9FC83 /* LatestBuilder.swift */; };
@@ -103,7 +102,6 @@
 		6B295E8D2AD84C3E003FD56C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		6B295E912AD84CAF003FD56C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localize.strings; sourceTree = "<group>"; };
 		6B295E932AD84CB3003FD56C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localize.strings; sourceTree = "<group>"; };
-		6B3DC6272B3081C100C9FC83 /* MVPExample */ = {isa = PBXFileReference; lastKnownFileType = folder; path = MVPExample; sourceTree = "<group>"; };
 		6B3DC62C2B3085C600C9FC83 /* OnboardingPresenterInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPresenterInput.swift; sourceTree = "<group>"; };
 		6B3DC62E2B3087DE00C9FC83 /* OnboardingBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingBuilder.swift; sourceTree = "<group>"; };
 		6B3DC6352B3090C000C9FC83 /* LatestBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestBuilder.swift; sourceTree = "<group>"; };
@@ -466,6 +464,28 @@
 			path = Builder;
 			sourceTree = "<group>";
 		};
+		6B5C0C072B345D760044EB2C /* NetworkeServices */ = {
+			isa = PBXGroup;
+			children = (
+				6B9BA6282B28DDD600D69EBC /* NetworkService.swift */,
+				6B48430F2B31E95C005AD807 /* NetworkServiceProfileProtocol.swift */,
+				6B226C172B33259A00A653B9 /* NetworkServicePublicFilesProtocol.swift */,
+				6B226C222B33554400A653B9 /* NetworkServiceOpenPublicProtocol.swift */,
+				6B3DC63B2B30944C00C9FC83 /* NetworkServiceLatestProtocol.swift */,
+				6B3DC6462B30BF2F00C9FC83 /* NetworkServiceLatestCellProtocol.swift */,
+				6B4842FF2B31B86F005AD807 /* NetworkServiceAllFilesProtocol.swift */,
+				6B48430A2B31D3F5005AD807 /* NetworkServiceAllOpenFolderProtocol.swift */,
+			);
+			path = NetworkeServices;
+			sourceTree = "<group>";
+		};
+		6B5C0C082B345E100044EB2C /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
 		6B5FFAAD2B03AC1400300019 /* CustomCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -495,19 +515,13 @@
 			path = OpenFolder;
 			sourceTree = "<group>";
 		};
-		6B9BA6272B28DDB400D69EBC /* NetworkService */ = {
+		6B9BA6272B28DDB400D69EBC /* NetworkAndCoreDataService */ = {
 			isa = PBXGroup;
 			children = (
-				6B9BA6282B28DDD600D69EBC /* NetworkService.swift */,
-				6B48430F2B31E95C005AD807 /* NetworkServiceProfileProtocol.swift */,
-				6B226C172B33259A00A653B9 /* NetworkServicePublicFilesProtocol.swift */,
-				6B226C222B33554400A653B9 /* NetworkServiceOpenPublicProtocol.swift */,
-				6B3DC63B2B30944C00C9FC83 /* NetworkServiceLatestProtocol.swift */,
-				6B3DC6462B30BF2F00C9FC83 /* NetworkServiceLatestCellProtocol.swift */,
-				6B4842FF2B31B86F005AD807 /* NetworkServiceAllFilesProtocol.swift */,
-				6B48430A2B31D3F5005AD807 /* NetworkServiceAllOpenFolderProtocol.swift */,
+				6B5C0C082B345E100044EB2C /* CoreData */,
+				6B5C0C072B345D760044EB2C /* NetworkeServices */,
 			);
-			path = NetworkService;
+			path = NetworkAndCoreDataService;
 			sourceTree = "<group>";
 		};
 		6BC3FC392AD71EBF00A86FF6 /* LoginScreen */ = {
@@ -584,7 +598,7 @@
 			children = (
 				6BEEF0E52ACEC47000BBE68D /* AppDelegate.swift */,
 				6BEEF0E72ACEC47000BBE68D /* SceneDelegate.swift */,
-				6B9BA6272B28DDB400D69EBC /* NetworkService */,
+				6B9BA6272B28DDB400D69EBC /* NetworkAndCoreDataService */,
 				6B205F302AD572E0001BB4CD /* Constants */,
 				6B358D5F2B14F3B300AE4454 /* RealmModels */,
 				6BFC67662AFFFE7600711AA7 /* ResponseModels */,
@@ -592,7 +606,6 @@
 				6B177E7F2AF9428300F43811 /* Authorization */,
 				6BC3FC392AD71EBF00A86FF6 /* LoginScreen */,
 				6BD139AF2B068CD900BE5B42 /* ViewingScreen */,
-				6B3DC6272B3081C100C9FC83 /* MVPExample */,
 				6BEEF0FC2ACED77100BBE68D /* MainTabBar */,
 				6BEEF0F12ACEC47100BBE68D /* Assets.xcassets */,
 				6B295E922AD84CAF003FD56C /* Localize.strings */,
@@ -747,7 +760,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6BEEF0F52ACEC47100BBE68D /* LaunchScreen.storyboard in Resources */,
-				6B3DC6282B3081C100C9FC83 /* MVPExample in Resources */,
 				6BEEF0F22ACEC47100BBE68D /* Assets.xcassets in Resources */,
 				6B295E902AD84CAF003FD56C /* Localize.strings in Resources */,
 			);
