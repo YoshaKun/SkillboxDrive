@@ -23,6 +23,7 @@ final class PublicFilesViewController: UIViewController {
     private var tableView = UITableView(frame: CGRect.zero, style: UITableView.Style.grouped)
     private var errorView = UIView()
     private var errorLabel = UILabel()
+    private var noInternetFlag = false
     
     // MARK: - Initialization
     
@@ -276,6 +277,7 @@ extension PublicFilesViewController: PublicFilesPresenterOutput {
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
+            self.noInternetFlag = false
             self.activityIndicator.stopAnimating()
             self.activityIndicatorView.removeFromSuperview()
             self.tableView.reloadData()
@@ -298,6 +300,7 @@ extension PublicFilesViewController: PublicFilesPresenterOutput {
     func noInternetGettingPublishedFiles() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
+            self.noInternetFlag = true
             self.activityIndicator.stopAnimating()
             self.activityIndicatorView.removeFromSuperview()
             self.tableView.reloadData()
@@ -338,15 +341,35 @@ extension PublicFilesViewController: PublicFilesPresenterOutput {
 
 // MARK: - UITableViewDataSource
 extension PublicFilesViewController: UITableViewDataSource {
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
+        guard noInternetFlag == false else {
+            let modelCount = presenter.fetchProfileModelFromCoreData().items?.count
+            return modelCount ?? 0
+        }
         return presenter.getModelData().items?.count ?? 0
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: publicCell) as? PublicCell
-        guard let viewModel = presenter.getModelData().items, viewModel.count > indexPath.row else {
+        
+        guard noInternetFlag == false else {
+            // MARK: - If there is no an Internet - so model fetching from CoreData
+            guard let viewModel = presenter.fetchProfileModelFromCoreData().items,
+                    viewModel.count > indexPath.row
+            else {
+                return UITableViewCell()
+            }
+            let item = viewModel[indexPath.row]
+            cell?.configureCell(item)
+            cell?.delegate = self
+            cell?.backgroundColor = .white
+            return cell ?? UITableViewCell()
+        }
+        // MARK: - If the Internet is ON - so model fetching from Server
+        guard let viewModel = presenter.getModelData().items,
+                viewModel.count > indexPath.row 
+        else {
             return UITableViewCell()
         }
         let item = viewModel[indexPath.row]
@@ -360,11 +383,11 @@ extension PublicFilesViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 
 extension PublicFilesViewController: UITableViewDelegate {
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+
         configureActivityIndicatorView()
-        
+
         guard let viewModel = presenter.getModelData().items else {
             print("error getModelData")
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
@@ -405,9 +428,15 @@ extension PublicFilesViewController: UITableViewDelegate {
         } else {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
                 guard let self = self else { return }
-                let vc = ViewingScreenViewController(title: title, created: created, type: fileType, file: fileUrl, path: pathItem)
-                vc.modalPresentationStyle = .fullScreen
-                self.navigationController?.present(vc, animated: true, completion: {
+                let newVc = ViewingScreenViewController(
+                    title: title,
+                    created: created,
+                    type: fileType,
+                    file: fileUrl,
+                    path: pathItem
+                )
+                newVc.modalPresentationStyle = .fullScreen
+                self.navigationController?.present(newVc, animated: true, completion: {
                     self.activityIndicator.stopAnimating()
                     self.activityIndicatorView.removeFromSuperview()
                 })

@@ -16,20 +16,30 @@ final class PublicFilesPresenter {
     // MARK: - Private
 
     private let networkService: NetworkServicePublicFilesProtocol
-//    private let coreDataService:
-    
+    private let coreDataService: CoreDataPublicFilesProtocol
+
     // MARK: - Initialization
-    
-    init(networkService: NetworkService) {
+
+    init(
+        networkService: NetworkService,
+        coreDataService: CoreDataManager
+    ) {
         self.networkService = networkService
+        self.coreDataService = coreDataService
     }
 }
 
 extension PublicFilesPresenter: PublicFilesPresenterInput {
-    
+
     func updateDataTableView() {
         networkService.getPublishedFiles { [weak self] in
             self?.output?.didSuccessGettingPublishedFiles()
+            self?.coreDataService.deletePublicFilesFromCoreData()
+            guard let modelData = self?.networkService.getModalDataPublic() else {
+                print("error of save data to CoreData")
+                return
+            }
+            self?.coreDataService.saveOnCoreData(publicList: modelData)
         } errorHandler: { [weak self] in
             self?.output?.didFailureGettingPublishedFiles()
         } noInternet: { [weak self] in
@@ -38,13 +48,13 @@ extension PublicFilesPresenter: PublicFilesPresenterInput {
     }
 
     func getModelData() -> LatestFilesModel {
-
         let data = networkService.getModalDataPublic()
-//        if ((data.items?.isEmpty) != nil) {
-//            print("сработал метод readPublicFilesRealm")
-//            return model.readPublicFilesRealm()
-//        }
         return data
+    }
+    
+    func fetchProfileModelFromCoreData() -> LatestFilesModel {
+        print("сработал метод fetchProfileCoreData")
+        return coreDataService.fetchProfileCoreData()
     }
 
     func removePublishedData(path: String?) {

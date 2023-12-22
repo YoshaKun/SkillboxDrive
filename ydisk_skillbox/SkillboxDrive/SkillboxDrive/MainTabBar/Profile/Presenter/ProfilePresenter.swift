@@ -40,7 +40,7 @@ extension ProfilePresenter: ProfilePresenterInput {
             let cookiesCleaner = WebCacheCleaner()
             cookiesCleaner.clean()
         }
-        coreDataService.deleteFromCoreData(ProfileEntity())
+        coreDataService.deleteProfileDataFromCoreData()
     }
     
     func updateToken(newToken: String?) {

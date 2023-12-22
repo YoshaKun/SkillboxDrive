@@ -8,6 +8,7 @@
 protocol PublicFilesPresenterInput: AnyObject {
     func updateDataTableView()
     func getModelData() -> LatestFilesModel
+    func fetchProfileModelFromCoreData() -> LatestFilesModel
     func removePublishedData(path: String?)
     func isPaginating() -> Bool
     func additionalGetingPublishedFiles()

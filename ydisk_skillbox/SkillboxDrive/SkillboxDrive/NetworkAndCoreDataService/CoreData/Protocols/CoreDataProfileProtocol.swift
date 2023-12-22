@@ -9,9 +9,8 @@ import Foundation
 import CoreData
 
 protocol CoreDataProfileProtocol {
-    
     func saveOnCoreData(total: Int64, used: Int64)
-    func deleteFromCoreData(_ profile: ProfileEntity)
+    func deleteProfileDataFromCoreData()
     func fetchProfileCoreData() -> [ProfileEntity]
 }
 
@@ -24,8 +23,13 @@ extension CoreDataManager: CoreDataProfileProtocol {
         saveContext()
     }
     
-    func deleteFromCoreData(_ profile: ProfileEntity) {
-        viewContext.delete(profile)
+    func deleteProfileDataFromCoreData() {
+        let fetchRequest = ProfileEntity.fetchRequest()
+        guard let objects = try? viewContext.fetch(fetchRequest) else { return }
+
+        for object in objects {
+            viewContext.delete(object)
+        }
         saveContext()
     }
     
