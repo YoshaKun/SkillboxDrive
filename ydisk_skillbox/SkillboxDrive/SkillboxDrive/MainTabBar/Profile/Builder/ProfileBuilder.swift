@@ -10,7 +10,11 @@ import UIKit
 enum ProfileBuilder {
     static func build() -> UIViewController {
         let networkService = NetworkService.shared
-        let presenter = ProfilePresenter(networkService: networkService)
+        let coreDataService = CoreDataManager.shared
+        let presenter = ProfilePresenter(
+            networkService: networkService,
+            coreDataService: coreDataService
+        )
         let viewController = ProfileViewController(presenter: presenter)
         presenter.output = viewController
         return viewController

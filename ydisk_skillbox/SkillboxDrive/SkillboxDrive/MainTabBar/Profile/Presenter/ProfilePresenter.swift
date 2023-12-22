@@ -15,12 +15,17 @@ final class ProfilePresenter {
     
     // MARK: - Private
     
+    private let coreDataService: CoreDataProfileProtocol
     private let networkService: NetworkServiceProfileProtocol
     
     // MARK: - Initialization
     
-    init(networkService: NetworkService) {
+    init(
+        networkService: NetworkService,
+        coreDataService: CoreDataManager
+    ) {
         self.networkService = networkService
+        self.coreDataService = coreDataService
     }
 }
 
@@ -35,6 +40,7 @@ extension ProfilePresenter: ProfilePresenterInput {
             let cookiesCleaner = WebCacheCleaner()
             cookiesCleaner.clean()
         }
+        coreDataService.deleteFromCoreData(ProfileEntity())
     }
     
     func updateToken(newToken: String?) {
@@ -74,8 +80,25 @@ extension ProfilePresenter: ProfilePresenterInput {
                 total: totalSpace,
                 used: usedSpace
             )
+            self?.coreDataService.saveOnCoreData(
+                total: Int64(totalSpace ?? 777),
+                used: Int64(usedSpace ?? 777)
+            )
         } errorHandler: { [weak self] in
             self?.output?.didFailureUpdatePieChart()
+            let core = self?.coreDataService.fetchProfileCoreData()
+            guard let totalCore = core?.first?.totalSpace else {
+                print("error total coreData")
+                return
+            }
+            guard let usedCore = core?.first?.usedSpace else {
+                print("error total coreData")
+                return
+            }
+            self?.output?.didSuccessUpdatePieChart(
+                total: Int(totalCore),
+                used: Int(usedCore)
+            )
         }
     }
 }

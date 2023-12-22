@@ -67,6 +67,9 @@
 		6B99242F2B07E92200002F8A /* PublicCellPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B99242E2B07E92200002F8A /* PublicCellPresenter.swift */; };
 		6B9BA6292B28DDD600D69EBC /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9BA6282B28DDD600D69EBC /* NetworkService.swift */; };
 		6BA0F7712AE95D56007EE8FC /* ProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA0F7702AE95D56007EE8FC /* ProfilePresenter.swift */; };
+		6BBCA60F2B35B67F00133940 /* ProfileEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBCA60D2B35B67F00133940 /* ProfileEntity+CoreDataClass.swift */; };
+		6BBCA6102B35B67F00133940 /* ProfileEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBCA60E2B35B67F00133940 /* ProfileEntity+CoreDataProperties.swift */; };
+		6BBCA6132B35BD7600133940 /* CoreDataProfileProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBCA6122B35BD7600133940 /* CoreDataProfileProtocol.swift */; };
 		6BC3FC382AD71EB800A86FF6 /* LoginScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC3FC372AD71EB800A86FF6 /* LoginScreenViewController.swift */; };
 		6BD139AB2B06654800BE5B42 /* LatestPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD139AA2B06654800BE5B42 /* LatestPresenter.swift */; };
 		6BD139AE2B068B0C00BE5B42 /* LatestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD139AD2B068B0C00BE5B42 /* LatestCell.swift */; };
@@ -150,6 +153,9 @@
 		6B99242E2B07E92200002F8A /* PublicCellPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCellPresenter.swift; sourceTree = "<group>"; };
 		6B9BA6282B28DDD600D69EBC /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		6BA0F7702AE95D56007EE8FC /* ProfilePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePresenter.swift; sourceTree = "<group>"; };
+		6BBCA60D2B35B67F00133940 /* ProfileEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileEntity+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
+		6BBCA60E2B35B67F00133940 /* ProfileEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileEntity+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
+		6BBCA6122B35BD7600133940 /* CoreDataProfileProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataProfileProtocol.swift; sourceTree = "<group>"; };
 		6BC3FC372AD71EB800A86FF6 /* LoginScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreenViewController.swift; sourceTree = "<group>"; };
 		6BD139AA2B06654800BE5B42 /* LatestPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestPresenter.swift; sourceTree = "<group>"; };
 		6BD139AD2B068B0C00BE5B42 /* LatestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestCell.swift; sourceTree = "<group>"; };
@@ -480,6 +486,7 @@
 		6B5C0C082B345E100044EB2C /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
+				6BBCA6112B35BD5E00133940 /* Protocols */,
 				6B5C0C152B347C5B0044EB2C /* Models */,
 				6B5C0C162B347C770044EB2C /* CoreDataManager.swift */,
 			);
@@ -489,6 +496,8 @@
 		6B5C0C152B347C5B0044EB2C /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				6BBCA60D2B35B67F00133940 /* ProfileEntity+CoreDataClass.swift */,
+				6BBCA60E2B35B67F00133940 /* ProfileEntity+CoreDataProperties.swift */,
 				6B5C0C092B3477A20044EB2C /* AllFiles+CoreDataClass.swift */,
 				6B5C0C0A2B3477A20044EB2C /* AllFiles+CoreDataProperties.swift */,
 				6B5C0C0B2B3477A20044EB2C /* LatestFiles+CoreDataClass.swift */,
@@ -535,6 +544,14 @@
 				6B5C0C072B345D760044EB2C /* NetworkeServices */,
 			);
 			path = NetworkAndCoreDataService;
+			sourceTree = "<group>";
+		};
+		6BBCA6112B35BD5E00133940 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				6BBCA6122B35BD7600133940 /* CoreDataProfileProtocol.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 		6BC3FC392AD71EBF00A86FF6 /* LoginScreen */ = {
@@ -873,6 +890,8 @@
 				6B4842FC2B31B5F6005AD807 /* AllFilesPresenterInput.swift in Sources */,
 				6BC3FC382AD71EB800A86FF6 /* LoginScreenViewController.swift in Sources */,
 				6BEAF4112B02770500A80A4E /* PublicFilesPresenter.swift in Sources */,
+				6BBCA6132B35BD7600133940 /* CoreDataProfileProtocol.swift in Sources */,
+				6BBCA60F2B35B67F00133940 /* ProfileEntity+CoreDataClass.swift in Sources */,
 				6BEEF0E62ACEC47000BBE68D /* AppDelegate.swift in Sources */,
 				6B4842FA2B31B58F005AD807 /* AllFilesBuilder.swift in Sources */,
 				6B205F342AD587ED001BB4CD /* CustomOnboardingCell.swift in Sources */,
@@ -907,6 +926,7 @@
 				6B4843182B31EC58005AD807 /* Units.swift in Sources */,
 				6BA0F7712AE95D56007EE8FC /* ProfilePresenter.swift in Sources */,
 				6B4C4B812AFCF7B30048D1B3 /* WebCacheCleaner.swift in Sources */,
+				6BBCA6102B35B67F00133940 /* ProfileEntity+CoreDataProperties.swift in Sources */,
 				6BEEF1082ACED9EE00BBE68D /* OnboardingModel.swift in Sources */,
 				6B5C0C042B3452900044EB2C /* LoginScreenBuilder.swift in Sources */,
 				6B295E8C2AD81DF7003FD56C /* LoginScreenPresenter.swift in Sources */,
