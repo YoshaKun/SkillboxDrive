@@ -9,7 +9,7 @@ protocol AllFilesPresenterOutput: AnyObject {
     func didSuccessUpdateTableView()
     func didFailureUpdateTableView()
     func noInternetUpdateTableView()
-    
+
     func didSuccessAdditionalGetingAllFiles()
     func didFailureAdditionalGetingAllFiles()
 }

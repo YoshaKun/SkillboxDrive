@@ -10,11 +10,13 @@ import UIKit
 enum AllFilesBuilder {
     static func build() -> UIViewController {
         let networkService = NetworkService.shared
-        let presenter = AllFilesPresenter(networkService: networkService)
+        let coreDataService = CoreDataManager.shared
+        let presenter = AllFilesPresenter(
+            networkService: networkService,
+            coreDataService: coreDataService
+        )
         let viewController = AllFilesViewController(presenter: presenter)
-
         presenter.output = viewController
-        
         return viewController
     }
 }

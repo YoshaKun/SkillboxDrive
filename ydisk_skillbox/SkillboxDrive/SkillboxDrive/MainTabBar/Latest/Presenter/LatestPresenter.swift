@@ -8,37 +8,53 @@
 import Foundation
 
 final class LatestPresenter {
-    
+
     // MARK: - Public properties
-    
+
     weak var output: LatestPresenterOutput?
-    
+
     // MARK: - Private properties
-    
+
     private let networkService: NetworkServiceLatestProtocol
-    
+    private let coreDataService: CoreDataLatestProtocol
+
     // MARK: - Initialization
-    
-    init(networkService: NetworkService) {
+
+    init(
+        networkService: NetworkService,
+        coreDataService: CoreDataManager
+    ) {
         self.networkService = networkService
+        self.coreDataService = coreDataService
     }
 }
 
 extension LatestPresenter: LatestPresenterInput {
-    
+
     func updateDataTableView() {
         networkService.getLatestFiles { [weak self] in
             self?.output?.didSuccessUpdateTableView()
+            self?.coreDataService.deleteLatestFilesFromCoreData()
+            guard let modelData = self?.networkService.getModelData() else {
+                print("error of save data to CoreData")
+                return
+            }
+            self?.coreDataService.saveLatestFilesOnCoreData(openList: modelData)
         } noInternet: { [weak self] in
             self?.output?.noInternetUpdateTableView()
         }
     }
-    
+
     func getModelData() -> LatestFilesModel {
         let data = networkService.getModelData()
         return data
     }
     
+    func fetchLatestModelFromCoreData() -> LatestFilesModel {
+        print("сработал метод fetchProfileCoreData")
+        return coreDataService.fetchLatestFilesCoreData()
+    }
+
     func getFileFromPath(
         title: String?,
         created: String?,
@@ -59,20 +75,19 @@ extension LatestPresenter: LatestPresenterInput {
                 self?.output?.didFailureGetFileFromPath()
             }
     }
-    
+
     func additionalGetingLatestFiles() {
         networkService.additionalGetingLatestFilesOnLatestScreen { [weak self] in
             self?.output?.didSuccessAdditionalGettingFiles()
         } errorHandler: { [weak self] in
             self?.output?.didFailureAdditionalGettingFiles()
         }
-
     }
-    
+
     func isPaginating() -> Bool {
         return networkService.isPaginatingLatestFiles()
     }
-    
+
     func changePaginatingStateOnFalse() {
         networkService.changePaginatingStateOnFalse()
     }

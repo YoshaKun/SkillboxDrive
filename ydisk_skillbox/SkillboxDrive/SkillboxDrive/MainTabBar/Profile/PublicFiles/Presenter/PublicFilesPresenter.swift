@@ -51,10 +51,10 @@ extension PublicFilesPresenter: PublicFilesPresenterInput {
         let data = networkService.getModalDataPublic()
         return data
     }
-    
-    func fetchProfileModelFromCoreData() -> LatestFilesModel {
+
+    func fetchPublicFilesModelFromCoreData() -> LatestFilesModel {
         print("сработал метод fetchProfileCoreData")
-        return coreDataService.fetchProfileCoreData()
+        return coreDataService.fetchPublicFilesCoreData()
     }
 
     func removePublishedData(path: String?) {

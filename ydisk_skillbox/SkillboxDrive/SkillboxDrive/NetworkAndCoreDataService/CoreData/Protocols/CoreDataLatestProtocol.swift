@@ -1,5 +1,5 @@
 //
-//  CoreDataPublicFilesProtocol.swift
+//  CoreDataOpenPublicProtocol.swift
 //  SkillboxDrive
 //
 //  Created by Yosha Kun on 22.12.2023.
@@ -8,19 +8,19 @@
 import Foundation
 import CoreData
 
-protocol CoreDataPublicFilesProtocol {
-    func saveOnCoreData(publicList: LatestFilesModel)
-    func deletePublicFilesFromCoreData()
-    func fetchPublicFilesCoreData() -> LatestFilesModel
+protocol CoreDataLatestProtocol {
+    func saveLatestFilesOnCoreData(openList: LatestFilesModel)
+    func deleteLatestFilesFromCoreData()
+    func fetchLatestFilesCoreData() -> LatestFilesModel
 }
 
-extension CoreDataManager: CoreDataPublicFilesProtocol {
+extension CoreDataManager: CoreDataLatestProtocol {
 
-    func saveOnCoreData(publicList: LatestFilesModel) {
-        guard let fetchedArray = publicList.items else { return }
-        var savedArry = [PublicFiles]()
+    func saveLatestFilesOnCoreData(openList: LatestFilesModel) {
+        guard let fetchedArray = openList.items else { return }
+        var savedArry = [LatestFiles]()
         for items in fetchedArray {
-            let model = PublicFiles(context: viewContext)
+            let model = LatestFiles(context: viewContext)
             model.name = items.name
             model.created = items.created
             model.file = items.file
@@ -33,19 +33,18 @@ extension CoreDataManager: CoreDataPublicFilesProtocol {
         }
         saveContext()
     }
-
-    func deletePublicFilesFromCoreData() {
-        let publicFetchRequest = PublicFiles.fetchRequest()
+    
+    func deleteLatestFilesFromCoreData() {
+        let publicFetchRequest = LatestFiles.fetchRequest()
         guard let objects = try? viewContext.fetch(publicFetchRequest) else { return }
-
         for object in objects {
             viewContext.delete(object)
         }
         saveContext()
     }
 
-    func fetchPublicFilesCoreData() -> LatestFilesModel {
-        let publicFetchRequest = PublicFiles.fetchRequest()
+    func fetchLatestFilesCoreData() -> LatestFilesModel {
+        let publicFetchRequest = LatestFiles.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "type", ascending: true)
         publicFetchRequest.sortDescriptors = [sortDescriptor]
         guard let result = try? viewContext.fetch(publicFetchRequest) else {

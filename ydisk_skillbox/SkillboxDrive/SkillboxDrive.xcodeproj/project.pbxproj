@@ -71,7 +71,8 @@
 		6BBCA6102B35B67F00133940 /* ProfileEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBCA60E2B35B67F00133940 /* ProfileEntity+CoreDataProperties.swift */; };
 		6BBCA6132B35BD7600133940 /* CoreDataProfileProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBCA6122B35BD7600133940 /* CoreDataProfileProtocol.swift */; };
 		6BBCA6152B35C58D00133940 /* CoreDataPublicFilesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBCA6142B35C58D00133940 /* CoreDataPublicFilesProtocol.swift */; };
-		6BBCA6172B36088000133940 /* CoreDataOpenPublicProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBCA6162B36088000133940 /* CoreDataOpenPublicProtocol.swift */; };
+		6BBCA6172B36088000133940 /* CoreDataLatestProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBCA6162B36088000133940 /* CoreDataLatestProtocol.swift */; };
+		6BBCA6192B36160200133940 /* CoreDataAllFilesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBCA6182B36160200133940 /* CoreDataAllFilesProtocol.swift */; };
 		6BC3FC382AD71EB800A86FF6 /* LoginScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC3FC372AD71EB800A86FF6 /* LoginScreenViewController.swift */; };
 		6BD139AB2B06654800BE5B42 /* LatestPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD139AA2B06654800BE5B42 /* LatestPresenter.swift */; };
 		6BD139AE2B068B0C00BE5B42 /* LatestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD139AD2B068B0C00BE5B42 /* LatestCell.swift */; };
@@ -159,7 +160,8 @@
 		6BBCA60E2B35B67F00133940 /* ProfileEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileEntity+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		6BBCA6122B35BD7600133940 /* CoreDataProfileProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataProfileProtocol.swift; sourceTree = "<group>"; };
 		6BBCA6142B35C58D00133940 /* CoreDataPublicFilesProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataPublicFilesProtocol.swift; sourceTree = "<group>"; };
-		6BBCA6162B36088000133940 /* CoreDataOpenPublicProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataOpenPublicProtocol.swift; sourceTree = "<group>"; };
+		6BBCA6162B36088000133940 /* CoreDataLatestProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataLatestProtocol.swift; sourceTree = "<group>"; };
+		6BBCA6182B36160200133940 /* CoreDataAllFilesProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataAllFilesProtocol.swift; sourceTree = "<group>"; };
 		6BC3FC372AD71EB800A86FF6 /* LoginScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreenViewController.swift; sourceTree = "<group>"; };
 		6BD139AA2B06654800BE5B42 /* LatestPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestPresenter.swift; sourceTree = "<group>"; };
 		6BD139AD2B068B0C00BE5B42 /* LatestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestCell.swift; sourceTree = "<group>"; };
@@ -555,7 +557,8 @@
 			children = (
 				6BBCA6122B35BD7600133940 /* CoreDataProfileProtocol.swift */,
 				6BBCA6142B35C58D00133940 /* CoreDataPublicFilesProtocol.swift */,
-				6BBCA6162B36088000133940 /* CoreDataOpenPublicProtocol.swift */,
+				6BBCA6162B36088000133940 /* CoreDataLatestProtocol.swift */,
+				6BBCA6182B36160200133940 /* CoreDataAllFilesProtocol.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -868,7 +871,7 @@
 			files = (
 				6B5C0C112B3477A20044EB2C /* LatestFiles+CoreDataClass.swift in Sources */,
 				6B226C1D2B334CC200A653B9 /* OpenPublicFolderBuilder.swift in Sources */,
-				6BBCA6172B36088000133940 /* CoreDataOpenPublicProtocol.swift in Sources */,
+				6BBCA6172B36088000133940 /* CoreDataLatestProtocol.swift in Sources */,
 				6B4843002B31B86F005AD807 /* NetworkServiceAllFilesProtocol.swift in Sources */,
 				6BD831552B121B7500A59441 /* RenameFilePresenter.swift in Sources */,
 				6B5FFAAF2B03AC9700300019 /* PublicCell.swift in Sources */,
@@ -922,6 +925,7 @@
 				6BEEF0E82ACEC47000BBE68D /* SceneDelegate.swift in Sources */,
 				6B3DC6362B3090C000C9FC83 /* LatestBuilder.swift in Sources */,
 				6B5C0C132B3477A20044EB2C /* PublicFiles+CoreDataClass.swift in Sources */,
+				6BBCA6192B36160200133940 /* CoreDataAllFilesProtocol.swift in Sources */,
 				6B4842FE2B31B602005AD807 /* AllFilesPresenterOutput.swift in Sources */,
 				6B68E7C02B1D10CE003D5DE4 /* OpenPublicFolderPresenter.swift in Sources */,
 				6BD139AB2B06654800BE5B42 /* LatestPresenter.swift in Sources */,
