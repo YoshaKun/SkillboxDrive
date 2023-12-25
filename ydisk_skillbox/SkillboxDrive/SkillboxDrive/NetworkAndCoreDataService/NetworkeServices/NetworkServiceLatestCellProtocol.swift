@@ -15,7 +15,7 @@ protocol NetworkServiceLatestCellProtocol: AnyObject {
 }
 
 extension NetworkService: NetworkServiceLatestCellProtocol {
-    
+
     // MARK: - CELL
     // Public cell - getting image for cell
     func getImageForCell(
@@ -27,7 +27,7 @@ extension NetworkService: NetworkServiceLatestCellProtocol {
         guard let url = components?.url else { return }
         var request = URLRequest(url: url)
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request) { (data, _, error) in
             guard let data = data else {
                 print("Error: \(String(describing: error))")
                 return }

@@ -205,7 +205,7 @@ extension LatestViewController: LatestPresenterOutput {
     ) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
-            let newVc = ViewingScreenViewController(
+            let newVc = ViewingScreenBuilder.build(
                 title: title,
                 created: created,
                 type: type,
@@ -331,7 +331,6 @@ extension LatestViewController: UIScrollViewDelegate {
         if deltaOffset <= 0, currentOffset >= 50 {
 
             guard !self.presenter.isPaginating() else {
-                print("We are already fetching more data")
                 return
             }
             self.tableView.tableFooterView = createLoadingFooterView()

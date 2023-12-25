@@ -19,7 +19,7 @@ protocol OnboardingDataProtocol {
 // MARK: - OnboardingData
 
 final class OnboardingData {
-    
+
     let onboardingArray: [OnboardingModel] = [
         OnboardingModel(image: Constants.Image.onboarding1, description: Constants.Text.onboarding1),
         OnboardingModel(image: Constants.Image.onboarding2, description: Constants.Text.onboarding2),
@@ -29,7 +29,7 @@ final class OnboardingData {
 // MARK: - Extension - OnboardingDataProtocol
 
 extension OnboardingData: OnboardingDataProtocol {
-    
+
     func getModel() -> [OnboardingModel] {
         return onboardingArray
     }

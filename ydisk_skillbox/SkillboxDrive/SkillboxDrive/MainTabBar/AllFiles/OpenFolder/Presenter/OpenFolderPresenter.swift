@@ -8,17 +8,17 @@
 import Foundation
 
 final class OpenFolderPresenter {
-    
+
     // MARK: - Public properties
-    
+
     weak var output: OpenFolderPresenterOutput?
-    
+
     // MARK: - Private
-    
+
     private let networkService: NetworkServiceAllOpenFolderProtocol
-    
+
     // MARK: - Initialization
-    
+
     init(networkService: NetworkService) {
         self.networkService = networkService
     }
@@ -27,11 +27,11 @@ final class OpenFolderPresenter {
 // MARK: - extension OpenFolderPresenterProtocol
 
 extension OpenFolderPresenter: OpenFolderPresenterInput {
-    
+
     func getModelData() -> LatestFilesModel {
         return networkService.getModelDataAllFilesOpenFolder()
     }
-    
+
     func updateDataTableView(path: String?) {
         networkService.getAllFilesOpenFolder(
             path: path) { [weak self] in
@@ -42,11 +42,11 @@ extension OpenFolderPresenter: OpenFolderPresenterInput {
                 self?.output?.noInternetUpdateTableView()
             }
     }
-    
+
     func isPaginatingOpenFolder() -> Bool {
         return networkService.gettingIsPaginatingAllOpenFolder()
     }
-    
+
     func additionalGettingFiles(path: String?) {
         networkService.additionalGettingAllFilesOpenFolder(
             path: path) { [weak self] in
@@ -55,9 +55,8 @@ extension OpenFolderPresenter: OpenFolderPresenterInput {
                 self?.output?.didFailureAdditionalGetting()
             }
     }
-    
+
     func changePaginatingStateOnFalse() {
         networkService.changePaginatingStateAllOpenFolderOnFalse()
     }
 }
-

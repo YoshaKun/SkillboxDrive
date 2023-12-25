@@ -8,13 +8,13 @@
 import Foundation
 
 final class OnboardingPresenter {
-    
+
     // MARK: - Private properties
 
     private let onboardingData: OnboardingDataProtocol
-    
+
     // MARK: - Initialization
-    
+
     init(onboardingData: OnboardingDataProtocol) {
         self.onboardingData = onboardingData
     }
@@ -23,11 +23,11 @@ final class OnboardingPresenter {
 // MARK: - OnboardingPresenterInput
 
 extension OnboardingPresenter: OnboardingPresenterInput {
-    
+
     func numberOfItemsInSection(_ section: Int) -> Int {
         onboardingData.getModel().count
     }
-    
+
     func getModelArray(index: Int) -> OnboardingModel {
         let memberOfArray = onboardingData.getModel()[index]
         return memberOfArray

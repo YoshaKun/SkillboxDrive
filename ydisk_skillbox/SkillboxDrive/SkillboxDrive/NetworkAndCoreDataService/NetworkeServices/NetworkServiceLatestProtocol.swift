@@ -31,7 +31,7 @@ protocol NetworkServiceLatestProtocol: AnyObject {
 // MARK: - extension NetworkService
 
 extension NetworkService: NetworkServiceLatestProtocol {
-    
+
     func getLatestFiles(
         completion: @escaping () -> Void,
         noInternet: @escaping () -> Void
@@ -64,11 +64,11 @@ extension NetworkService: NetworkServiceLatestProtocol {
         }
         task.resume()
     }
-    
+
     func getModelData() -> LatestFilesModel {
         return modelDataLatest
     }
-    
+
     // Get data for open files in Latest screen
     func getFileFromPathOnLatestScreen(
         path: String?,
@@ -85,18 +85,20 @@ extension NetworkService: NetworkServiceLatestProtocol {
         let task = URLSession.shared.dataTask(with: request) { (data, _, error) in
             guard let data = data else {
                 print("Error: \(String(describing: error))")
-                return }
+                return
+            }
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             guard (try? decoder.decode(LatestItems.self, from: data)) != nil else {
                 print("Error serialization")
                 errorHandler()
-                return }
+                return
+            }
             completion()
         }
         task.resume()
     }
-    
+
     // Additional getting latest files (Пагинация)
     func additionalGetingLatestFilesOnLatestScreen (
         completion: @escaping () -> Void,
@@ -105,7 +107,6 @@ extension NetworkService: NetworkServiceLatestProtocol {
         isPaginatingLatest = true
         guard let model = modelDataLatest.items else { return }
         let count = model.count
-        print("modelData.count = \(count)")
         guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
         var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk/resources/last-uploaded")
         components?.queryItems = [
@@ -141,15 +142,14 @@ extension NetworkService: NetworkServiceLatestProtocol {
             self.modelDataLatest = latestFiles
             completion()
             isPaginatingLatest = false
-            print("isPaging = \(isPaginatingLatest)")
         }
         task.resume()
     }
-    
+
     func isPaginatingLatestFiles() -> Bool {
         return isPaginatingLatest
     }
-    
+
     func changePaginatingStateOnFalse() {
         isPaginatingLatest = false
     }

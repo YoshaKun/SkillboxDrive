@@ -7,10 +7,10 @@
 
 import Foundation
 
-class NetworkService {
-    
+final class NetworkService {
+
     // MARK: - SingleTone
-    
+
     static let shared = NetworkService(); private init() {}
     // Pagination FLAG
     var isPaginatingPublic = false

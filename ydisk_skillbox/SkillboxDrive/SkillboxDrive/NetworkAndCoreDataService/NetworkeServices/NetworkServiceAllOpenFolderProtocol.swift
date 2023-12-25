@@ -25,11 +25,11 @@ protocol NetworkServiceAllOpenFolderProtocol: AnyObject {
 }
 
 extension NetworkService: NetworkServiceAllOpenFolderProtocol {
-    
+
     func getModelDataAllFilesOpenFolder() -> LatestFilesModel {
         return modelDataAllOpenFolder
     }
-    
+
     func getAllFilesOpenFolder(
         path: String?,
         completion: @escaping () -> Void,
@@ -38,7 +38,6 @@ extension NetworkService: NetworkServiceAllOpenFolderProtocol {
     ) {
         guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
         guard let pathUrl = path else { return }
-        print("\(pathUrl)")
         var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk/resources")
         components?.queryItems = [
             URLQueryItem(name: "path", value: "\(pathUrl)"),
@@ -72,12 +71,12 @@ extension NetworkService: NetworkServiceAllOpenFolderProtocol {
         }
         task.resume()
     }
-    
+
     // Pagination
     func gettingIsPaginatingAllOpenFolder() -> Bool {
         return isPaginatingAllOpenFolder
     }
-    
+
     // Additional getting files in all files open folder
     func additionalGettingAllFilesOpenFolder(
         path: String?,
@@ -87,10 +86,8 @@ extension NetworkService: NetworkServiceAllOpenFolderProtocol {
         isPaginatingAllOpenFolder = true
         guard let model = modelDataAllOpenFolder.items else { return }
         let count = model.count
-        print("modelDataAllOpenFolder.count = \(count)")
         guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
         guard let pathUrl = path else { return }
-        print("\(pathUrl)")
         var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk/resources")
         components?.queryItems = [
             URLQueryItem(name: "path", value: "\(pathUrl)"),
@@ -129,11 +126,10 @@ extension NetworkService: NetworkServiceAllOpenFolderProtocol {
             self.modelDataAllOpenFolder.items = items
             completion()
             isPaginatingAllOpenFolder = false
-            print("isPaging = \(isPaginatingAllOpenFolder)")
         }
         task.resume()
     }
-    
+
     func changePaginatingStateAllOpenFolderOnFalse() {
         isPaginatingAllOpenFolder = false
     }

@@ -48,19 +48,21 @@ extension NetworkService: NetworkServicePublicFilesProtocol {
             guard let data = data else {
                 print("No internrt: \(String(describing: error))")
                 noInternet()
-                return }
+                return
+            }
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             guard let latestFiles = try? decoder.decode(LatestFilesModel.self, from: data) else {
                 print("Error serialization")
-                return }
+                return
+            }
             guard let self = self else { return }
             guard latestFiles.items?.count != 0 else {
                 errorHandler()
-                return }
+                return
+            }
             self.modelDataPublic = latestFiles
             completion()
-            print("Количество ячеек = \(self.modelDataPublic.items?.count ?? 000)")
         }
         task.resume()
     }
@@ -86,10 +88,9 @@ extension NetworkService: NetworkServicePublicFilesProtocol {
             if let response = response  as? HTTPURLResponse {
                 switch response.statusCode {
                 case 200..<300:
-                    print("Success")
                     completion()
                 default:
-                    print("Status: \(response.statusCode)")
+//                    print("Status: \(response.statusCode)")
                     errorHendler()
                 }
             }
@@ -109,8 +110,6 @@ extension NetworkService: NetworkServicePublicFilesProtocol {
         isPaginatingPublic = true
         guard let model = modelDataPublic.items else { return }
         let count = model.count
-        print("modelData.count = \(count)")
-
         guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
         var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk/resources/public")
         components?.queryItems = [
@@ -149,7 +148,6 @@ extension NetworkService: NetworkServicePublicFilesProtocol {
             completion()
 
             isPaginatingPublic = false
-            print("isPaging = \(isPaginatingPublic)")
         }
         task.resume()
     }

@@ -12,7 +12,6 @@ enum OnboardingBuilder {
         let onboardingData = OnboardingData()
         let presenter = OnboardingPresenter(onboardingData: onboardingData)
         let viewController = OnboardingViewController(presenter: presenter)
-        
         return viewController
     }
 }

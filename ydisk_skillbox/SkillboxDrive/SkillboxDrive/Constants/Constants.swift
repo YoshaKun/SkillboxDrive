@@ -8,7 +8,7 @@
 import UIKit
 
 enum Constants {
-    
+
     enum Image {
         static let onboarding1 = UIImage(named: "onboarding1")
         static let onboarding2 = UIImage(named: "onboarding2")
@@ -26,7 +26,7 @@ enum Constants {
         static let linkLogo = UIImage(named: "LinkLogo")
         static let trash = UIImage(named: "Trash")
     }
-    
+
     enum Text {
         static let onboarding1 = Bundle.main.localizedString(forKey: "onboarding1", value: "", table: "Localize")
         static let onboarding2 = Bundle.main.localizedString(forKey: "onboarding2", value: "", table: "Localize")
@@ -40,7 +40,7 @@ enum Constants {
         static let errorInternet = Bundle.main.localizedString(forKey: "errorInternet", value: "", table: "Localize")
         static let emptyFolder = Bundle.main.localizedString(forKey: "emptyFolder", value: "", table: "Localize")
         static let fileError = Bundle.main.localizedString(forKey: "fileError", value: "", table: "Localize")
-        
+
         enum FirstVC {
             static let title = Bundle.main.localizedString(forKey: "FirstVC.title", value: "", table: "Localize")
             static let cancel = Bundle.main.localizedString(forKey: "FirstVC.cancel", value: "", table: "Localize")
@@ -68,12 +68,12 @@ enum Constants {
             static let ready = Bundle.main.localizedString(forKey: "SecondVC.ready", value: "", table: "Localize")
             static let rename = Bundle.main.localizedString(forKey: "SecondVC.rename", value: "", table: "Localize")
         }
-        
+
         enum ThirdVC {
             static let title = Bundle.main.localizedString(forKey: "ThirdVC.title", value: "", table: "Localize")
         }
     }
-    
+
     enum Fonts {
         static var systemHeading: UIFont {
             UIFont.systemFont(ofSize: 30, weight: .semibold)
@@ -85,7 +85,7 @@ enum Constants {
             UIFont(name: "Graphik", size: 30) ?? UIFont.systemFont(ofSize: 16)
         }
     }
-    
+
     enum Colors {
         static var blueSpecial: UIColor? {
             UIColor(named: "BlueSpecial")
@@ -104,4 +104,3 @@ enum Constants {
         }
     }
 }
-

@@ -33,7 +33,7 @@ extension CoreDataManager: CoreDataLatestProtocol {
         }
         saveContext()
     }
-    
+
     func deleteLatestFilesFromCoreData() {
         let publicFetchRequest = LatestFiles.fetchRequest()
         guard let objects = try? viewContext.fetch(publicFetchRequest) else { return }

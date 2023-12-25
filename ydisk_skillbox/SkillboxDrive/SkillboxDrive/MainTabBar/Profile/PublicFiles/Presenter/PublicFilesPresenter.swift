@@ -53,7 +53,6 @@ extension PublicFilesPresenter: PublicFilesPresenterInput {
     }
 
     func fetchPublicFilesModelFromCoreData() -> LatestFilesModel {
-        print("сработал метод fetchProfileCoreData")
         return coreDataService.fetchPublicFilesCoreData()
     }
 

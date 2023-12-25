@@ -23,14 +23,14 @@ protocol NetworkServiceAllFilesProtocol: AnyObject {
 }
 
 extension NetworkService: NetworkServiceAllFilesProtocol {
-    
+
     // MARK: - All Files Screen - 1
-    
+
     func getModelDataAllFiles() -> LatestFilesModel {
         let data = modelDataAllFiles
         return data
     }
-    
+
     func getAllFiles(
         completion: @escaping () -> Void,
         errorHandler: @escaping () -> Void,
@@ -60,7 +60,6 @@ extension NetworkService: NetworkServiceAllFilesProtocol {
                 errorHandler()
                 return
             }
-            print("decoder data: \(allFilesFolder)")
             guard let self = self else { return }
             let items = allFilesFolder.embedded.items
             self.modelDataAllFiles.items = items
@@ -68,11 +67,11 @@ extension NetworkService: NetworkServiceAllFilesProtocol {
         }
         task.resume()
     }
-    
+
     func getBoolIsPaginating() -> Bool {
         return isPaginatingAllFiles
     }
-    
+
     // Additional getting all files (Пагинация)
     func additionalGetingAllFiles (
         completion: @escaping () -> Void,
@@ -81,7 +80,6 @@ extension NetworkService: NetworkServiceAllFilesProtocol {
         isPaginatingAllFiles = true
         guard let model = modelDataAllFiles.items else { return }
         let count = model.count
-        print("modelDataAllFiles.count = \(count)")
         guard let token = UserDefaults.standard.string(forKey: Keys.apiToken) else { return }
         var components = URLComponents(string: "https://cloud-api.yandex.net/v1/disk/resources")
         components?.queryItems = [
@@ -119,11 +117,10 @@ extension NetworkService: NetworkServiceAllFilesProtocol {
             self.modelDataAllFiles.items?.append(contentsOf: items)
             completion()
             isPaginatingAllFiles = false
-            print("isPaging = \(isPaginatingAllFiles)")
         }
         task.resume()
     }
-    
+
     func changePaginatingStateToFalse() {
         isPaginatingAllFiles = false
     }

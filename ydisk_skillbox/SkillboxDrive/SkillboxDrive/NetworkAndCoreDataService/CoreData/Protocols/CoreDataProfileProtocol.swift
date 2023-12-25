@@ -15,14 +15,14 @@ protocol CoreDataProfileProtocol {
 }
 
 extension CoreDataManager: CoreDataProfileProtocol {
-    
+
     func saveOnCoreData(total: Int64, used: Int64) {
         let profileMemory = ProfileEntity(context: viewContext)
         profileMemory.totalSpace = total
         profileMemory.usedSpace = used
         saveContext()
     }
-    
+
     func deleteProfileDataFromCoreData() {
         let fetchRequest = ProfileEntity.fetchRequest()
         guard let objects = try? viewContext.fetch(fetchRequest) else { return }
@@ -32,11 +32,9 @@ extension CoreDataManager: CoreDataProfileProtocol {
         }
         saveContext()
     }
-    
+
     func fetchProfileCoreData() -> [ProfileEntity] {
         let profileFetchRequest = ProfileEntity.fetchRequest()
-//        let sortDescriptor = NSSortDescriptor(key: "", ascending: true)
-//        profileFetchRequest.sortDescriptors = [sortDescriptor]
         let result = try? viewContext.fetch(profileFetchRequest)
         return result ?? []
     }
