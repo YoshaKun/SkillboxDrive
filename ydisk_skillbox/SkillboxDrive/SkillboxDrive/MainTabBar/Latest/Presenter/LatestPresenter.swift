@@ -36,7 +36,7 @@ extension LatestPresenter: LatestPresenterInput {
             self?.output?.didSuccessUpdateTableView()
             self?.coreDataService.deleteLatestFilesFromCoreData()
             guard let modelData = self?.networkService.getModelData() else {
-                print("error of save data to CoreData")
+                AlertHelper.showAlert(withMessage: "Error getting list")
                 return
             }
             self?.coreDataService.saveLatestFilesOnCoreData(openList: modelData)
@@ -51,7 +51,6 @@ extension LatestPresenter: LatestPresenterInput {
     }
 
     func fetchLatestModelFromCoreData() -> LatestFilesModel {
-        print("сработал метод fetchProfileCoreData")
         return coreDataService.fetchLatestFilesCoreData()
     }
 

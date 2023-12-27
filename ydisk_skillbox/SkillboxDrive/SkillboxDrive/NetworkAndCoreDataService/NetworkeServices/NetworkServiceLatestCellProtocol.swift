@@ -29,7 +29,7 @@ extension NetworkService: NetworkServiceLatestCellProtocol {
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
         let task = URLSession.shared.dataTask(with: request) { (data, _, error) in
             guard let data = data else {
-                print("Error: \(String(describing: error))")
+                AlertHelper.showAlert(withMessage: "Error: \(String(describing: error?.localizedDescription))")
                 return }
             completion(data)
         }

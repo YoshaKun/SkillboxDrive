@@ -33,7 +33,7 @@ extension NetworkService: NetworkServiceViewingProtocol {
         let request = URLRequest(url: url)
         let task = URLSession.shared.dataTask(with: request) { (data, _, error) in
             guard let data = data else {
-                print("Error: \(String(describing: error))")
+                AlertHelper.showAlert(withMessage: "Error: \(String(describing: error?.localizedDescription))")
                 return
             }
             completion(data)
@@ -59,11 +59,11 @@ extension NetworkService: NetworkServiceViewingProtocol {
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard data != nil else {
-                print("Error: \(String(describing: error))")
+                AlertHelper.showAlert(withMessage: "Error: \(String(describing: error?.localizedDescription))")
                 return
             }
-            guard let response = response else {
-                print("Error: \(String(describing: error))")
+            guard response != nil else {
+                AlertHelper.showAlert(withMessage: "Error of response")
                 return
             }
             completion()
@@ -83,10 +83,10 @@ extension NetworkService: NetworkServiceViewingProtocol {
         var request = URLRequest(url: url)
         request.httpMethod = "PUT"
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
-        let task = URLSession.shared.dataTask(with: request) { (data, response, _) in
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data else { return }
             guard let files = try? JSONDecoder().decode(ShareLink.self, from: data) else {
-                print("Error serialization")
+                AlertHelper.showAlert(withMessage: "Error: \(String(describing: error?.localizedDescription))")
                 return
             }
             guard files.href != nil else { return }
@@ -95,7 +95,7 @@ extension NetworkService: NetworkServiceViewingProtocol {
                 case 200..<300:
                     completion()
                 default:
-                    print("Status: \(response.statusCode)")
+                    AlertHelper.showAlert(withMessage: "Error. Status code 300+")
                 }
             }
         }

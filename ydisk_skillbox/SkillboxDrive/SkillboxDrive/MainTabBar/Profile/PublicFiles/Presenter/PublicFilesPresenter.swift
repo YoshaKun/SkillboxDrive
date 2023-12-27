@@ -36,7 +36,7 @@ extension PublicFilesPresenter: PublicFilesPresenterInput {
             self?.output?.didSuccessGettingPublishedFiles()
             self?.coreDataService.deletePublicFilesFromCoreData()
             guard let modelData = self?.networkService.getModalDataPublic() else {
-                print("error of save data to CoreData")
+                AlertHelper.showAlert(withMessage: "Error getting list")
                 return
             }
             self?.coreDataService.saveOnCoreData(publicList: modelData)

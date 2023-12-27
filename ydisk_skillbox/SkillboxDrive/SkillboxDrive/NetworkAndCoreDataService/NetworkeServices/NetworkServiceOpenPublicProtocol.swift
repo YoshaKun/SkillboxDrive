@@ -58,16 +58,15 @@ extension NetworkService: NetworkServiceOpenPublicProtocol {
         components?.queryItems = [URLQueryItem(name: "public_key", value: "\(String(describing: valueUrl))")]
         guard let url = components?.url else { return }
         let request = URLRequest(url: url)
-        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, _, _) in
             guard let data = data else {
-                print("No internet folder: \(String(describing: error))")
                 noInternet()
                 return
             }
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             guard let publishedFolder = try? decoder.dashDecoding().decode(PublishedFolder.self, from: data) else {
-                print("Error published folder decode: \(String(describing: response))")
+                AlertHelper.showAlert(withMessage: "Error serialization")
                 errorHandler()
                 return
             }
@@ -111,16 +110,15 @@ extension NetworkService: NetworkServiceOpenPublicProtocol {
             return
         }
         let request = URLRequest(url: url)
-        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, _, error) in
             guard let data = data else {
-                print("No internet folder: \(String(describing: error))")
                 errorHandler()
                 return
             }
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             guard let publishedFolder = try? decoder.dashDecoding().decode(PublishedFolder.self, from: data) else {
-                print("Error published folder decode: \(String(describing: response))")
+                AlertHelper.showAlert(withMessage: "Error: \(String(describing: error?.localizedDescription))")
                 guard let self = self else { return }
                 self.isPaginatingPublicOpen = false
                 errorHandler()

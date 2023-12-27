@@ -38,7 +38,6 @@ extension AllFilesPresenter: AllFilesPresenterInput {
     }
 
     func fetchAllFilesModelFromCoreData() -> LatestFilesModel {
-        print("сработал метод fetchProfileCoreData")
         return coreDataService.fetchAllFilesCoreData()
     }
 
@@ -47,7 +46,7 @@ extension AllFilesPresenter: AllFilesPresenterInput {
             self?.output?.didSuccessUpdateTableView()
             self?.coreDataService.deleteAllFilesFromCoreData()
             guard let modelData = self?.networkService.getModelDataAllFiles() else {
-                print("error of save data to CoreData")
+                AlertHelper.showAlert(withMessage: "Error getting list of All files tab")
                 return
             }
             self?.coreDataService.saveAllFilesOnCoreData(openList: modelData)

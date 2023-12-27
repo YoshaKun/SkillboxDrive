@@ -37,6 +37,11 @@ final class LatestViewController: UIViewController {
 
         view.backgroundColor = .systemBackground
         configureNavigationBar()
+    }
+
+    // MARK: - View will Appear
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         configureActivityIndicatorView()
         updateView()
     }
@@ -84,7 +89,7 @@ final class LatestViewController: UIViewController {
 
     @objc private func didSwipeToRefresh() {
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             self?.updateDataOfTableView()
             self?.tableView.refreshControl?.endRefreshing()
         }
@@ -134,13 +139,11 @@ final class LatestViewController: UIViewController {
 
     // MARK: - Update Data
     private func updateView() {
-
         configureTableView()
         updateDataOfTableView()
     }
 
     private func updateDataOfTableView() {
-
         presenter.updateDataTableView()
     }
 
@@ -155,13 +158,11 @@ final class LatestViewController: UIViewController {
 
     // MARK: - Footer view
     private func createLoadingFooterView() -> UIView {
-
         let footerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 50))
         let spinner = UIActivityIndicatorView()
         spinner.center = footerView.center
         footerView.addSubview(spinner)
         spinner.startAnimating()
-
         return footerView
     }
 }
@@ -174,7 +175,7 @@ extension LatestViewController: LatestPresenterOutput {
         DispatchQueue.main.async {
             self.errorView.removeFromSuperview()
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             guard let self = self else { return }
             self.noInternetFlag = false
             self.tableView.reloadData()
@@ -203,7 +204,7 @@ extension LatestViewController: LatestPresenterOutput {
         file: String?,
         path: String?
     ) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             guard let self = self else { return }
             let newVc = ViewingScreenBuilder.build(
                 title: title,
@@ -225,7 +226,7 @@ extension LatestViewController: LatestPresenterOutput {
     }
 
     func didFailureGetFileFromPath() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             guard let self = self else { return }
             self.updateDataOfTableView()
             self.activityIndicator.stopAnimating()
@@ -234,7 +235,7 @@ extension LatestViewController: LatestPresenterOutput {
     }
 
     func didSuccessAdditionalGettingFiles() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             guard let self = self else { return }
             self.tableView.tableFooterView = nil
             self.tableView.reloadData()
@@ -243,7 +244,7 @@ extension LatestViewController: LatestPresenterOutput {
     }
 
     func didFailureAdditionalGettingFiles() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             guard let self = self else { return }
             self.tableView.tableFooterView = nil
             self.tableView.reloadData()

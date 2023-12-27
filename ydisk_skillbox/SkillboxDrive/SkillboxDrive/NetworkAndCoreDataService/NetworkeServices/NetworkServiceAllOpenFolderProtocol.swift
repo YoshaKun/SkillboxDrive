@@ -49,14 +49,13 @@ extension NetworkService: NetworkServiceAllOpenFolderProtocol {
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
         let task = URLSession.shared.dataTask(with: request) { [weak self] (data, _, error) in
             guard let data = data else {
-                print("No internet get data: \(String(describing: error))")
                 noInternet()
                 return
             }
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             guard let allFilesFolder = try? decoder.dashDecoding().decode(PublishedFolder.self, from: data) else {
-                print("Error serialization")
+                AlertHelper.showAlert(withMessage: "Error: \(String(describing: error?.localizedDescription))")
                 errorHandler()
                 return
             }
@@ -103,14 +102,13 @@ extension NetworkService: NetworkServiceAllOpenFolderProtocol {
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
         let task = URLSession.shared.dataTask(with: request) { [weak self] (data, _, error) in
             guard let data = data else {
-                print("No internet get data: \(String(describing: error))")
                 errorHandler()
                 return
             }
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             guard let allFilesFolder = try? decoder.dashDecoding().decode(PublishedFolder.self, from: data) else {
-                print("Error serialization")
+                AlertHelper.showAlert(withMessage: "Error: \(String(describing: error?.localizedDescription))")
                 guard let self = self else { return }
                 self.isPaginatingAllOpenFolder = false
                 errorHandler()

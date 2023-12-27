@@ -152,7 +152,7 @@ final class ViewingScreenViewController: UIViewController {
         ])
 
         guard let fileStr = fileUrlStr else {
-            print("error FileStr")
+            AlertHelper.showAlert(withMessage: "File URL Error")
             return
         }
         presenter.getImage(urlStr: fileStr)
@@ -176,7 +176,7 @@ final class ViewingScreenViewController: UIViewController {
 
         guard let str = fileUrlStr else { return }
         guard let url = URL(string: str) else {
-            print("error")
+            AlertHelper.showAlert(withMessage: "URL Error")
             return
         }
         if let document = PDFDocument(url: url) {
@@ -202,7 +202,7 @@ final class ViewingScreenViewController: UIViewController {
 
         guard let str = fileUrlStr else { return }
         guard let url = URL(string: str) else {
-            print("error")
+            AlertHelper.showAlert(withMessage: "URL Error")
             return
         }
 
@@ -325,7 +325,7 @@ final class ViewingScreenViewController: UIViewController {
 
     private func didTapOnLink() {
         guard let path = path else {
-            print("error path")
+            AlertHelper.showAlert(withMessage: "Path Error")
             return
         }
         presenter.getLinkFile(path: path)

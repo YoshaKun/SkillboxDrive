@@ -56,6 +56,11 @@ final class OpenPublicFolderVC: UIViewController {
         super.viewDidLoad()
         configureNavigationBar()
         noFilesView.removeFromSuperview()
+    }
+
+    // MARK: - View will appear
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         configureActivityIndicatorView()
         updateView()
     }
@@ -234,7 +239,7 @@ final class OpenPublicFolderVC: UIViewController {
     }
 
     @objc private func didSwipeToRefresh() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             self?.updateDataOfTableView()
             self?.tableView.refreshControl?.endRefreshing()
         }
@@ -336,46 +341,48 @@ extension OpenPublicFolderVC: OpenPublicFolderPresenterOutput {
         DispatchQueue.main.async { [weak self] in
             self?.errorView.removeFromSuperview()
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             guard let self = self else { return }
-            self.activityIndicator.stopAnimating()
-            self.activityIndicatorView.removeFromSuperview()
             self.tableView.reloadData()
             self.tableView.isHidden = false
+            self.activityIndicator.stopAnimating()
+            self.activityIndicatorView.removeFromSuperview()
             self.noFilesView.removeFromSuperview()
         }
     }
 
     func didFailureUpdateDataTableView() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             guard let self = self else { return }
-            self.activityIndicator.stopAnimating()
-            self.activityIndicatorView.removeFromSuperview()
             self.tableView.reloadData()
             self.tableView.isHidden = true
+            self.activityIndicator.stopAnimating()
+            self.activityIndicatorView.removeFromSuperview()
             self.configureNoFilesView()
         }
     }
 
     func noFilesUpdateDataTableView() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             guard let self = self else { return }
-            self.activityIndicator.stopAnimating()
-            self.activityIndicatorView.removeFromSuperview()
             self.tableView.reloadData()
             self.tableView.isHidden = true
+            self.activityIndicator.stopAnimating()
+            self.activityIndicatorView.removeFromSuperview()
+            AlertHelper.showAlert(withMessage: Constants.Text.emptyFolder)
             self.configureEmptyFolderError()
         }
     }
 
     func noInternetUpdateDataTableView() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             guard let self = self else { return }
-            self.activityIndicator.stopAnimating()
-            self.activityIndicatorView.removeFromSuperview()
             self.tableView.reloadData()
             self.tableView.isHidden = false
+            self.activityIndicator.stopAnimating()
+            self.activityIndicatorView.removeFromSuperview()
             self.noFilesView.removeFromSuperview()
+            AlertHelper.showAlert(withMessage: Constants.Text.errorInternet)
             self.configureErrorView()
         }
     }
@@ -393,7 +400,7 @@ extension OpenPublicFolderVC: OpenPublicFolderPresenterOutput {
     }
 
     func didSuccessAdditionalGettingData() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             self?.tableView.tableFooterView = nil
             self?.tableView.reloadData()
             self?.presenter.changePaginatingStateOnFalse()
@@ -401,7 +408,7 @@ extension OpenPublicFolderVC: OpenPublicFolderPresenterOutput {
     }
 
     func didFailureAdditionalGettingData() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             self?.tableView.tableFooterView = nil
             self?.tableView.reloadData()
             self?.presenter.changePaginatingStateOnFalse()
@@ -441,7 +448,7 @@ extension OpenPublicFolderVC: UITableViewDelegate {
             return
         }
         guard let strUrl = viewModel[indexPath.row].publicUrl else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
                 guard let self = self else { return }
                 self.activityIndicator.stopAnimating()
                 self.activityIndicatorView.removeFromSuperview()
@@ -457,7 +464,7 @@ extension OpenPublicFolderVC: UITableViewDelegate {
         let fileType = determinationOfFileType(path: pathItem)
         let folder = "dir"
         if fileType == folder {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
                 guard let self = self else { return }
                 let someVC = OpenPublicFolderBuilder.build(
                     title: title,
@@ -470,7 +477,7 @@ extension OpenPublicFolderVC: UITableViewDelegate {
                 self.activityIndicatorView.removeFromSuperview()
             }
         } else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
                 guard let self = self else { return }
                 let someVc = ViewingScreenBuilder.build(
                     title: title,

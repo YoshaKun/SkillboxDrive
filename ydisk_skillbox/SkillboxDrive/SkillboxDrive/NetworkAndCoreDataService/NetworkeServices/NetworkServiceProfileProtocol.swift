@@ -31,13 +31,18 @@ extension NetworkService: NetworkServiceProfileProtocol {
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
         let task = URLSession.shared.dataTask(with: request) { data, _, error in
             guard let data = data else {
-                print("Error: \(String(describing: error))")
                 errorHandler()
                 return }
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
-            guard let newFiles = try? decoder.decode(DiskSpaceResponse.self, from: data) else { return }
-            guard let total = newFiles.totalSpace, let used = newFiles.usedSpace else { return }
+            guard let newFiles = try? decoder.decode(DiskSpaceResponse.self, from: data) else {
+                AlertHelper.showAlert(withMessage: "Error: \(String(describing: error?.localizedDescription))")
+                return
+            }
+            guard let total = newFiles.totalSpace, let used = newFiles.usedSpace else {
+                AlertHelper.showAlert(withMessage: "Error: \(String(describing: error?.localizedDescription))")
+                return
+            }
             completion(total, used)
         }
         task.resume()

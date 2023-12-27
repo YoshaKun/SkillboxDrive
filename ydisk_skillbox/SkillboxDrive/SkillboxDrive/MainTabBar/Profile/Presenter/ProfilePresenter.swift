@@ -86,11 +86,11 @@ extension ProfilePresenter: ProfilePresenterInput {
             self?.output?.didFailureUpdatePieChart()
             let core = self?.coreDataService.fetchProfileCoreData()
             guard let totalCore = core?.first?.totalSpace else {
-                print("error total coreData")
+                AlertHelper.showAlert(withMessage: "CoreData error - total space")
                 return
             }
             guard let usedCore = core?.first?.usedSpace else {
-                print("error total coreData")
+                AlertHelper.showAlert(withMessage: "CoreData error - used space")
                 return
             }
             self?.output?.didSuccessUpdatePieChart(

@@ -67,6 +67,7 @@
 		6B68E7C02B1D10CE003D5DE4 /* OpenPublicFolderPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B68E7BF2B1D10CE003D5DE4 /* OpenPublicFolderPresenter.swift */; };
 		6B76FB6A2B0BC5E200B66E93 /* ViewingScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B76FB692B0BC5E200B66E93 /* ViewingScreenViewController.swift */; };
 		6B76FB6C2B0BC60900B66E93 /* ViewingScreenPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B76FB6B2B0BC60900B66E93 /* ViewingScreenPresenter.swift */; };
+		6B8A92DD2B3C8114000D37B2 /* AlertHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8A92DC2B3C8114000D37B2 /* AlertHelper.swift */; };
 		6B8AFFEE2B1B511B009A988C /* AllFilesPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8AFFED2B1B511B009A988C /* AllFilesPresenter.swift */; };
 		6B8AFFF52B1B6F85009A988C /* OpenFolderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8AFFF42B1B6F85009A988C /* OpenFolderVC.swift */; };
 		6B8AFFF72B1B6F93009A988C /* OpenFolderPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8AFFF62B1B6F93009A988C /* OpenFolderPresenter.swift */; };
@@ -162,6 +163,7 @@
 		6B68E7BF2B1D10CE003D5DE4 /* OpenPublicFolderPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenPublicFolderPresenter.swift; sourceTree = "<group>"; };
 		6B76FB692B0BC5E200B66E93 /* ViewingScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewingScreenViewController.swift; sourceTree = "<group>"; };
 		6B76FB6B2B0BC60900B66E93 /* ViewingScreenPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewingScreenPresenter.swift; sourceTree = "<group>"; };
+		6B8A92DC2B3C8114000D37B2 /* AlertHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertHelper.swift; sourceTree = "<group>"; };
 		6B8AFFED2B1B511B009A988C /* AllFilesPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllFilesPresenter.swift; sourceTree = "<group>"; };
 		6B8AFFF42B1B6F85009A988C /* OpenFolderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenFolderVC.swift; sourceTree = "<group>"; };
 		6B8AFFF62B1B6F93009A988C /* OpenFolderPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenFolderPresenter.swift; sourceTree = "<group>"; };
@@ -278,6 +280,7 @@
 			children = (
 				6B205F312AD5736A001BB4CD /* Constants.swift */,
 				6B4843172B31EC58005AD807 /* Units.swift */,
+				6B8A92DC2B3C8114000D37B2 /* AlertHelper.swift */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -947,6 +950,7 @@
 				6B3DC62D2B3085C600C9FC83 /* OnboardingPresenterInput.swift in Sources */,
 				6B4843052B31CAC3005AD807 /* OpenFolderInAllFilesBuilder.swift in Sources */,
 				6B226C212B334D1900A653B9 /* OpenPublicFolderPresenterOutput.swift in Sources */,
+				6B8A92DD2B3C8114000D37B2 /* AlertHelper.swift in Sources */,
 				6B5C0C122B3477A20044EB2C /* LatestFiles+CoreDataProperties.swift in Sources */,
 				6B177E832AF973ED00F43811 /* ResponseModels.swift in Sources */,
 				6B48430B2B31D3F5005AD807 /* NetworkServiceAllOpenFolderProtocol.swift in Sources */,

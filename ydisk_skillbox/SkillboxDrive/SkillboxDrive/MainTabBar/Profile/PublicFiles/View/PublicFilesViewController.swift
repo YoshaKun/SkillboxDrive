@@ -44,6 +44,11 @@ final class PublicFilesViewController: UIViewController {
         view.backgroundColor = .systemBackground
         configureNavigationBar()
         noFilesView.removeFromSuperview()
+    }
+
+    // MARK: - View will Appear
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         configureActivityIndicatorView()
         updateView()
     }
@@ -401,7 +406,7 @@ extension PublicFilesViewController: UITableViewDelegate {
         configureActivityIndicatorView()
         guard let viewModel = presenter.getModelData().items else {
             print("error getModelData")
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
                 guard let self = self else { return }
                 self.activityIndicator.stopAnimating()
                 self.activityIndicatorView.removeFromSuperview()
@@ -409,7 +414,7 @@ extension PublicFilesViewController: UITableViewDelegate {
             return
         }
         guard let strUrl = viewModel[indexPath.row].publicUrl else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
                 guard let self = self else { return }
                 self.activityIndicator.stopAnimating()
                 self.activityIndicatorView.removeFromSuperview()
@@ -423,7 +428,7 @@ extension PublicFilesViewController: UITableViewDelegate {
         let fileType = determinationOfFileType(path: pathItem)
         let folder = "dir"
         if fileType == folder {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
                 guard let self = self else { return }
                 let someVC = OpenPublicFolderBuilder.build(
                     title: title,
@@ -436,7 +441,7 @@ extension PublicFilesViewController: UITableViewDelegate {
                 self.activityIndicatorView.removeFromSuperview()
             }
         } else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
                 guard let self = self else { return }
                 let newVc = ViewingScreenBuilder.build(
                     title: title,

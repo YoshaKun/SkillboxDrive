@@ -37,6 +37,11 @@ final class AllFilesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureNavigationBar()
+    }
+
+    // MARK: - View will appear
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         configureActivityIndicatorView()
         updateView()
     }
@@ -85,7 +90,7 @@ final class AllFilesViewController: UIViewController {
 
     @objc private func didSwipeToRefresh() {
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             self?.updateDataOfTableView()
             self?.tableView.refreshControl?.endRefreshing()
         }
@@ -178,7 +183,7 @@ extension AllFilesViewController: AllFilesPresenterOutput {
         DispatchQueue.main.async { [weak self] in
             self?.errorView.removeFromSuperview()
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             guard let self = self else { return }
             self.noInternetFlag = false
             self.tableView.reloadData()
@@ -212,7 +217,7 @@ extension AllFilesViewController: AllFilesPresenterOutput {
     }
 
     func didSuccessAdditionalGetingAllFiles() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             self?.tableView.tableFooterView = nil
             self?.tableView.reloadData()
             self?.presenter.changePaginatingStateOnFalse()
@@ -220,7 +225,7 @@ extension AllFilesViewController: AllFilesPresenterOutput {
     }
 
     func didFailureAdditionalGetingAllFiles() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             self?.tableView.tableFooterView = nil
             self?.tableView.reloadData()
             self?.presenter.changePaginatingStateOnFalse()
@@ -275,7 +280,7 @@ extension AllFilesViewController: UITableViewDelegate {
         configureActivityIndicatorView()
 
         guard let viewModel = presenter.getModelData().items else {
-            print("error getModelData")
+            AlertHelper.showAlert(withMessage: "Error getting list of All files tab")
             return
         }
         guard let title = viewModel[indexPath.row].name else { return }
@@ -286,7 +291,7 @@ extension AllFilesViewController: UITableViewDelegate {
 
         let folder = "dir"
         if fileType == folder {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
                 guard let self = self else { return }
                 let newVc = OpenFolderInAllFilesBuilder.build(
                     title: title,
@@ -298,7 +303,7 @@ extension AllFilesViewController: UITableViewDelegate {
                 self.activityIndicatorView.removeFromSuperview()
             }
         } else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
                 guard let self = self else { return }
                 let newVc = ViewingScreenBuilder.build(
                     title: title,

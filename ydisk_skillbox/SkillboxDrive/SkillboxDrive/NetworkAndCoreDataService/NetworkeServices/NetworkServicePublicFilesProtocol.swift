@@ -46,14 +46,13 @@ extension NetworkService: NetworkServicePublicFilesProtocol {
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
         let task = URLSession.shared.dataTask(with: request) { [weak self] (data, _, error) in
             guard let data = data else {
-                print("No internrt: \(String(describing: error))")
                 noInternet()
                 return
             }
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             guard let latestFiles = try? decoder.decode(LatestFilesModel.self, from: data) else {
-                print("Error serialization")
+                AlertHelper.showAlert(withMessage: "Error: \(String(describing: error?.localizedDescription))")
                 return
             }
             guard let self = self else { return }
@@ -84,13 +83,13 @@ extension NetworkService: NetworkServicePublicFilesProtocol {
         var request = URLRequest(url: url)
         request.httpMethod = "PUT"
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
-        let task = URLSession.shared.dataTask(with: request) { _, response, _ in
+        let task = URLSession.shared.dataTask(with: request) { _, response, error in
             if let response = response  as? HTTPURLResponse {
                 switch response.statusCode {
                 case 200..<300:
                     completion()
                 default:
-//                    print("Status: \(response.statusCode)")
+                    AlertHelper.showAlert(withMessage: "Error: \(String(describing: error?.localizedDescription))")
                     errorHendler()
                 }
             }
@@ -125,16 +124,15 @@ extension NetworkService: NetworkServicePublicFilesProtocol {
         var request = URLRequest(url: url)
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
 
-        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, _, _) in
+        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, _, error) in
             guard let data = data else {
-                print("additionalGetting - No internet")
                 errorHandler()
                 return
             }
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             guard let latestFiles = try? decoder.decode(LatestFilesModel.self, from: data) else {
-                print("Error serialization")
+                AlertHelper.showAlert(withMessage: "Error: \(String(describing: error?.localizedDescription))")
                 guard let self = self else { return }
                 self.isPaginatingPublic = false
                 return

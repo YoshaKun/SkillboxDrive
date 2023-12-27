@@ -49,14 +49,14 @@ extension NetworkService: NetworkServiceAllFilesProtocol {
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
         let task = URLSession.shared.dataTask(with: request) { [weak self] (data, _, error) in
             guard let data = data else {
-                print("No internet get data: \(String(describing: error))")
+                AlertHelper.showAlert(withMessage: "Error: \(String(describing: error?.localizedDescription))")
                 noInternet()
                 return
             }
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             guard let allFilesFolder = try? decoder.dashDecoding().decode(PublishedFolder.self, from: data) else {
-                print("Error serialization getAllfiles")
+                AlertHelper.showAlert(withMessage: "Error updating")
                 errorHandler()
                 return
             }
@@ -97,14 +97,14 @@ extension NetworkService: NetworkServiceAllFilesProtocol {
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
         let task = URLSession.shared.dataTask(with: request) { [weak self] (data, _, error) in
             guard let data = data else {
-                print("additionalGetting - No internet: \(String(describing: error))")
+                AlertHelper.showAlert(withMessage: "Error: \(String(describing: error?.localizedDescription))")
                 errorHandler()
                 return
             }
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             guard let allFilesFolder = try? decoder.dashDecoding().decode(PublishedFolder.self, from: data) else {
-                print("Error serialization")
+                AlertHelper.showAlert(withMessage: "Error updating")
                 guard let self = self else { return }
                 self.isPaginatingAllFiles = false
                 return

@@ -52,12 +52,12 @@ final class ProfileViewController: UIViewController, ChartViewDelegate {
         configureViews()
         configureStackView()
         configureConstraints()
-        configureActivityIndicatorView()
-        updateData()
     }
 
+    // MARK: - View will Appear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        configureActivityIndicatorView()
         updateData()
     }
 
@@ -345,7 +345,7 @@ extension ProfileViewController: ProfilePresenterOutput {
         DispatchQueue.main.async {
             self.errorView.removeFromSuperview()
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             guard let self = self else { return }
             self.activityIndicator.stopAnimating()
             self.activityIndicatorView.removeFromSuperview()

@@ -48,14 +48,13 @@ extension NetworkService: NetworkServiceLatestProtocol {
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
         let task = URLSession.shared.dataTask(with: request) { [weak self] (data, _, error) in
             guard let data = data else {
-                print("Error: \(String(describing: error))")
                 noInternet()
                 return
             }
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             guard let latestFiles = try? decoder.decode(LatestFilesModel.self, from: data) else {
-                print("Error serialization")
+                AlertHelper.showAlert(withMessage: "Error: \(String(describing: error?.localizedDescription))")
                 return
             }
             guard let self = self else { return }
@@ -84,13 +83,13 @@ extension NetworkService: NetworkServiceLatestProtocol {
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
         let task = URLSession.shared.dataTask(with: request) { (data, _, error) in
             guard let data = data else {
-                print("Error: \(String(describing: error))")
+                AlertHelper.showAlert(withMessage: "Error: \(String(describing: error?.localizedDescription))")
                 return
             }
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             guard (try? decoder.decode(LatestItems.self, from: data)) != nil else {
-                print("Error serialization")
+                AlertHelper.showAlert(withMessage: "Error: \(String(describing: error?.localizedDescription))")
                 errorHandler()
                 return
             }
@@ -122,14 +121,14 @@ extension NetworkService: NetworkServiceLatestProtocol {
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
         let task = URLSession.shared.dataTask(with: request) { [weak self] (data, _, _) in
             guard let data = data else {
-                print("additionalGetting - No internet")
+                AlertHelper.showAlert(withMessage: "No internet")
                 errorHandler()
                 return
             }
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             guard let latestFiles = try? decoder.decode(LatestFilesModel.self, from: data) else {
-                print("Error serialization")
+                AlertHelper.showAlert(withMessage: "Error updating")
                 guard let self = self else { return }
                 self.isPaginatingLatest = false
                 return

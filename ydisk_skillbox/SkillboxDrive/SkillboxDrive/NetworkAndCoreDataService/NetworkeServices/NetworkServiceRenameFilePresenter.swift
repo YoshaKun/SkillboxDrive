@@ -31,11 +31,11 @@ extension NetworkService: NetworkServiceRenameFilePresenter {
         request.setValue("OAuth \(token)", forHTTPHeaderField: "Authorization")
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard data != nil else {
-                print("Error: \(String(describing: error))")
+                AlertHelper.showAlert(withMessage: "Error: \(String(describing: error?.localizedDescription))")
                 return
             }
             guard response != nil else {
-                print("Error: \(String(describing: error))")
+                AlertHelper.showAlert(withMessage: "Error of response")
                 return
             }
             completion()

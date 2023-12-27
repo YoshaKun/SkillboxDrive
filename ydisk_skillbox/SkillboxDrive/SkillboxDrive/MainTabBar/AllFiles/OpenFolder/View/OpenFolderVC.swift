@@ -49,6 +49,11 @@ final class OpenFolderVC: UIViewController {
         self.title = titleOfFolder
         view.backgroundColor = .systemBackground
         configureNavigationBar()
+    }
+
+    // MARK: - View will appear
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         configureActivityIndicatorView()
         updateView()
     }
@@ -137,7 +142,7 @@ final class OpenFolderVC: UIViewController {
 
     @objc private func didSwipeToRefresh() {
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             self?.updateDataOfTableView()
             self?.tableView.refreshControl?.endRefreshing()
         }
@@ -229,7 +234,7 @@ extension OpenFolderVC: OpenFolderPresenterOutput {
         DispatchQueue.main.async { [weak self] in
             self?.errorView.removeFromSuperview()
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             guard let self = self else { return }
             self.tableView.reloadData()
             self.activityIndicator.stopAnimating()
@@ -259,7 +264,7 @@ extension OpenFolderVC: OpenFolderPresenterOutput {
     }
 
     func didSuccessAdditionalGetting() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             self?.tableView.tableFooterView = nil
             self?.tableView.reloadData()
             self?.presenter.changePaginatingStateOnFalse()
@@ -267,7 +272,7 @@ extension OpenFolderVC: OpenFolderPresenterOutput {
     }
 
     func didFailureAdditionalGetting() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             self?.tableView.tableFooterView = nil
             self?.tableView.reloadData()
             self?.presenter.changePaginatingStateOnFalse()
@@ -301,7 +306,7 @@ extension OpenFolderVC: UITableViewDelegate {
         configureActivityIndicatorView()
 
         guard let viewModel = presenter.getModelData().items else {
-            print("error getModelData")
+            AlertHelper.showAlert(withMessage: "Error getting list")
             return
         }
         guard let title = viewModel[indexPath.row].name else { return }
@@ -312,7 +317,7 @@ extension OpenFolderVC: UITableViewDelegate {
 
         let folder = "dir"
         if fileType == folder {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
                 guard let self = self else { return }
                 let vcOpenFolder = OpenFolderInAllFilesBuilder.build(
                     title: title,
@@ -324,7 +329,7 @@ extension OpenFolderVC: UITableViewDelegate {
                 self.activityIndicatorView.removeFromSuperview()
             }
         } else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
                 guard let self = self else { return }
                 let vcViewingScreen = ViewingScreenBuilder.build(
                     title: title,
