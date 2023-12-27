@@ -33,11 +33,11 @@ public struct Units {
     case 0..<1_024:
       return "\(bytes) bytes"
     case 1_024..<(1_024 * 1_024):
-      return "\(String(format: "%.2f", kilobytes)) " + Constants.Text.kb
+      return "\(String(format: "%.2f", kilobytes)) " + Constants.Text.kbMemory
     case 1_024..<(1_024 * 1_024 * 1_024):
-        return "\(String(format: "%.2f", megabytes)) " + Constants.Text.mb
+        return "\(String(format: "%.2f", megabytes)) " + Constants.Text.mbMemory
     case (1_024 * 1_024 * 1_024)...Int64.max:
-        return "\(String(format: "%.2f", gigabytes)) " + Constants.Text.gb
+        return "\(String(format: "%.2f", gigabytes)) " + Constants.Text.gbMemory
     default:
       return "\(bytes) bytes"
     }

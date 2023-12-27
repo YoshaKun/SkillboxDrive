@@ -44,7 +44,7 @@ final class LatestViewController: UIViewController {
     // MARK: - Configure methods
     private func configureNavigationBar() {
 
-        navigationItem.title = Constants.Text.SecondVC.title
+        navigationItem.title = Constants.SecondVC.title
     }
 
     private func configureActivityIndicatorView() {

@@ -10,10 +10,10 @@ protocol OpenPublicFolderPresenterOutput: AnyObject {
     func didFailureUpdateDataTableView()
     func noFilesUpdateDataTableView()
     func noInternetUpdateDataTableView()
-    
+
     func didSuccessRemovePublishedData()
     func didFailureRemovePublishedData()
-    
+
     func didSuccessAdditionalGettingData()
     func didFailureAdditionalGettingData()
 }

@@ -44,7 +44,7 @@ final class AllFilesViewController: UIViewController {
     // MARK: - Configure methods
     private func configureNavigationBar() {
 
-        self.navigationItem.title = Constants.Text.ThirdVC.title
+        self.navigationItem.title = Constants.ThirdVC.title
         view.backgroundColor = .systemBackground
     }
 

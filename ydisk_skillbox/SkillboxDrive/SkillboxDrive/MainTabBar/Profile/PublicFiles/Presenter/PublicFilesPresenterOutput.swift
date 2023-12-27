@@ -9,10 +9,10 @@ protocol PublicFilesPresenterOutput: AnyObject {
     func didSuccessGettingPublishedFiles()
     func didFailureGettingPublishedFiles()
     func noInternetGettingPublishedFiles()
-    
+
     func didSuccessRemovePublishedFile()
     func didFailureRemovePublishedFile()
-    
+
     func didSuccessAdditionalPublishedFiles()
     func didFailureAdditionalPublishedFiles()
 }

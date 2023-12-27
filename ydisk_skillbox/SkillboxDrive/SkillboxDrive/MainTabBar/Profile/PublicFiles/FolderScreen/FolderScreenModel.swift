@@ -8,12 +8,12 @@
 import Foundation
 
 final class FolderScreenModel {
-    
+
     // MARK: - Base Model data
     var modelData = LatestFiles(items: [])
-    
+
     func getDataOfPublishedFolder (publicUrl: String?, completion: @escaping () -> Void, errorHandler: @escaping () -> Void, noInternet: @escaping () -> Void) {
-        
+
         guard let publicUrl = publicUrl else { return }
 
         let valueUrl = URLComponents(string: "\(publicUrl)")
@@ -22,7 +22,7 @@ final class FolderScreenModel {
         guard let url = components?.url else { return }
         let request = URLRequest(url: url)
 
-        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, _, error) in
             guard let data = data else {
                 print("Error: \(String(describing: error))")
                 noInternet()

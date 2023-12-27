@@ -135,10 +135,10 @@ final class OpenPublicFolderVC: UIViewController {
         descriptionLabel.numberOfLines = 0
         descriptionLabel.textAlignment = .center
         descriptionLabel.contentMode = .scaleAspectFit
-        descriptionLabel.text = Constants.Text.FirstVC.noFilesDescr
+        descriptionLabel.text = Constants.FirstVC.noFilesDescr
 
         updateButton.backgroundColor = Constants.Colors.pink
-        updateButton.setTitle(Constants.Text.FirstVC.update, for: .normal)
+        updateButton.setTitle(Constants.FirstVC.update, for: .normal)
         updateButton.setTitleColor(.black, for: .normal)
         updateButton.layer.cornerRadius = 7
         updateButton.addTarget(self, action: #selector(didTappedOnUpdateButton), for: .touchUpInside)
@@ -290,10 +290,10 @@ final class OpenPublicFolderVC: UIViewController {
         let folder = pathFolder ?? ""
         let allPath = folder + cellPath
         let alert = UIAlertController(title: titleCell, message: nil, preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: Constants.Text.FirstVC.cancel, style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: Constants.FirstVC.cancel, style: .cancel, handler: nil))
         alert.addAction(
             UIAlertAction(
-                title: Constants.Text.FirstVC.removePost,
+                title: Constants.FirstVC.removePost,
                 style: .destructive,
                 handler: {  [weak self] _ in
                     self?.configureActivityIndicatorView()
@@ -433,6 +433,7 @@ extension OpenPublicFolderVC: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 
 extension OpenPublicFolderVC: UITableViewDelegate {
+    // swiftlint:disable:next function_body_length
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         configureActivityIndicatorView()
         guard let viewModel = presenter.getModelData().items else {

@@ -3,3 +3,9 @@ excluded:
 type_body_length:
 - 600 # warning
 - 900 # error
+line_length:
+- 200 # warning
+- 300 # error
+file_length:
+- 800 # warning
+- 1200 # error

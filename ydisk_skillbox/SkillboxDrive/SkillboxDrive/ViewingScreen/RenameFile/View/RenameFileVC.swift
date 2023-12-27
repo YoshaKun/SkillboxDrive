@@ -87,9 +87,9 @@ final class RenameFileVC: UIViewController {
         titleScreen.font = .systemFont(ofSize: 17, weight: .semibold)
         titleScreen.textColor = .black
         titleScreen.textAlignment = .center
-        titleScreen.text = Constants.Text.SecondVC.rename
+        titleScreen.text = Constants.SecondVC.rename
 
-        readyButton.setTitle(Constants.Text.SecondVC.ready, for: .normal)
+        readyButton.setTitle(Constants.SecondVC.ready, for: .normal)
         readyButton.setTitleColor(Constants.Colors.blueSpecial, for: .normal)
         readyButton.addTarget(self, action: #selector(didTapOnReadyButton), for: .touchUpInside)
 

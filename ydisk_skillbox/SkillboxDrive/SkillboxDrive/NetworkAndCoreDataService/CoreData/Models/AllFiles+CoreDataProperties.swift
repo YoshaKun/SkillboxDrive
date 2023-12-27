@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension AllFiles {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<AllFiles> {
@@ -27,6 +26,6 @@ extension AllFiles {
 
 }
 
-extension AllFiles : Identifiable {
+extension AllFiles: Identifiable {
 
 }

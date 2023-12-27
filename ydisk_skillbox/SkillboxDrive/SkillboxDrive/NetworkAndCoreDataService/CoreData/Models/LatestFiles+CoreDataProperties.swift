@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension LatestFiles {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<LatestFiles> {
@@ -27,6 +26,6 @@ extension LatestFiles {
 
 }
 
-extension LatestFiles : Identifiable {
+extension LatestFiles: Identifiable {
 
 }

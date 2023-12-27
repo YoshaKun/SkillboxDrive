@@ -49,7 +49,7 @@ extension LatestPresenter: LatestPresenterInput {
         let data = networkService.getModelData()
         return data
     }
-    
+
     func fetchLatestModelFromCoreData() -> LatestFilesModel {
         print("сработал метод fetchProfileCoreData")
         return coreDataService.fetchLatestFilesCoreData()

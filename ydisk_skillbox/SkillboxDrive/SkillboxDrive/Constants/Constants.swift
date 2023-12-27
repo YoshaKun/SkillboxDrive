@@ -34,44 +34,44 @@ enum Constants {
         static let nextButton = Bundle.main.localizedString(forKey: "nextButton", value: "", table: "Localize")
         static let loginButton = Bundle.main.localizedString(forKey: "loginButton", value: "", table: "Localize")
         static let OnboardButton = Bundle.main.localizedString(forKey: "OnboardButton", value: "", table: "Localize")
-        static let gb = Bundle.main.localizedString(forKey: "gb", value: "", table: "Localize")
-        static let mb = Bundle.main.localizedString(forKey: "mb", value: "", table: "Localize")
-        static let kb = Bundle.main.localizedString(forKey: "kb", value: "", table: "Localize")
+        static let gbMemory = Bundle.main.localizedString(forKey: "gb", value: "", table: "Localize")
+        static let mbMemory = Bundle.main.localizedString(forKey: "mb", value: "", table: "Localize")
+        static let kbMemory = Bundle.main.localizedString(forKey: "kb", value: "", table: "Localize")
         static let errorInternet = Bundle.main.localizedString(forKey: "errorInternet", value: "", table: "Localize")
         static let emptyFolder = Bundle.main.localizedString(forKey: "emptyFolder", value: "", table: "Localize")
         static let fileError = Bundle.main.localizedString(forKey: "fileError", value: "", table: "Localize")
+    }
 
-        enum FirstVC {
-            static let title = Bundle.main.localizedString(forKey: "FirstVC.title", value: "", table: "Localize")
-            static let cancel = Bundle.main.localizedString(forKey: "FirstVC.cancel", value: "", table: "Localize")
-            static let logOut = Bundle.main.localizedString(forKey: "FirstVC.logOut", value: "", table: "Localize")
-            static let alertTitle = Bundle.main.localizedString(forKey: "FirstVC.alertTitle", value: "", table: "Localize")
-            static let alertMessage = Bundle.main.localizedString(forKey: "FirstVC.alertMessage", value: "", table: "Localize")
-            static let alertYes = Bundle.main.localizedString(forKey: "FirstVC.alertYes", value: "", table: "Localize")
-            static let alertNo = Bundle.main.localizedString(forKey: "FirstVC.alertNo", value: "", table: "Localize")
-            static let gbFilled = Bundle.main.localizedString(forKey: "FirstVC.gbFilled", value: "", table: "Localize")
-            static let gbRemains = Bundle.main.localizedString(forKey: "FirstVC.gbRemains", value: "", table: "Localize")
-            static let publicFiles = Bundle.main.localizedString(forKey: "FirstVC.publicFiles", value: "", table: "Localize")
-            static let publicFilesTitle = Bundle.main.localizedString(forKey: "FirstVC.publicFilesTitle", value: "", table: "Localize")
-            static let noFilesDescr = Bundle.main.localizedString(forKey: "FirstVC.noFilesDescr", value: "", table: "Localize")
-            static let update = Bundle.main.localizedString(forKey: "FirstVC.update", value: "", table: "Localize")
-            static let removePost = Bundle.main.localizedString(forKey: "FirstVC.removePost", value: "", table: "Localize")
-        }
-        
-        enum SecondVC {
-            static let title = Bundle.main.localizedString(forKey: "SecondVC.title", value: "", table: "Localize")
-            static let deleteMessage = Bundle.main.localizedString(forKey: "SecondVC.deleteMessage", value: "", table: "Localize")
-            static let delete = Bundle.main.localizedString(forKey: "SecondVC.delete", value: "", table: "Localize")
-            static let shareMessage = Bundle.main.localizedString(forKey: "SecondVC.shareMessage", value: "", table: "Localize")
-            static let shareFile = Bundle.main.localizedString(forKey: "SecondVC.shareFile", value: "", table: "Localize")
-            static let shareLink = Bundle.main.localizedString(forKey: "SecondVC.shareLink", value: "", table: "Localize")
-            static let ready = Bundle.main.localizedString(forKey: "SecondVC.ready", value: "", table: "Localize")
-            static let rename = Bundle.main.localizedString(forKey: "SecondVC.rename", value: "", table: "Localize")
-        }
+    enum FirstVC {
+        static let title = Bundle.main.localizedString(forKey: "FirstVC.title", value: "", table: "Localize")
+        static let cancel = Bundle.main.localizedString(forKey: "FirstVC.cancel", value: "", table: "Localize")
+        static let logOut = Bundle.main.localizedString(forKey: "FirstVC.logOut", value: "", table: "Localize")
+        static let alertTitle = Bundle.main.localizedString(forKey: "FirstVC.alertTitle", value: "", table: "Localize")
+        static let alertMessage = Bundle.main.localizedString(forKey: "FirstVC.alertMessage", value: "", table: "Localize")
+        static let alertYes = Bundle.main.localizedString(forKey: "FirstVC.alertYes", value: "", table: "Localize")
+        static let alertNo = Bundle.main.localizedString(forKey: "FirstVC.alertNo", value: "", table: "Localize")
+        static let gbFilled = Bundle.main.localizedString(forKey: "FirstVC.gbFilled", value: "", table: "Localize")
+        static let gbRemains = Bundle.main.localizedString(forKey: "FirstVC.gbRemains", value: "", table: "Localize")
+        static let publicFiles = Bundle.main.localizedString(forKey: "FirstVC.publicFiles", value: "", table: "Localize")
+        static let publicFilesTitle = Bundle.main.localizedString(forKey: "FirstVC.publicFilesTitle", value: "", table: "Localize")
+        static let noFilesDescr = Bundle.main.localizedString(forKey: "FirstVC.noFilesDescr", value: "", table: "Localize")
+        static let update = Bundle.main.localizedString(forKey: "FirstVC.update", value: "", table: "Localize")
+        static let removePost = Bundle.main.localizedString(forKey: "FirstVC.removePost", value: "", table: "Localize")
+    }
 
-        enum ThirdVC {
-            static let title = Bundle.main.localizedString(forKey: "ThirdVC.title", value: "", table: "Localize")
-        }
+    enum SecondVC {
+        static let title = Bundle.main.localizedString(forKey: "SecondVC.title", value: "", table: "Localize")
+        static let deleteMessage = Bundle.main.localizedString(forKey: "SecondVC.deleteMessage", value: "", table: "Localize")
+        static let delete = Bundle.main.localizedString(forKey: "SecondVC.delete", value: "", table: "Localize")
+        static let shareMessage = Bundle.main.localizedString(forKey: "SecondVC.shareMessage", value: "", table: "Localize")
+        static let shareFile = Bundle.main.localizedString(forKey: "SecondVC.shareFile", value: "", table: "Localize")
+        static let shareLink = Bundle.main.localizedString(forKey: "SecondVC.shareLink", value: "", table: "Localize")
+        static let ready = Bundle.main.localizedString(forKey: "SecondVC.ready", value: "", table: "Localize")
+        static let rename = Bundle.main.localizedString(forKey: "SecondVC.rename", value: "", table: "Localize")
+    }
+
+    enum ThirdVC {
+        static let title = Bundle.main.localizedString(forKey: "ThirdVC.title", value: "", table: "Localize")
     }
 
     enum Fonts {

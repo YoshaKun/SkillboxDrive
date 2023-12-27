@@ -58,7 +58,7 @@ final class PublicFilesViewController: UIViewController {
         )
         backButton.tintColor = Constants.Colors.gray
         navigationItem.leftBarButtonItem = backButton
-        navigationItem.title = Constants.Text.FirstVC.publicFilesTitle
+        navigationItem.title = Constants.FirstVC.publicFilesTitle
     }
 
     @objc private func didTappedOnBackButton() {
@@ -97,10 +97,10 @@ final class PublicFilesViewController: UIViewController {
         descriptionLabel.numberOfLines = 0
         descriptionLabel.textAlignment = .center
         descriptionLabel.contentMode = .scaleAspectFit
-        descriptionLabel.text = Constants.Text.FirstVC.noFilesDescr
+        descriptionLabel.text = Constants.FirstVC.noFilesDescr
 
         updateButton.backgroundColor = Constants.Colors.pink
-        updateButton.setTitle(Constants.Text.FirstVC.update, for: .normal)
+        updateButton.setTitle(Constants.FirstVC.update, for: .normal)
         updateButton.setTitleColor(.black, for: .normal)
         updateButton.layer.cornerRadius = 7
         updateButton.addTarget(self, action: #selector(didTappedOnUpdateButton), for: .touchUpInside)
@@ -237,10 +237,10 @@ final class PublicFilesViewController: UIViewController {
     private func createActionSheet(titleCell: String, path: String?) -> UIAlertController {
 
         let alert = UIAlertController(title: titleCell, message: nil, preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: Constants.Text.FirstVC.cancel, style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: Constants.FirstVC.cancel, style: .cancel, handler: nil))
         alert.addAction(
             UIAlertAction(
-                title: Constants.Text.FirstVC.removePost,
+                title: Constants.FirstVC.removePost,
                 style: .destructive,
                 handler: {  [weak self] _ in
                     self?.configureActivityIndicatorView()
@@ -351,7 +351,7 @@ extension PublicFilesViewController: PublicFilesPresenterOutput {
 // MARK: - UITableViewDataSource
 extension PublicFilesViewController: UITableViewDataSource {
 
-    func tableView(_ tableView: UITableView,      numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard noInternetFlag == false else {
             let modelCount = presenter.fetchPublicFilesModelFromCoreData().items?.count
             return modelCount ?? 0
@@ -396,11 +396,8 @@ extension PublicFilesViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 
 extension PublicFilesViewController: UITableViewDelegate {
-
-    func tableView(
-        _ tableView: UITableView,
-        didSelectRowAt indexPath: IndexPath
-    ) {
+    // swiftlint:disable:next function_body_length
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         configureActivityIndicatorView()
         guard let viewModel = presenter.getModelData().items else {
             print("error getModelData")

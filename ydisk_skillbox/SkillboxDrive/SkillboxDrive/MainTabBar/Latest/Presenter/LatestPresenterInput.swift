@@ -6,7 +6,7 @@
 //
 
 protocol LatestPresenterInput {
-    
+
     func updateDataTableView()
     func getModelData() -> LatestFilesModel
     func fetchLatestModelFromCoreData() -> LatestFilesModel

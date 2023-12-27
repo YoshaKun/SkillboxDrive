@@ -291,20 +291,20 @@ final class ViewingScreenViewController: UIViewController {
 
     private func createShareActionSheet() -> UIAlertController {
         let alert = UIAlertController(
-            title: Constants.Text.SecondVC.shareMessage,
+            title: Constants.SecondVC.shareMessage,
             message: nil,
             preferredStyle: .actionSheet
         )
         alert.addAction(
             UIAlertAction(
-                title: Constants.Text.FirstVC.cancel,
+                title: Constants.FirstVC.cancel,
                 style: .cancel,
                 handler: nil
             )
         )
         alert.addAction(
             UIAlertAction(
-                title: Constants.Text.SecondVC.shareFile,
+                title: Constants.SecondVC.shareFile,
                 style: .default,
                 handler: {  [weak self] _ in
                     self?.didTapOnLink()
@@ -313,7 +313,7 @@ final class ViewingScreenViewController: UIViewController {
         )
         alert.addAction(
             UIAlertAction(
-                title: Constants.Text.SecondVC.shareLink,
+                title: Constants.SecondVC.shareLink,
                 style: .default,
                 handler: {  [weak self] _ in
                     self?.didTapOnLink()
@@ -339,20 +339,20 @@ final class ViewingScreenViewController: UIViewController {
 
     private func createDeleteActionSheet() -> UIAlertController {
         let alert = UIAlertController(
-            title: Constants.Text.SecondVC.deleteMessage,
+            title: Constants.SecondVC.deleteMessage,
             message: nil,
             preferredStyle: .actionSheet
         )
         alert.addAction(
             UIAlertAction(
-                title: Constants.Text.FirstVC.cancel,
+                title: Constants.FirstVC.cancel,
                 style: .cancel,
                 handler: nil
             )
         )
         alert.addAction(
             UIAlertAction(
-                title: Constants.Text.SecondVC.delete,
+                title: Constants.SecondVC.delete,
                 style: .destructive,
                 handler: {  [weak self] _ in
                     self?.didTappedOnYesAlert()

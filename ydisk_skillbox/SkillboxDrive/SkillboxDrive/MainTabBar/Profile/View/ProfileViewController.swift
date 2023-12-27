@@ -90,7 +90,7 @@ final class ProfileViewController: UIViewController, ChartViewDelegate {
         mainView.isHidden = true
 
         publicFilesButton.backgroundColor = .white
-        publicFilesButton.setTitle(Constants.Text.FirstVC.publicFiles, for: .normal)
+        publicFilesButton.setTitle(Constants.FirstVC.publicFiles, for: .normal)
         publicFilesButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         publicFilesButton.setTitleColor(.black, for: .normal)
         publicFilesButton.contentHorizontalAlignment = .left
@@ -142,8 +142,8 @@ final class ProfileViewController: UIViewController, ChartViewDelegate {
         pieChart.data?.setDrawValues(false)
         pieChart.transparentCircleColor = .white
         pieChart.centerText = presenter.getConvertedBytesTotalToString(value: totalSpaceGb)
-        totalSpaseLabel.text = firstString + Constants.Text.FirstVC.gbFilled
-        usedSpaceLabel.text = secondString + Constants.Text.FirstVC.gbRemains
+        totalSpaseLabel.text = firstString + Constants.FirstVC.gbFilled
+        usedSpaceLabel.text = secondString + Constants.FirstVC.gbRemains
     }
 
     private func configureStackView() {
@@ -177,7 +177,7 @@ final class ProfileViewController: UIViewController, ChartViewDelegate {
         )
         menuButton.tintColor = Constants.Colors.gray
         navigationItem.rightBarButtonItem = menuButton
-        navigationItem.title = Constants.Text.FirstVC.title
+        navigationItem.title = Constants.FirstVC.title
     }
 
     @objc private func didTappedOnMenuButton() {
@@ -189,20 +189,20 @@ final class ProfileViewController: UIViewController, ChartViewDelegate {
     private func createActionSheet() -> UIAlertController {
 
         let alert = UIAlertController(
-            title: Constants.Text.FirstVC.title,
+            title: Constants.FirstVC.title,
             message: nil,
             preferredStyle: .actionSheet
         )
         alert.addAction(
             UIAlertAction(
-                title: Constants.Text.FirstVC.cancel,
+                title: Constants.FirstVC.cancel,
                 style: .cancel,
                 handler: nil
             )
         )
         alert.addAction(
             UIAlertAction(
-                title: Constants.Text.FirstVC.logOut,
+                title: Constants.FirstVC.logOut,
                 style: .destructive,
                 handler: {  [weak self] _ in
                     let alert = self?.createAlert() ?? UIAlertController()
@@ -220,13 +220,13 @@ final class ProfileViewController: UIViewController, ChartViewDelegate {
     private func createAlert() -> UIAlertController {
 
         let alert = UIAlertController(
-            title: Constants.Text.FirstVC.alertTitle,
-            message: Constants.Text.FirstVC.alertMessage,
+            title: Constants.FirstVC.alertTitle,
+            message: Constants.FirstVC.alertMessage,
             preferredStyle: .alert
         )
         alert.addAction(
             UIAlertAction(
-                title: Constants.Text.FirstVC.alertYes,
+                title: Constants.FirstVC.alertYes,
                 style: .cancel,
                 handler: {  [weak self] _ in
                     self?.didTappedOnYesAlert()
@@ -235,7 +235,7 @@ final class ProfileViewController: UIViewController, ChartViewDelegate {
         )
         alert.addAction(
             UIAlertAction(
-                title: Constants.Text.FirstVC.alertNo,
+                title: Constants.FirstVC.alertNo,
                 style: .destructive,
                 handler: nil
             )
