@@ -9,6 +9,8 @@
 + Allows you to view files and directories on the disk.
 + Allows you to download existing files.
 + Programming language - Swift.
++ Architecture - MVP
++ Technology - CoreData, URLSession, GCD, UIKit, WebKit, SwiftLint, DGCharts
 
 ## SCREENSHOTS
 
