@@ -10,7 +10,7 @@
 + Allows you to download existing files.
 + Programming language - Swift.
 + Architecture - MVP
-+ Technology - CoreData, URLSession, GCD, UIKit, WebKit, SwiftLint, DGCharts
++ Technology - CoreData, UserDefaults, URLSession, GCD, UIKit, WebKit, SwiftLint, DGCharts
 
 ## SCREENSHOTS
 
